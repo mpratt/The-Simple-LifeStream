@@ -11,14 +11,17 @@ Sitios Soportados
 - Youtube
     - Busca por videos que se hayan agregado a la lista de favoritos.
 - Twitter
-	- Busca por los últimos tweets enviados (siempre y cuando el perfil sea público).
+    - Busca por los últimos tweets enviados (siempre y cuando el perfil sea público).
 - StackOverflow
     - Busca por Comentarios.
     - Busca por Preguntas/Respuestas publicadas.
-    - Busca por medallas que hayas recibido
+    - Busca por medallas que hayas recibido.
 - Github
     - Busca por proyectos iniciados.
     - Busca por proyectos actualizados (push).
+-FacebookPages
+    - Coge toda la información de una página de Facebook.
+    - Ojo, Facebook Pages es distinto a tu página de perfil en facebook.
 
 Requerimientos
 ==============
@@ -33,29 +36,30 @@ Antes de iniciar, debes escribir los datos necesarios en el archivo config.ini y
         require('directorio/a/SimpleLifestream.php');
 
         try {
-			$lifestream = new SimpleLifestream();
-			$output = $lifestream->getLifestream();
-			var_dump($output);
-		} catch (Exception $e) { echo 'Un error ha ocurrido!'; }
+            $lifestream = new SimpleLifestream();
+            $output = $lifestream->getLifestream();
+            var_dump($output);
+        } catch (Exception $e) { echo 'Un error ha ocurrido!'; }
     ?>
 
 O tambien puedes especificar los datos al instanciar el objeto SimpleLifestream.
 
-	<?php
+    <?php
         require('directorio/a/SimpleLifestream.php');
 
         try {
 
-			$config = array('NombreServicio' => array('username' => 'nombre-usuario-del-servicio'),
-							'Youtube' => array('username' => 'nombre-usuario-youtube'),
-							'Twitter' => array('username' => 'nombre-usuario-twitter'),
-							'Github' => array('username' => 'nombre-usuario-Github'));
+            $config = array('NombreServicio' => array('username' => 'nombre-usuario-del-servicio'),
+                            'Youtube' => array('username' => 'nombre-usuario-youtube'),
+                            'Twitter' => array('username' => 'nombre-usuario-twitter'),
+                            'Github' => array('username' => 'nombre-usuario-Github'),
+                            'FacebookPages' => array('username' => 'id-página-facebook'));
 
-			$lifestream = new SimpleLifestream($config);
-			$output = $lifestream->getLifestream();
-			var_dump($output);
+            $lifestream = new SimpleLifestream($config);
+            $output = $lifestream->getLifestream();
+            var_dump($output);
 
-		} catch (Exception $e) { echo 'Un error ha ocurrido!'; }
+        } catch (Exception $e) { echo 'Un error ha ocurrido!'; }
     ?>
 
 Licencia

@@ -1,9 +1,9 @@
 <?php
 /**
  * TwiterService.php
- * A service for Stack Overflow
+ * A service for Twitter
  *
- * @author	Michael Pratt <pratt@hablarmierda.net>
+ * @author    Michael Pratt <pratt@hablarmierda.net>
  * @link http://www.michael-pratt.com/
  *
  * For the full copyright and license information, please view the LICENSE
@@ -13,35 +13,35 @@
 
 class TwitterService extends SimpleLifestreamAdapter
 {
-	protected $translation = array('view'   => 'ver');
+    protected $translation = array('view'   => 'ver');
 
-	/**
-	 * Gets the data of the user and returns an array
-	 * with all the information.
-	 *
-	 * @return array
-	 */
-	public function getApiData()
-	{
-		$apiResponse = json_decode($this->fetchUrl('http://api.twitter.com/1/statuses/user_timeline.json?screen_name=' . $this->config['username']), true);
+    /**
+     * Gets the data of the user and returns an array
+     * with all the information.
+     *
+     * @return array
+     */
+    public function getApiData()
+    {
+        $apiResponse = json_decode($this->fetchUrl('http://api.twitter.com/1/statuses/user_timeline.json?screen_name=' . $this->config['username']), true);
 
-		if (!isset($apiResponse['error']) || !empty($apiResponse))
-			return array_map(array($this, 'filterResponse'), $apiResponse);
+        if (!isset($apiResponse['error']) || !empty($apiResponse))
+            return array_map(array($this, 'filterResponse'), $apiResponse);
 
-		return array();
-	}
+        return array();
+    }
 
-	/**
-	 * Callback method that filters/translates the ApiResponse
-	 *
-	 * @param array $value
-	 * @return array
-	 */
-	protected function filterResponse($value)
-	{
-		return array('service' => 'twitter',
-					 'date' => strtotime($value['created_at']),
-					 'html' => $value['text'] . ' (<a href="http://twitter.com/#!/' . $this->username . '/status/' . $value['id_str'] . '">' . $this->translation['view'] . '</a>)');
-	}
+    /**
+     * Callback method that filters/translates the ApiResponse
+     *
+     * @param array $value
+     * @return array
+     */
+    protected function filterResponse($value)
+    {
+        return array('service' => 'twitter',
+                     'date' => strtotime($value['created_at']),
+                     'html' => $value['text'] . ' (<a href="http://twitter.com/#!/' . $this->config['username'] . '/status/' . $value['id_str'] . '">' . $this->translation['view'] . '</a>)');
+    }
 }
 ?>
