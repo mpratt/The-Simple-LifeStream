@@ -44,10 +44,10 @@ foreach($testArray as $title => $config)
         $lifestream = new SimpleLifestream($config);
         $output = $lifestream->getLifestream();
 
-        if (!is_array($output))
+        if (empty($output))
+            SimpleLifestreamOutput('Empty array returned - Its required to have valid usernames/services with data for testing.', true);
+        else if (!is_array($output))
             SimpleLifestreamOutput('Wrong format returned', true);
-        else if (empty($output))
-            SimpleLifestreamOutput('Empty array returned', true);
 
         SimpleLifestreamOutput('Validating ' . $title . ' output');
         foreach ($output as $k => $o)
@@ -58,6 +58,8 @@ foreach($testArray as $title => $config)
                 SimpleLifestreamOutput('Date key number ' . $k . ' is in the wrong format', true);
             else if (empty($o['service']) || $o['service'] != strtolower($title))
                 SimpleLifestreamOutput('Wrong Service key number ' . $k, true);
+            else if (count($o) != count($o, 1))
+                SimpleLifestreamOutput('Warning: Multidimensional array returned');
         }
 
         unset($lifestream);
