@@ -17,23 +17,39 @@ class SimpleLifestream
     /**
      * Instantiates available services on construction.
      *
-     * @param mixed $config An array with all the data needed to call the services. When Empty we use load the data from config.ini
+     * @param mixed $config An array with all the data needed to call the services. When Empty it tries to load the data from config.ini
      * @return void
      */
     public function __construct($config = array())
     {
-        $config = (is_array($config) && !empty($config) ? $config : parse_ini_file(dirname(__FILE__) . '/config.ini', true));
-        foreach ($config as $serviceName => $values)
-        {
-            $serviceName .= 'Service';
-            if (!is_readable(dirname(__FILE__) . '/Services/' . $serviceName . '.php') || !isset($values['username']))
-                throw new Exception('The service ' . $serviceName . ' does not exist or has no username variable!');
+        if ((empty($config) || !is_array($config)) && is_readable(dirname(__FILE__) . '/config.ini'))
+            $config = parse_ini_file(dirname(__FILE__) . '/config.ini', true);
 
-            require_once(dirname(__FILE__) . '/Services/' . $serviceName . '.php');
-            $serviceObject = new $serviceName();
-            $serviceObject->setConfig($values);
-            $this->services[] = $serviceObject;
+        if (!empty($config))
+        {
+            foreach ($config as $serviceName => $values)
+                $this->loadService($serviceName, $values);
         }
+    }
+
+    /**
+     * Instantiates and initializes a service object!
+     * It stores the object in the services property.
+     *
+     * @param string $serviceName
+     * @param array $values an array with the service options
+     * @return void
+     */
+    public function loadService($serviceName, $values)
+    {
+        $serviceName .= 'Service';
+        if (!is_readable(dirname(__FILE__) . '/Services/' . $serviceName . '.php') || !isset($values['username']))
+            throw new Exception('The service ' . $serviceName . ' does not exist or has no username variable!');
+
+        require_once(dirname(__FILE__) . '/Services/' . $serviceName . '.php');
+        $serviceObject = new $serviceName();
+        $serviceObject->setConfig($values);
+        $this->services[] = $serviceObject;
     }
 
     /**

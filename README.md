@@ -42,7 +42,7 @@ Antes de iniciar, debes escribir los datos necesarios en el archivo config.ini y
         } catch (Exception $e) { echo 'Un error ha ocurrido!'; }
     ?>
 
-O tambien puedes especificar los datos al instanciar el objeto SimpleLifestream.
+Tambien puedes especificar los datos al instanciar el objeto SimpleLifestream.
 
     <?php
         require('directorio/a/SimpleLifestream.php');
@@ -56,6 +56,23 @@ O tambien puedes especificar los datos al instanciar el objeto SimpleLifestream.
                             'FacebookPages' => array('username' => 'id-página-facebook'));
 
             $lifestream = new SimpleLifestream($config);
+            $output = $lifestream->getLifestream();
+            var_dump($output);
+
+        } catch (Exception $e) { echo 'Un error ha ocurrido!'; }
+    ?>
+
+O puedes especificar los servicios individualmente, incluso puedes especificar varias cuentas  de un mismo servicio.
+
+    <?php
+        require('directorio/a/SimpleLifestream.php');
+
+        try {
+
+            $lifestream = new SimpleLifestream();
+            $lifestream->loadService('Twitter', array('username' => 'nombre-usuario-twitter-uno'));
+            $lifestream->loadService('Twitter', array('username' => 'nombre-usuario-twitter-dos'));
+            $lifestream->loadService('Youtube', array('username' => 'nombre-usuario-youtube'));
             $output = $lifestream->getLifestream();
             var_dump($output);
 

@@ -27,7 +27,10 @@ class GithubService extends SimpleLifestreamAdapter
         $apiResponse = utf8_encode($this->fetchUrl('https://github.com/' . $this->config['username'] . '.json'));
         $apiResponse = json_decode($apiResponse, true);
 
-        return array_map(array($this, 'filterResponse'), $apiResponse);
+        if (!empty($apiResponse) && is_array($apiResponse))
+            return array_map(array($this, 'filterResponse'), $apiResponse);
+
+        return array();
     }
 
     /**
