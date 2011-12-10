@@ -13,6 +13,7 @@
 abstract class SimpleLifestreamAdapter
 {
     protected $config;
+    protected $requires = array('username');
 
     /**
      * Gets the data API response and returns an array
@@ -28,7 +29,19 @@ abstract class SimpleLifestreamAdapter
      * @param array $config
      * @return void
      */
-    public function setConfig($config) { $this->config = $config; }
+    public function setConfig($config)
+    {
+        if (!empty($this->requires) && !in_array($this->requires, array_keys($config)))
+        {
+            foreach ($this->requires as $key)
+            {
+                if (empty($config[$key]))
+                    throw new Exception('The Service "' . get_class($this) . '" requires a configuration key named "' . $key . '".');
+            }
+        }
+
+        $this->config = $config;
+    }
 
     /**
      * A convenience method that fetches the contents of a url

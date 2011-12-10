@@ -30,13 +30,14 @@ Requerimientos
 
 Como se usa?
 ============
-Antes de iniciar, debes escribir los datos necesarios en el archivo config.ini y luego puedes hacer lo siguiente:
+Inicialmente puedes editar el archivo config.ini con los servicios necesarios y pasarlo al constructor.
 
     <?php
         require('directorio/a/SimpleLifestream.php');
 
         try {
-            $lifestream = new SimpleLifestream();
+            $configFile = dirname(__FILE__) . '/config.ini';
+            $lifestream = new SimpleLifestream($configFile);
             $output = $lifestream->getLifestream();
             var_dump($output);
         } catch (Exception $e) { echo 'Un error ha ocurrido!'; }
@@ -74,6 +75,22 @@ O puedes especificar los servicios individualmente, incluso puedes especificar v
             $lifestream->loadService('Twitter', array('username' => 'nombre-usuario-twitter-dos'));
             $lifestream->loadService('Youtube', array('username' => 'nombre-usuario-youtube'));
             $output = $lifestream->getLifestream();
+            var_dump($output);
+
+        } catch (Exception $e) { echo 'Un error ha ocurrido!'; }
+    ?>
+
+El método getLifestream() acepta como atributo un número entero para delimitar el resultado de las acciones más recientes.
+
+    <?php
+        require('directorio/a/SimpleLifestream.php');
+
+        try {
+
+            $lifestream = new SimpleLifestream();
+            $lifestream->loadService('Twitter', array('username' => 'nombre-usuario-twitter'));
+            $lifestream->loadService('Youtube', array('username' => 'nombre-usuario-youtube'));
+            $output = $lifestream->getLifestream(10);
             var_dump($output);
 
         } catch (Exception $e) { echo 'Un error ha ocurrido!'; }

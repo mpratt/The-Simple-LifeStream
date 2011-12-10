@@ -22,10 +22,10 @@ class SimpleLifestream
      */
     public function __construct($config = array())
     {
-        if ((empty($config) || !is_array($config)) && is_readable(dirname(__FILE__) . '/config.ini'))
-            $config = parse_ini_file(dirname(__FILE__) . '/config.ini', true);
+        if (is_string($config) && is_readable($config))
+            $config = parse_ini_file($config, true);
 
-        if (!empty($config))
+        if (!empty($config) && is_array($config))
         {
             foreach ($config as $serviceName => $values)
                 $this->loadService($serviceName, $values);
@@ -43,8 +43,8 @@ class SimpleLifestream
     public function loadService($serviceName, $values)
     {
         $serviceName .= 'Service';
-        if (!is_readable(dirname(__FILE__) . '/Services/' . $serviceName . '.php') || !isset($values['username']))
-            throw new Exception('The service ' . $serviceName . ' does not exist or has no username variable!');
+        if (!is_readable(dirname(__FILE__) . '/Services/' . $serviceName . '.php'))
+            throw new Exception('The service ' . $serviceName . ' does not exist');
 
         require_once(dirname(__FILE__) . '/Services/' . $serviceName . '.php');
         $serviceObject = new $serviceName();
@@ -59,14 +59,19 @@ class SimpleLifestream
      * @param int $limit The maximal amount of entries you want to get.
      * @return array
      */
-    public function getLifestream($limit = 50)
+    public function getLifestream($limit = 0)
     {
         $output = array();
+        if (empty($this->services))
+            return $output;
+
         foreach ($this->services as $service)
             $output[] = $service->getApiData();
 
         $output = $this->flattenArray($output);
-        usort($output, array($this, 'orderByDate'));
+
+        if (!empty($output))
+            usort($output, array($this, 'orderByDate'));
 
         if ($limit > 0 && count($output) > $limit)
             $output = array_slice($output, 0, $limit);
