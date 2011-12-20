@@ -17,8 +17,8 @@ Sitios Soportados
     - Busca por Preguntas/Respuestas publicadas.
     - Busca por medallas que hayas recibido.
 - Github
-    - Busca por proyectos iniciados.
-    - Busca por proyectos actualizados (push).
+    - Busca por proyectos iniciados o actualizados.
+    - Busca por Gists Creados o actualizados.
 - FacebookPages
     - Coge toda la información de una página de Facebook.
     - Ojo, Facebook Pages es distinto a tu página de perfil en facebook.

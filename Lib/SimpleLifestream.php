@@ -17,7 +17,8 @@ class SimpleLifestream
     /**
      * Instantiates available services on construction.
      *
-     * @param mixed $config An array with all the data needed to call the services. When Empty it tries to load the data from config.ini
+     * @param mixed $config You can pass an array with all the information
+     *                      or a string with the location of a ini file with all the data.
      * @return void
      */
     public function __construct($config = array())
@@ -78,15 +79,6 @@ class SimpleLifestream
 
         return $output;
     }
-
-    /**
-     * To avoid warnings of strtotime() relying on the system's timezone settings
-     * you can set the timezone on the library itself.
-     *
-     * @param string $timezone The timezone.
-     * @return void
-     */
-    public function setTimezone($timezone) { date_default_timezone_set($timezone); }
 
     /**
      * flattens a multidimensional array
