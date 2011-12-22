@@ -51,6 +51,13 @@ class GithubService extends SimpleLifestreamAdapter
         {
             case 'CreateEvent':
             case 'PushEvent':
+
+                // Github registers CreateEvents twice! The first one is done when you create the repo via webbrowser
+                // and the second one when you actually push your first push.
+                // To avoid double-posting we just choose the second one.
+                if (empty($value['payload']['ref']))
+                    return ;
+
                 $html = sprintf($this->translation[$value['type']], $value['repository']['url'], $value['repository']['name']);
                 break;
 
