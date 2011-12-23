@@ -22,6 +22,8 @@ Sitios Soportados
 - FacebookPages
     - Coge toda la información de una página de Facebook.
     - Ojo, Facebook Pages es distinto a tu página de perfil en facebook.
+- Atom/RSS Feeds
+    - Busca por información contenida en feeds Atom/RSS (AtomService).
 
 Requerimientos
 ==============

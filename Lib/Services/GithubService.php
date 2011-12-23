@@ -47,6 +47,7 @@ class GithubService extends SimpleLifestreamAdapter
         if (!in_array($value['type'], array('PushEvent', 'CreateEvent', 'GistEvent')))
             return ;
 
+        $html = 'unknown action';
         switch ($value['type'])
         {
             case 'CreateEvent':
@@ -55,7 +56,7 @@ class GithubService extends SimpleLifestreamAdapter
                 // Github registers CreateEvents twice! The first one is done when you create the repo via webbrowser
                 // and the second one when you actually push your first push.
                 // To avoid double-posting we just choose the second one.
-                if (empty($value['payload']['ref']))
+                if (empty($value['payload']['ref']) || empty($value['repository']))
                     return ;
 
                 $html = sprintf($this->translation[$value['type']], $value['repository']['url'], $value['repository']['name']);

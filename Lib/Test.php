@@ -29,11 +29,24 @@ if (function_exists('json_decode'))
 else
     SimpleLifestreamOutput('Need to have JSON', true);
 
+if (function_exists('utf8_decode'))
+    SimpleLifestreamOutput('UTF8 OK');
+else
+    SimpleLifestreamOutput('Need to have UTF8 support', true);
+
+if (function_exists('simplexml_load_string'))
+    SimpleLifestreamOutput('SimpleXML OK');
+else
+    SimpleLifestreamOutput('Need to have SimpleXML support', true);
+
 $testArray = array('Github'  => array('Github' => array('username' => 'mpratt')),
                    'Twitter' => array('Twitter' => array('username' => 'parishilton')),
                    'Youtube' => array('Youtube' => array('username' => 'mtppratt')),
                    'StackOverflow' => array('StackOverflow' => array('username' => '430087')),
-                   'FacebookPages' => array('FacebookPages' => array('username' => '27469195051')));
+                   'FacebookPages' => array('FacebookPages' => array('username' => '27469195051')),
+                   'RSS Feed Test'  => array('Atom' => array('url' => 'http://www.michael-pratt.com/blog/rss/')),
+                   'ATOM Feed Test' => array('Atom' => array('url' => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom')));
+
 
 SimpleLifestreamOutput(' ');
 foreach($testArray as $title => $config)
@@ -45,27 +58,27 @@ foreach($testArray as $title => $config)
         $output = $lifestream->getLifestream();
 
         if (empty($output))
-            SimpleLifestreamOutput('Empty array returned - Its required to have valid usernames/services with data for testing.', true);
+            SimpleLifestreamOutput('**** Empty array returned - Its required to have valid usernames/services with data for testing.', true);
         else if (!is_array($output))
-            SimpleLifestreamOutput('Wrong format returned', true);
+            SimpleLifestreamOutput('**** Wrong format returned', true);
+        else if (empty($output['0']['service']) || $output['0']['service'] != strtolower($title))
+            SimpleLifestreamOutput('** Warning: Wrong Servicename | Gotten: "' . $output['0']['service'] . '" | Expected: "' . strtolower($title) . '"');
 
         SimpleLifestreamOutput('Validating ' . $title . ' output');
         foreach ($output as $k => $o)
         {
             if (empty($o['html']) || !is_string($o['html']))
-                SimpleLifestreamOutput('Html key number ' . $k . ' is in the wrong format', true);
-            else if (empty($o['date']) || !is_numeric($o['date']))
-                SimpleLifestreamOutput('Date key number ' . $k . ' is in the wrong format', true);
-            else if (empty($o['service']) || $o['service'] != strtolower($title))
-                SimpleLifestreamOutput('Wrong Service key number ' . $k, true);
+                SimpleLifestreamOutput('**** Html key number ' . $k . ' is in the wrong format', true);
+            else if (empty($o['date']) || !is_numeric($o['date']) || $o['date'] < 0 || strlen($o['date']) < 10)
+                SimpleLifestreamOutput('**** Date key number ' . $k . ' is in the wrong format', true);
             else if (count($o) != count($o, 1))
-                SimpleLifestreamOutput('Warning: Multidimensional array returned');
+                SimpleLifestreamOutput('** Warning: Multidimensional array returned');
         }
 
         unset($lifestream);
-        SimpleLifestreamOutput($title . ' Test Passed');
+        SimpleLifestreamOutput($title . ' Test Passed!');
         SimpleLifestreamOutput(' ');
-    } catch (Exception $e) { SimpleLifestreamOutput('Library Exception - ' . $e->getMessage(), true); }
+    } catch (Exception $e) { SimpleLifestreamOutput('**** Library Exception - ' . $e->getMessage(), true); }
 }
 
 ?>
