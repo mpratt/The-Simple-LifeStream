@@ -13,6 +13,7 @@ require(dirname(__FILE__) . '/SimpleLifestreamAdapter.php');
 class SimpleLifestream
 {
     protected $services = array();
+    protected $errors   = array();
 
     /**
      * Instantiates available services on construction.
@@ -44,13 +45,15 @@ class SimpleLifestream
     public function loadService($serviceName, $values)
     {
         $serviceName .= 'Service';
-        if (!is_readable(dirname(__FILE__) . '/Services/' . $serviceName . '.php'))
-            throw new Exception('The service ' . $serviceName . ' does not exist');
-
-        require_once(dirname(__FILE__) . '/Services/' . $serviceName . '.php');
-        $serviceObject = new $serviceName();
-        $serviceObject->setConfig($values);
-        $this->services[] = $serviceObject;
+        if (is_readable(dirname(__FILE__) . '/Services/' . $serviceName . '.php'))
+        {
+            require_once(dirname(__FILE__) . '/Services/' . $serviceName . '.php');
+            $serviceObject = new $serviceName();
+            $serviceObject->setConfig($values);
+            $this->services[] = $serviceObject;
+        }
+        else
+            $this->errors[] = 'The service ' . $serviceName . ' does not exist';
     }
 
     /**
@@ -67,7 +70,13 @@ class SimpleLifestream
             return $output;
 
         foreach ($this->services as $service)
-            $output[] = $service->getApiData();
+        {
+            try {
+                $output[] = $service->getApiData();
+            } catch (Exception $e) {
+                $this->errors[] = $e->getMessage();
+            }
+        }
 
         $output = $this->flattenArray($output);
 
@@ -78,6 +87,24 @@ class SimpleLifestream
             $output = array_slice($output, 0, $limit);
 
         return $output;
+    }
+
+    /**
+     * This method confirms if the process had any errors
+     * @return bool
+     */
+    public function hasErrors()
+    {
+       return (!empty($this->errors));
+    }
+
+    /**
+     * Returns an array with all the errors.
+     * @return array
+     */
+    public function getErrors()
+    {
+       return $this->errors;
     }
 
     /**
@@ -105,6 +132,15 @@ class SimpleLifestream
      * @param array $b
      * @return bool
      */
-    protected function orderByDate($a, $b) { return $a['date'] < $b['date']; }
+    protected function orderByDate($a, $b)
+    {
+        if (empty($a['date']) || !is_numeric($a['date']))
+            $a['date'] = 0;
+
+        if (empty($b['date']) || !is_numeric($b['date']))
+            $b['date'] = 0;
+
+        return $a['date'] < $b['date'];
+    }
 }
 ?>

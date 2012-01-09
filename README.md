@@ -36,50 +36,60 @@ Inicialmente puedes editar el archivo config.ini con los servicios necesarios y 
 
     <?php
         require('directorio/a/SimpleLifestream.php');
+        $lifestream = new SimpleLifestream(dirname(__FILE__) . '/config.ini');
 
-        try {
-            $configFile = dirname(__FILE__) . '/config.ini';
-            $lifestream = new SimpleLifestream($configFile);
-            $output = $lifestream->getLifestream();
+        $output = $lifestream->getLifestream();
+
+        if ($lifestream->hasErrors())
+        {
+            var_dump($lifestream->getErrors());
+            die();
+        }
+        else
             var_dump($output);
-        } catch (Exception $e) { echo 'Un error ha ocurrido!'; }
     ?>
 
 Tambien puedes especificar los datos al instanciar el objeto SimpleLifestream.
 
     <?php
         require('directorio/a/SimpleLifestream.php');
+        $config = array('NombreServicio' => array('username' => 'nombre-usuario-del-servicio'),
+                        'Youtube' => array('username' => 'nombre-usuario-youtube'),
+                        'Twitter' => array('username' => 'nombre-usuario-twitter'),
+                        'Github' => array('username' => 'nombre-usuario-Github'),
+                        'FacebookPages' => array('username' => 'id-página-facebook'));
 
-        try {
+        $lifestream = new SimpleLifestream($config);
 
-            $config = array('NombreServicio' => array('username' => 'nombre-usuario-del-servicio'),
-                            'Youtube' => array('username' => 'nombre-usuario-youtube'),
-                            'Twitter' => array('username' => 'nombre-usuario-twitter'),
-                            'Github' => array('username' => 'nombre-usuario-Github'),
-                            'FacebookPages' => array('username' => 'id-página-facebook'));
+        $output = $lifestream->getLifestream();
 
-            $lifestream = new SimpleLifestream($config);
-            $output = $lifestream->getLifestream();
+        if ($lifestream->hasErrors())
+        {
+            var_dump($lifestream->getErrors());
+            die();
+        }
+        else
             var_dump($output);
-
-        } catch (Exception $e) { echo 'Un error ha ocurrido!'; }
     ?>
 
 O puedes especificar los servicios individualmente, incluso puedes especificar varias cuentas  de un mismo servicio.
 
     <?php
         require('directorio/a/SimpleLifestream.php');
+        $lifestream = new SimpleLifestream();
+        $lifestream->loadService('Twitter', array('username' => 'nombre-usuario-twitter-uno'));
+        $lifestream->loadService('Twitter', array('username' => 'nombre-usuario-twitter-dos'));
+        $lifestream->loadService('Youtube', array('username' => 'nombre-usuario-youtube'));
 
-        try {
+        $output = $lifestream->getLifestream();
 
-            $lifestream = new SimpleLifestream();
-            $lifestream->loadService('Twitter', array('username' => 'nombre-usuario-twitter-uno'));
-            $lifestream->loadService('Twitter', array('username' => 'nombre-usuario-twitter-dos'));
-            $lifestream->loadService('Youtube', array('username' => 'nombre-usuario-youtube'));
-            $output = $lifestream->getLifestream();
+        if ($lifestream->hasErrors())
+        {
+            var_dump($lifestream->getErrors());
+            die();
+        }
+        else
             var_dump($output);
-
-        } catch (Exception $e) { echo 'Un error ha ocurrido!'; }
     ?>
 
 El método getLifestream() acepta como atributo un número entero para delimitar el resultado de las acciones más recientes.
@@ -87,15 +97,19 @@ El método getLifestream() acepta como atributo un número entero para delimitar
     <?php
         require('directorio/a/SimpleLifestream.php');
 
-        try {
+        $lifestream = new SimpleLifestream();
+        $lifestream->loadService('Twitter', array('username' => 'nombre-usuario-twitter'));
+        $lifestream->loadService('Youtube', array('username' => 'nombre-usuario-youtube'));
 
-            $lifestream = new SimpleLifestream();
-            $lifestream->loadService('Twitter', array('username' => 'nombre-usuario-twitter'));
-            $lifestream->loadService('Youtube', array('username' => 'nombre-usuario-youtube'));
-            $output = $lifestream->getLifestream(10);
+        $output = $lifestream->getLifestream(10);
+
+        if ($lifestream->hasErrors())
+        {
+            var_dump($lifestream->getErrors());
+            die();
+        }
+        else
             var_dump($output);
-
-        } catch (Exception $e) { echo 'Un error ha ocurrido!'; }
     ?>
 
 Licencia

@@ -19,24 +19,16 @@ function SimpleLifestreamOutput($m, $die = false) { echo "${m} \n"; if ($die) di
 require(dirname(__FILE__) . '/SimpleLifestream.php');
 SimpleLifestreamOutput('Testing The Simple Life(stream) Library');
 
-if (function_exists('curl_init'))
-    SimpleLifestreamOutput('CURL OK');
-else
+if (!function_exists('curl_init'))
     SimpleLifestreamOutput('Need to have CURL',true);
 
-if (function_exists('json_decode'))
-    SimpleLifestreamOutput('JSON OK');
-else
+if (!function_exists('json_decode'))
     SimpleLifestreamOutput('Need to have JSON', true);
 
-if (function_exists('utf8_decode'))
-    SimpleLifestreamOutput('UTF8 OK');
-else
+if (!function_exists('utf8_decode'))
     SimpleLifestreamOutput('Need to have UTF8 support', true);
 
-if (function_exists('simplexml_load_string'))
-    SimpleLifestreamOutput('SimpleXML OK');
-else
+if (!function_exists('simplexml_load_string'))
     SimpleLifestreamOutput('Need to have SimpleXML support', true);
 
 $testArray = array('Github'  => array('Github' => array('username' => 'mpratt')),
@@ -53,32 +45,40 @@ foreach($testArray as $title => $config)
 {
     SimpleLifestreamOutput('Testing ' . $title);
 
-    try {
-        $lifestream = new SimpleLifestream($config);
-        $output = $lifestream->getLifestream();
+    $lifestream = new SimpleLifestream($config);
+    $output = $lifestream->getLifestream();
 
-        if (empty($output))
-            SimpleLifestreamOutput('**** Empty array returned - Its required to have valid usernames/services with data for testing.', true);
-        else if (!is_array($output))
-            SimpleLifestreamOutput('**** Wrong format returned', true);
-        else if (empty($output['0']['service']) || $output['0']['service'] != strtolower($title))
-            SimpleLifestreamOutput('** Warning: Wrong Servicename | Gotten: "' . $output['0']['service'] . '" | Expected: "' . strtolower($title) . '"');
+    if ($lifestream->hasErrors())
+    {
+        foreach ($lifestream->getErrors() as $e)
+            SimpleLifestreamOutput('****  - ' . $e);
 
-        SimpleLifestreamOutput('Validating ' . $title . ' output');
-        foreach ($output as $k => $o)
-        {
-            if (empty($o['html']) || !is_string($o['html']))
-                SimpleLifestreamOutput('**** Html key number ' . $k . ' is in the wrong format', true);
-            else if (empty($o['date']) || !is_numeric($o['date']) || $o['date'] < 0 || strlen($o['date']) < 10)
-                SimpleLifestreamOutput('**** Date key number ' . $k . ' is in the wrong format', true);
-            else if (count($o) != count($o, 1))
-                SimpleLifestreamOutput('** Warning: Multidimensional array returned');
-        }
+        die('*** Test Failed ***');
+    }
+    else if (!is_array($output))
+        SimpleLifestreamOutput('**** Wrong format returned', true);
+    else if (empty($output))
+    {
+        SimpleLifestreamOutput('** Warning: The output is empty -- skiping test!');
+        continue ;
+    }
+    else if (empty($output['0']['service']) || $output['0']['service'] != strtolower($title))
+        SimpleLifestreamOutput('** Warning: Wrong Servicename | Gotten: "' . $output['0']['service'] . '" | Expected: "' . strtolower($title) . '"');
 
-        unset($lifestream);
-        SimpleLifestreamOutput($title . ' Test Passed!');
-        SimpleLifestreamOutput(' ');
-    } catch (Exception $e) { SimpleLifestreamOutput('**** Library Exception - ' . $e->getMessage(), true); }
+    SimpleLifestreamOutput('Validating ' . $title . ' output');
+    foreach ($output as $k => $o)
+    {
+        if (empty($o['html']) || !is_string($o['html']))
+            SimpleLifestreamOutput('**** Html key number ' . $k . ' is in the wrong format', true);
+        else if (empty($o['date']) || !is_numeric($o['date']) || $o['date'] < 0 || strlen($o['date']) < 10)
+            SimpleLifestreamOutput('**** Date key number ' . $k . ' is in the wrong format', true);
+        else if (count($o) != count($o, 1))
+            SimpleLifestreamOutput('** Warning: Multidimensional array returned');
+    }
+
+    unset($lifestream);
+    SimpleLifestreamOutput($title . ' Test Passed!');
+    SimpleLifestreamOutput(' ');
 }
 
 ?>
