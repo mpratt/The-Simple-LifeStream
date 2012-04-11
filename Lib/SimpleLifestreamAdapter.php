@@ -54,7 +54,7 @@ abstract class SimpleLifestreamAdapter
         if (!function_exists('curl_init'))
             throw new Exception('Curl must be installed on your server');
 
-        $timeout = (!empty($config['timeout']) && is_numeric($config['timeout']) ? $config['timeout'] : 4);
+        $timeout = (isset($this->config['timeout']) && $this->config['timeout'] > 0 ? (int) $this->config['timeout'] : 4);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);

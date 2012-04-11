@@ -1,0 +1,11 @@
+{
+    "name": "TheSimpleLifestream/TheSimpleLifestream",
+    "type": "library",
+    "description": "A library that returns lifestream events from a bunch of social services",
+    "keywords": ["lifestream","lifestreaming","life-stream"],
+    "homepage": "https://github.com/mpratt/The-Simple-LifeStream",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.2.0"
+    }
+}
