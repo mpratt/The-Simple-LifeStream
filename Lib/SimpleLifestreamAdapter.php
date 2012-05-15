@@ -10,6 +10,7 @@
  * file that was distributed with this source code.
  *
  */
+
 abstract class SimpleLifestreamAdapter
 {
     protected $config;
@@ -79,7 +80,7 @@ abstract class SimpleLifestreamAdapter
         // Check for translation strings
         if (!empty($config['translate']) && is_array($config['translate']) && count($config['translate']) == 2)
         {
-            $this->transltion += $config['translate'];
+            $this->translation += $config['translate'];
             unset($config['translate']);
         }
 
@@ -97,15 +98,14 @@ abstract class SimpleLifestreamAdapter
         if (!function_exists('curl_init'))
             throw new Exception('Curl must be installed on your server');
 
-        $timeout = (isset($this->config['timeout']) && $this->config['timeout'] > 0 ? (int) $this->config['timeout'] : 4);
-
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, (isset($this->config['timeout']) && $this->config['timeout'] > 0 ? (int) $this->config['timeout'] : 5));
         curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:2.0.1) Gecko/20110606 Firefox/4.0.1');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
         $data = curl_exec($ch);
         curl_close($ch);
 

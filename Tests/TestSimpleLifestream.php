@@ -30,6 +30,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     public function testTwitter()
     {
         $lifestream = new SimpleLifestream(array('Twitter' => array('username' => 'parishilton')));
+        $lifestream->setCacheConfig('', false);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
@@ -42,6 +43,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     public function testGithub()
     {
         $lifestream = new SimpleLifestream(array('Github' => array('username' => 'mpratt')));
+        $lifestream->setCacheConfig('', false);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
@@ -54,6 +56,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     public function testYoutube()
     {
         $lifestream = new SimpleLifestream(array('Youtube' => array('username' => 'mtppratt')));
+        $lifestream->setCacheConfig('', false);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
@@ -66,6 +69,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     public function testStackOverflow()
     {
         $lifestream = new SimpleLifestream(array('StackOverflow' => array('username' => '430087')));
+        $lifestream->setCacheConfig('', false);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
@@ -78,6 +82,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     public function testFacebookPages()
     {
         $lifestream = new SimpleLifestream(array('FacebookPages' => array('username' => '27469195051')));
+        $lifestream->setCacheConfig('', false);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
@@ -91,6 +96,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue(function_exists('simplexml_load_string'));
         $lifestream = new SimpleLifestream(array('Atom' => array('url' => 'http://www.michael-pratt.com/blog/rss/')));
+        $lifestream->setCacheConfig('', false);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
@@ -104,6 +110,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue(function_exists('simplexml_load_string'));
         $lifestream = new SimpleLifestream(array('Atom' => array('url' => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom')));
+        $lifestream->setCacheConfig('', false);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
@@ -116,6 +123,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     public function testIniFile()
     {
         $lifestream = new SimpleLifestream(dirname(__FILE__) . '/testIni.ini');
+        $lifestream->setCacheConfig('', false);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
@@ -123,30 +131,33 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test Limit
+     * Test Limit and Cache
      */
-    public function testLimit()
+    public function testLimitAndCache()
     {
         $lifestream = new SimpleLifestream(dirname(__FILE__) . '/testIni.ini');
-        $output = $lifestream->getLifestream(10);
+        $output1 = $lifestream->getLifestream(10);
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->assertEquals(count($output), 10);
-        $this->validateOutput($output);
+        $this->assertEquals(count($output1), 10);
+        $this->validateOutput($output1);
 
         $lifestream = new SimpleLifestream(dirname(__FILE__) . '/testIni.ini');
-        $output = $lifestream->getLifestream(1);
+        $output2 = $lifestream->getLifestream(1);
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->assertEquals(count($output), 1);
-        $this->validateOutput($output);
+        $this->assertEquals(count($output2), 1);
+        $this->validateOutput($output2);
 
         $lifestream = new SimpleLifestream(dirname(__FILE__) . '/testIni.ini');
-        $output = $lifestream->getLifestream(6);
+        $output3 = $lifestream->getLifestream(6);
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->assertEquals(count($output), 6);
-        $this->validateOutput($output);
+        $this->assertEquals(count($output3), 6);
+        $this->validateOutput($output3);
+
+        $this->assertEquals($output1[0], $output2[0]);
+        $this->assertEquals($output2[0], $output3[0]);
     }
 
     /**

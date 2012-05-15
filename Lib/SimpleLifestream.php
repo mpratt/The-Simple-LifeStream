@@ -9,11 +9,15 @@
  *
  */
 
-require(dirname(__FILE__) . '/SimpleLifestreamAdapter.php');
+require_once(dirname(__FILE__) . '/SimpleLifestreamAdapter.php');
+require_once(dirname(__FILE__) . '/SimpleLifestreamCache.php');
 class SimpleLifestream
 {
     protected $services = array();
     protected $errors   = array();
+    protected $enableCaching;
+    protected $cacheLocation;
+    protected $cacheDuration;
 
     /**
      * Instantiates available services on construction.
@@ -32,6 +36,8 @@ class SimpleLifestream
             foreach ($config as $serviceName => $values)
                 $this->loadService($serviceName, $values);
         }
+
+        $this->setCacheConfig(dirname(__FILE__) . '/Cache');
     }
 
     /**
@@ -65,26 +71,36 @@ class SimpleLifestream
      */
     public function getLifestream($limit = 0)
     {
-        $output = array();
-        if (empty($this->services))
-            return $output;
+        $cacheIndex = md5(serialize($this->services) . $limit);
+        $cache  = new SimpleLifestreamCache($this->cacheLocation, $this->enableCaching);
+        $output = $cache->read($cacheIndex);
 
-        foreach ($this->services as $service)
+        if (empty($this->services))
+            return array();
+
+        if (empty($output) || !is_array($output))
         {
-            try {
-                $output[] = $service->getApiData();
-            } catch (Exception $e) {
-                $this->errors[] = $e->getMessage();
+            foreach ($this->services as $service)
+            {
+                try {
+                    $output[] = $service->getApiData();
+                } catch (Exception $e) {
+                    $this->errors[] = $e->getMessage();
+                }
+            }
+
+            $output = $this->flattenArray($output);
+            if (!empty($output) && is_array($output))
+            {
+                usort($output, array($this, 'orderByDate'));
+
+                if ($limit > 0 && count($output) > $limit)
+                    $output = array_slice($output, 0, $limit);
+
+                if ($this->enableCaching && empty($this->errors))
+                    $cache->store($cacheIndex, $output, $this->cacheDuration);
             }
         }
-
-        $output = $this->flattenArray($output);
-
-        if (!empty($output))
-            usort($output, array($this, 'orderByDate'));
-
-        if ($limit > 0 && count($output) > $limit)
-            $output = array_slice($output, 0, $limit);
 
         return $output;
     }
@@ -105,6 +121,21 @@ class SimpleLifestream
     public function getErrors()
     {
        return $this->errors;
+    }
+
+    /**
+     * Sets the cache configuration
+     *
+     * @param string $path  The directory where the cache files are going to be stored
+     * @param bool $enable  Wether caching is enabled or not. ()
+     * @param int  $ttl     The duration of the cache file in seconds. (10 minutes by default)
+     * @return void
+     */
+    public function setCacheConfig($path, $enable = true, $time = 600)
+    {
+        $this->cacheLocation = $path;
+        $this->enableCaching = (bool) $enable;
+        $this->cacheDuration = (int) $time;
     }
 
     /**
