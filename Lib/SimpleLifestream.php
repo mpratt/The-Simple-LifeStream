@@ -126,7 +126,7 @@ class SimpleLifestream
     }
 
     /**
-     * Callback method that organizes the stream by most recent
+     * Callback method that organizes the stream by most recent events
      *
      * @param array $a
      * @param array $b

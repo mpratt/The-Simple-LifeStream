@@ -13,10 +13,14 @@
 
 class GithubService extends SimpleLifestreamAdapter
 {
-    protected $translation = array('PushEvent'   => 'actualizó el proyecto <a href="%s">%s</a>.',
-                                   'CreateEvent' => 'creó el proyecto <a href="%s">%s</a>.',
-                                   'createGist'  => 'creó el gist <a href="%s">%s</a>',
-                                   'updateGist'  => 'actualizó el gist <a href="%s">%s</a>');
+    protected $translation = array('en' => array('PushEvent'   => 'pushed a new commit to <a href="%s">%s</a>.',
+                                                 'CreateEvent' => 'Created the <a href="%s">%s</a> repository.',
+                                                 'createGist'  => 'created a new Gist <a href="%s">%s</a>',
+                                                 'updateGist'  => 'updated a Gist <a href="%s">%s</a>'),
+                                   'es' => array('PushEvent'   => 'actualizó el proyecto <a href="%s">%s</a>.',
+                                                 'CreateEvent' => 'creó el proyecto <a href="%s">%s</a>.',
+                                                 'createGist'  => 'creó el gist <a href="%s">%s</a>',
+                                                 'updateGist'  => 'actualizó el gist <a href="%s">%s</a>'));
 
     /**
      * Gets the data of the user and returns an array
@@ -59,11 +63,11 @@ class GithubService extends SimpleLifestreamAdapter
                 if (empty($value['payload']['ref']) || empty($value['repository']))
                     return ;
 
-                $html = sprintf($this->translation[$value['type']], $value['repository']['url'], $value['repository']['name']);
+                $html = $this->translate($value['type'], $value['repository']['url'], $value['repository']['name']);
                 break;
 
             case 'GistEvent':
-                $html = sprintf($this->translation[$value['payload']['action'] . 'Gist'], $value['payload']['url'], $value['payload']['name']);
+                $html = $this->translate($value['payload']['action'] . 'Gist', $value['payload']['url'], $value['payload']['name']);
                 break;
         }
 

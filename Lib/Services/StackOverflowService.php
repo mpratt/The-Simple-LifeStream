@@ -13,10 +13,16 @@
 
 class StackOverflowService extends SimpleLifestreamAdapter
 {
-    protected $translation = array('answer'   => 'contestó la pregunta - "<a href="http://stackoverflow.com/questions/%s">%s</a>".',
-                                   'question' => 'publicó la pregunta "<a href="http://stackoverflow.com/questions/%s">%s</a>".',
-                                   'badge'    => 'se ganó la medalla "<a href="http://stackoverflow.com/users/%s?tab=reputation">%s</a>" (%s).',
-                                   'comment'  => 'comentó en "<a href="http://stackoverflow.com/questions/%s#%s">%s</a>".');
+    protected $translation = array('en' => array('answer'   => 'answered "<a href="http://stackoverflow.com/questions/%s">%s</a>".',
+                                                 'question' => 'asked "<a href="http://stackoverflow.com/questions/%s">%s</a>".',
+                                                 'badge'    => 'won "<a href="http://stackoverflow.com/users/%s?tab=reputation">%s</a>" (%s).',
+                                                 'comment'  => 'commented "<a href="http://stackoverflow.com/questions/%s#%s">%s</a>".',
+                                                 'unknown'  => 'unknown action'),
+                                    'es' => array('answer'   => 'contestó la pregunta - "<a href="http://stackoverflow.com/questions/%s">%s</a>".',
+                                                 'question' => 'publicó la pregunta "<a href="http://stackoverflow.com/questions/%s">%s</a>".',
+                                                 'badge'    => 'se ganó la medalla "<a href="http://stackoverflow.com/users/%s?tab=reputation">%s</a>" (%s).',
+                                                 'comment'  => 'comentó en "<a href="http://stackoverflow.com/questions/%s#%s">%s</a>".',
+                                                 'unknown'  => 'acción desconocida'));
 
     /**
      * Gets the data of the user and returns an array
@@ -46,18 +52,19 @@ class StackOverflowService extends SimpleLifestreamAdapter
         if (!in_array($value['timeline_type'], array('askoranswered', 'badge', 'comment')))
             return ;
 
-        $html = 'Unknown Action';
         if ($value['timeline_type'] == 'askoranswered')
         {
             if ($value['post_type'] == 'answer')
-                $html = sprintf($this->translation['answer'], $value['post_id'], $value['description']);
+                $html = $this->translate('answer', $value['post_id'], $value['description']);
             else
-                $html = sprintf($this->translation['question'], $value['post_id'], $value['description']);
+                $html = $this->translate('question', $value['post_id'], $value['description']);
         }
         else if ($value['timeline_type'] == 'badge')
-            $html = sprintf($this->translation['badge'], $value['user_id'], $value['description'], $value['detail']);
+            $html = $this->translate('badge', $value['user_id'], $value['description'], $value['detail']);
         else if ($value['timeline_type'] == 'comment')
-            $html = sprintf($this->translation['comment'], $value['post_id'], $value['comment_id'], $value['description']);
+            $html = $this->translate('comment', $value['post_id'], $value['comment_id'], $value['description']);
+        else
+            $html = $this->translate('unknown');
 
         return array('service' => 'stackoverflow',
                      'date' => $value['creation_date'],

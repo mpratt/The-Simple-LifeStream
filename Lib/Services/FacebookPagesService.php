@@ -13,7 +13,8 @@
 
 class FacebookPagesService extends SimpleLifestreamAdapter
 {
-    protected $translation = array('no_title' => 'Sin titulo');
+    protected $translation = array('en' => array('no_title' => 'No title'),
+                                   'es' => array('no_title' => 'Sin titulo'));
 
     /**
      * Gets the data of the user and returns an array
@@ -44,7 +45,7 @@ class FacebookPagesService extends SimpleLifestreamAdapter
         else if (!empty($value['content']))
             $title = (strlen($value['content']) > 130 ? substr($value['content'],0, 130) . '...' : $value['content']);
         else
-            $title = $this->translation['no_title'];
+            $title = $this->translate('no_title');
 
         return array('service' => 'facebookpages',
                      'date' => strtotime($value['published']),

@@ -13,6 +13,8 @@
 abstract class SimpleLifestreamAdapter
 {
     protected $config;
+    protected $translation;
+    protected $defaultLang = 'en';
     protected $requires = array('username');
 
     /**
@@ -22,6 +24,40 @@ abstract class SimpleLifestreamAdapter
      * @return array
      */
     abstract public function getApiData();
+
+    /**
+     * Sets the Default Language
+     *
+     * @param string $lang
+     * @return void
+     */
+    public function setLanguage($lang) { $this->defaultLang = strtolower($lang); }
+
+    /**
+     * Gets an index and returns a translated string
+     *
+     * @return string
+     */
+    protected function translate()
+    {
+        if (func_num_args() < 1)
+            return 'Undefined Lang Index';
+
+        $index = func_get_arg(0);
+        if (isset($this->translation[$this->defaultLang][$index]))
+        {
+            if (func_num_args() > 1)
+            {
+                $params = func_get_args();
+                array_shift($params);
+                return vsprintf($this->translation[$this->defaultLang][$index], $params);
+            }
+            else
+                return $this->translation[$this->defaultLang][$index];
+        }
+
+        return $index;
+    }
 
     /**
      * Sets the configuration for this service
@@ -38,6 +74,13 @@ abstract class SimpleLifestreamAdapter
                 if (empty($config[$key]))
                     throw new Exception('The Service "' . get_class($this) . '" requires a configuration key named "' . $key . '".');
             }
+        }
+
+        // Check for translation strings
+        if (!empty($config['translate']) && is_array($config['translate']) && count($config['translate']) == 2)
+        {
+            $this->transltion += $config['translate'];
+            unset($config['translate']);
         }
 
         $this->config = $config;
@@ -67,7 +110,7 @@ abstract class SimpleLifestreamAdapter
         curl_close($ch);
 
         if (empty($data))
-            throw new Exception('No data was found on ' . parse_url($url, PHP_URL_HOST) . ' | Try again please!');
+            throw new Exception('No data was found on ' . parse_url($url, PHP_URL_HOST) . ' | Please try again!');
 
         return $data;
     }

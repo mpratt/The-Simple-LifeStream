@@ -13,7 +13,8 @@
 
 class TwitterService extends SimpleLifestreamAdapter
 {
-    protected $translation = array('view'   => 'ver');
+    protected $translation = array('en' => array('view' => 'view tweet.'),
+                                   'es' => array('view' => 'ver tweet.'));
 
     /**
      * Gets the data of the user and returns an array
@@ -41,7 +42,7 @@ class TwitterService extends SimpleLifestreamAdapter
     {
         return array('service' => 'twitter',
                      'date' => strtotime($value['created_at']),
-                     'html' => $value['text'] . ' (<a href="http://twitter.com/#!/' . $this->config['username'] . '/status/' . $value['id_str'] . '">' . $this->translation['view'] . '</a>)');
+                     'html' => $value['text'] . ' (<a href="http://twitter.com/#!/' . $this->config['username'] . '/status/' . $value['id_str'] . '">' . $this->translate('view') . '</a>)');
     }
 }
 ?>

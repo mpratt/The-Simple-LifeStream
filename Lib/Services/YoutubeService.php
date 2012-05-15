@@ -13,7 +13,8 @@
 
 class YoutubeService extends SimpleLifestreamAdapter
 {
-    protected $translation = array('favorites' => 'guardó <a href="http://www.youtube.com/watch?v=%s">%s</a> en sus favoritos.');
+    protected $translation = array('en' => array('favorites' => 'favorited <a href="http://www.youtube.com/watch?v=%s">%s</a>.'),
+                                   'es' => array('favorites' => 'guardó <a href="http://www.youtube.com/watch?v=%s">%s</a> en sus favoritos.'));
 
     /**
      * Gets the data of the user and returns an array
@@ -32,7 +33,7 @@ class YoutubeService extends SimpleLifestreamAdapter
             {
                 $return[] = array('service' => 'youtube',
                                   'date' => strtotime($value['created']),
-                                  'html' => sprintf($this->translation['favorites'], $value['video']['id'], $value['video']['title']));
+                                  'html' => $this->translate('favorites', $value['video']['id'], $value['video']['title']));
             }
         }
 

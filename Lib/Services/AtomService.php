@@ -15,7 +15,8 @@ class AtomService extends SimpleLifestreamAdapter
 {
     // Instead of a username you need to specify a url
     protected $requires = array('url');
-    protected $translation = array('publish' => 'publicó la entrada <a href="%s">%s</a>.');
+    protected $translation = array('en' => array('publish' => 'wrote new article <a href="%s">%s</a>.'),
+                                   'es' => array('publish' => 'publicó la entrada <a href="%s">%s</a>.'));
 
     /**
      * Gets the data of the url and returns an array
@@ -43,7 +44,7 @@ class AtomService extends SimpleLifestreamAdapter
 
                         $return[] = array('service' => 'atom',
                                           'date' => strtotime($entry->updated),
-                                          'html' => sprintf($this->translation['publish'], $entry->link->attributes()->href, $entry->title));
+                                          'html' => $this->translate('publish', $entry->link->attributes()->href, $entry->title));
                     }
                 }
             break;
@@ -59,7 +60,7 @@ class AtomService extends SimpleLifestreamAdapter
 
                         $return[] = array('service' => 'atom',
                                           'date' => strtotime($item->pubDate),
-                                          'html' => sprintf($this->translation['publish'], $item->link, $item->title));
+                                          'html' => $this->translate('publish', $item->link, $item->title));
                     }
                 }
             break;
