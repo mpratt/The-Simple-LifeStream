@@ -15,6 +15,7 @@ class SimpleLifestream
 {
     protected $services = array();
     protected $errors   = array();
+    protected $defaultLang = 'en';
     protected $enableCaching;
     protected $cacheLocation;
     protected $cacheDuration;
@@ -71,7 +72,7 @@ class SimpleLifestream
      */
     public function getLifestream($limit = 0)
     {
-        $cacheIndex = md5(serialize($this->services) . $limit);
+        $cacheIndex = md5(serialize($this->services) . $limit . $this->defaultLang);
         $cache  = new SimpleLifestreamCache($this->cacheLocation, $this->enableCaching);
         $output = $cache->read($cacheIndex);
 
@@ -83,10 +84,11 @@ class SimpleLifestream
             foreach ($this->services as $service)
             {
                 try {
+
+                    $service->setLanguage($this->defaultLang);
                     $output[] = $service->getApiData();
-                } catch (Exception $e) {
-                    $this->errors[] = $e->getMessage();
-                }
+
+                } catch (Exception $e) { $this->errors[] = $e->getMessage(); }
             }
 
             $output = $this->flattenArray($output);
@@ -137,6 +139,14 @@ class SimpleLifestream
         $this->enableCaching = (bool) $enable;
         $this->cacheDuration = (int) $time;
     }
+
+     /**
+     * Sets the Default Language
+     *
+     * @param string $lang
+     * @return void
+     */
+    public function setLanguage($lang) { $this->defaultLang = strtolower($lang); }
 
     /**
      * flattens a multidimensional array

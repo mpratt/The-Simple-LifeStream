@@ -1,10 +1,13 @@
 The Simple Life(stream)
 =======================
-Es una "librería" en PHP que busca por las acciones de un usuario en distintas páginas web.
+Es una librería en PHP que busca por las actividades que ha hecho un usuario en distintas páginas web.
 De esta manera puedes agregar tus cuentas de distintos sitios y mostrar esa información en un solo lugar.
 
 Esta librería solo pretende entregar un vector (array) con los datos necesarios para que tu decidas como manipular
 esa información y como presentarla en tu página web.
+
+Simple Life(stream) usa internamente un sistema de cache para mejorar un poco su rendimiento. Por defecto
+la duración del cache es de 10 minutos, pero eso es fácilmente modificable.
 
 Sitios Soportados
 =================
@@ -32,24 +35,8 @@ Requerimientos
 
 Como se usa?
 ============
-Inicialmente puedes editar el archivo config.ini con los servicios necesarios y pasarlo al constructor.
 
-    <?php
-        require('directorio/a/SimpleLifestream.php');
-        $lifestream = new SimpleLifestream(dirname(__FILE__) . '/config.ini');
-
-        $output = $lifestream->getLifestream();
-
-        if ($lifestream->hasErrors())
-        {
-            var_dump($lifestream->getErrors());
-            die();
-        }
-        else
-            var_dump($output);
-    ?>
-
-Tambien puedes especificar los datos al instanciar el objeto SimpleLifestream.
+Al instanciar el objeto debes especificar los datos necesarios.
 
     <?php
         require('directorio/a/SimpleLifestream.php');
@@ -82,39 +69,24 @@ O puedes especificar los servicios individualmente, incluso puedes especificar v
         $lifestream->loadService('Youtube', array('username' => 'nombre-usuario-youtube'));
 
         $output = $lifestream->getLifestream();
-
-        if ($lifestream->hasErrors())
-        {
-            var_dump($lifestream->getErrors());
-            die();
-        }
-        else
-            var_dump($output);
+        var_dump($output);
     ?>
 
-El método getLifestream() acepta como atributo un número entero para delimitar el resultado de las acciones más recientes.
+El método getLifestream() acepta como parámetro un número entero para delimitar el resultado de las acciones más recientes.
 
     <?php
-        require('directorio/a/SimpleLifestream.php');
-
-        $lifestream = new SimpleLifestream();
-        $lifestream->loadService('Twitter', array('username' => 'nombre-usuario-twitter'));
-        $lifestream->loadService('Youtube', array('username' => 'nombre-usuario-youtube'));
-
         $output = $lifestream->getLifestream(10);
-
-        if ($lifestream->hasErrors())
-        {
-            var_dump($lifestream->getErrors());
-            die();
-        }
-        else
-            var_dump($output);
+        var_dump($output);
+        // Muestra las 10 acciónes más recientes.
     ?>
+
+Si quieres ver más ejemplos de uso puedes ir al directorio Tests y ver el contenido de TestSimpleLifestream.php
+o incluso puedes ver el código fuente que esta "decentemente" documentado.
 
 Licencia
 ========
-MIT - El Archivo LICENSE contiene la licencia completa!
+MIT 
+El Archivo LICENSE contiene la licencia completa!
 
 Autor
 =====

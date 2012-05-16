@@ -78,10 +78,10 @@ abstract class SimpleLifestreamAdapter
         }
 
         // Check for translation strings
-        if (!empty($config['translate']) && is_array($config['translate']) && count($config['translate']) == 2)
+        if (!empty($config['translation']) && is_array($config['translation']))
         {
-            $this->translation += $config['translate'];
-            unset($config['translate']);
+            $this->translation = array_merge($this->translation, $config['translation']);
+            unset($config['translation']);
         }
 
         $this->config = $config;

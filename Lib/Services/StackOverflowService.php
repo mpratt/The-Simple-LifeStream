@@ -13,12 +13,12 @@
 
 class StackOverflowService extends SimpleLifestreamAdapter
 {
-    protected $translation = array('en' => array('answer'   => 'answered "<a href="http://stackoverflow.com/questions/%s">%s</a>".',
+    protected $translation = array('en' => array('answer'   => 'answered the "<a href="http://stackoverflow.com/questions/%s">%s</a>" question.',
                                                  'question' => 'asked "<a href="http://stackoverflow.com/questions/%s">%s</a>".',
-                                                 'badge'    => 'won "<a href="http://stackoverflow.com/users/%s?tab=reputation">%s</a>" (%s).',
-                                                 'comment'  => 'commented "<a href="http://stackoverflow.com/questions/%s#%s">%s</a>".',
+                                                 'badge'    => 'won the "<a href="http://stackoverflow.com/users/%s?tab=reputation">%s</a>" badge (%s).',
+                                                 'comment'  => 'commented on "<a href="http://stackoverflow.com/questions/%s#%s">%s</a>".',
                                                  'unknown'  => 'unknown action'),
-                                    'es' => array('answer'   => 'contestó la pregunta - "<a href="http://stackoverflow.com/questions/%s">%s</a>".',
+                                    'es' => array('answer'  => 'contestó la pregunta - "<a href="http://stackoverflow.com/questions/%s">%s</a>".',
                                                  'question' => 'publicó la pregunta "<a href="http://stackoverflow.com/questions/%s">%s</a>".',
                                                  'badge'    => 'se ganó la medalla "<a href="http://stackoverflow.com/users/%s?tab=reputation">%s</a>" (%s).',
                                                  'comment'  => 'comentó en "<a href="http://stackoverflow.com/questions/%s#%s">%s</a>".',

@@ -136,46 +136,106 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     public function testLimitAndCache()
     {
         $lifestream = new SimpleLifestream(dirname(__FILE__) . '/testIni.ini');
+        $lifestream->setCacheConfig(dirname(__FILE__) . '/testCacheDir');
         $output1 = $lifestream->getLifestream(10);
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->assertEquals(count($output1), 10);
+        $this->assertCount(10, $output1);
         $this->validateOutput($output1);
 
         $lifestream = new SimpleLifestream(dirname(__FILE__) . '/testIni.ini');
+        $lifestream->setCacheConfig(dirname(__FILE__) . '/testCacheDir');
         $output2 = $lifestream->getLifestream(1);
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->assertEquals(count($output2), 1);
+        $this->assertCount(1, $output2);
         $this->validateOutput($output2);
 
         $lifestream = new SimpleLifestream(dirname(__FILE__) . '/testIni.ini');
+        $lifestream->setCacheConfig(dirname(__FILE__) . '/testCacheDir');
         $output3 = $lifestream->getLifestream(6);
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->assertEquals(count($output3), 6);
+        $this->assertCount(6, $output3);
         $this->validateOutput($output3);
 
-        $this->assertEquals($output1[0], $output2[0]);
-        $this->assertEquals($output2[0], $output3[0]);
+        $this->assertEquals($output1[0], $output2[0], $output3[0]);
+    }
+
+    /**
+     * Test language
+     */
+    public function testLanguages()
+    {
+        // English
+        $lifestream = new SimpleLifestream(array('Twitter' => array('username' => 'parishilton')));
+        $lifestream->setCacheConfig('', false);
+        $lifestream->setLanguage('en');
+        $output = $lifestream->getLifestream();
+
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output, 'view tweet');
+
+        // Spanish
+        $lifestream = new SimpleLifestream(array('Twitter' => array('username' => 'parishilton')));
+        $lifestream->setCacheConfig('', false);
+        $lifestream->setLanguage('eS');
+        $output = $lifestream->getLifestream();
+
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output, 'ver tweet');
+
+        // Non-Existant Language
+        $lifestream = new SimpleLifestream(array('Twitter' => array('username' => 'parishilton')));
+        $lifestream->setCacheConfig('', false);
+        $lifestream->setLanguage('Unknown');
+        $output = $lifestream->getLifestream();
+
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output, 'view');
+
+        // Custom Translation
+        $lifestream = new SimpleLifestream(array('Twitter' => array('username' => 'parishilton',
+                                                                    'translation' => array('binary' => array('view' => '0101010101010101111000110001100')))));
+        $lifestream->setCacheConfig('', false);
+        $lifestream->setLanguage('binary');
+        $output = $lifestream->getLifestream();
+
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output, '0101010101010101111000110001100');
+
+        // Overwrite a translation
+        $lifestream = new SimpleLifestream(array('Twitter' => array('username' => 'parishilton',
+                                                                    'translation' => array('es' => array('view' => 'deseas observar este tweet')))));
+        $lifestream->setCacheConfig('', false);
+        $lifestream->setLanguage('es');
+        $output = $lifestream->getLifestream();
+
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output, 'deseas observar este tweet');
     }
 
     /**
      * Validates the output of a lifestream
      */
-    protected function validateOutput($output)
+    protected function validateOutput($output, $searchFor = '')
     {
         $this->assertTrue(is_array($output));
         if (!empty($output))
         {
             foreach ($output as $k => $o)
             {
+                $this->assertArrayHasKey('html', $o);
+                $this->assertArrayHasKey('date', $o);
+
                 if (empty($o['html']) || !is_string($o['html']))
                     $this->fail('**** Html key number ' . $k . ' is in the wrong format');
                 else if (empty($o['date']) || !is_numeric($o['date']) || $o['date'] < 0 || strlen($o['date']) < 10)
                     $this->fail('**** Date key number ' . $k . ' is in the wrong format, it should be a timestamp');
                 else if (count($o) != count($o, 1))
                     $this->warning('** Warning: Multidimensional array returned');
+                else if (!empty($searchFor))
+                    $this->assertContains($searchFor, $o['html']);
             }
         }
         else
