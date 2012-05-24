@@ -67,7 +67,7 @@ class RedditService extends SimpleLifestreamAdapter
         if (!empty($value['data']['permalink']))
             $link .= $value['data']['permalink'];
         else
-            $link .= $value['data']['subreddit'] . '/comments/' . str_replace('t3_', '', $value['data']['link_id']) . '/#' . str_replace('t1', '', $value['data']['name']);
+            $link .= '/r/'$value['data']['subreddit'] . '/comments/' . str_replace('t3_', '', $value['data']['link_id']) . '/#' . str_replace('t1', '', $value['data']['name']);
 
         switch ($value['kind'])
         {
