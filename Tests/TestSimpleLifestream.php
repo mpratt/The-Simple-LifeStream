@@ -90,6 +90,23 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test Reddit
+     */
+    public function testReddit()
+    {
+        // Display your saved links with your json saved feed in https://ssl.reddit.com/prefs/feeds/
+        // $lifestream = new SimpleLifestream(array('Reddit' => array('username' => 'mpratt',
+        //                                                            'saved_feed' => 'your-json-feed')));
+
+        $lifestream = new SimpleLifestream(array('Reddit' => array('username' => 'mpratt')));
+        $lifestream->setCacheConfig('', false);
+        $output = $lifestream->getLifestream();
+
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output);
+    }
+
+    /**
      * Test RSS feed
      */
     public function testRSS()

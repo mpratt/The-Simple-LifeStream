@@ -23,6 +23,10 @@ Supported Sites
 - Github
     - Searchs for Create and Push events on a Repo.
     - Searchs for Create and Push events on a Gist.
+- Reddit
+    - Links submitted.
+    - Comments on links.
+    - You can also display your saved links. Look at Tests/TestSimpleLifestream.php to se how.
 - FacebookPages
     - Latest posts on a Page.
     - Remember that a Facebook Page is different than a profile Page.

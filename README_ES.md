@@ -22,6 +22,10 @@ Sitios Soportados
 - Github
     - Busca por proyectos iniciados o actualizados.
     - Busca por Gists Creados o actualizados.
+- Reddit
+    - Links Enviados.
+    - Comentarios hechos en temas.
+    - Links guardados. Puedes ver el archivo Tests/TestSimpleLifestream.php para más información.
 - FacebookPages
     - Coge toda la información de una página de Facebook.
     - Ojo, Facebook Pages es distinto a tu página de perfil en facebook.
