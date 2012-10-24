@@ -1,32 +1,33 @@
 <?php
 /**
- * SimpleLifestreamCache.php
+ * Cache.php
  * This class has the hability to cache data into a file.
  *
- * @author Michael Pratt <pratt@hablarmierda.net>
- * @link   http://www.michael-pratt.com/
+ * @author  Michael Pratt <pratt@hablarmierda.net>
+ * @link    http://www.michael-pratt.com/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace SimpleLifestream\Core;
 
-class SimpleLifestreamCache
+class Cache implements \SimpleLifestream\Interfaces\ICache
 {
-    protected $prefix  = 'SimpleLifestreamCache';
+    protected $prefix  = 'SimpleLifestreamFileCache';
+    protected $enabled = true;
+    protected $ttl;
     protected $location;
-    protected $enabled;
 
     /**
      * Construct
      *
      * @param string $location The path where the files are going to be stored
-     * @param bool $enabled    If Caching is enabled for this request.
      * @return void
      */
-    public function __construct($location = '', $enable = true)
+    public function __construct($location)
     {
+        $this->ttl = (60*10);
         $this->location = $location;
-        $this->enabled = $enable;
         if ($this->enabled)
         {
             if (!file_exists($this->location))
@@ -47,12 +48,12 @@ class SimpleLifestreamCache
      * @param int $ttl The time in seconds that the cache is going to last
      * @return bool True if the cache was saved successfully. False otherwise
      */
-    public function store($key, $data, $ttl)
+    public function store($key, $data, $ttl = 0)
     {
         if (!$this->enabled || empty($data) || empty($key))
             return false;
 
-        $dataArray = array('expire_time' => (time() + ((is_numeric($ttl) && $ttl > 0 ? $ttl : 60))),
+        $dataArray = array('expire_time' => (time() + ((is_numeric($ttl) && $ttl > 0 ? $ttl : $this->ttl))),
                            'content'     => $data,
                            'created'     => date('Y-m-d H:i:s'));
 
@@ -60,6 +61,29 @@ class SimpleLifestreamCache
 
         return (bool) ($createFile !== false && $createFile > 0);
     }
+
+    /**
+     * Stores the cache data to a file
+     *
+     * @param int $ttl Default duration of the cache.
+     * @return void
+     */
+    public function setTTL($ttl) { $this->ttl = (int) $ttl;}
+
+
+    /**
+     * Enables Caching capabilities
+     *
+     * @return void
+     */
+    public function enable() { $this->enabled = true; }
+
+    /**
+     * Disables Caching capabilities
+     *
+     * @return void
+     */
+    public function disable() { $this->enabled = false; }
 
     /**
      * Reads cache data

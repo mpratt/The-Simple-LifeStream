@@ -11,7 +11,9 @@
  */
 
 date_default_timezone_set('America/Bogota');
-require_once(dirname(__FILE__) . '/../Lib/SimpleLifestreamCache.php');
+require_once(dirname(__FILE__) . '/../Lib/Interfaces/ICache.php');
+require_once(dirname(__FILE__) . '/../Lib/Core/Cache.php');
+
 class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
 {
     protected $cacheDir;
@@ -22,7 +24,7 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->cacheDir = dirname(__FILE__) . '/testCacheDir';
-        $cache = new SimpleLifestreamCache($this->cacheDir);
+        $cache = new \SimpleLifestream\Core\Cache($this->cacheDir);
         $cache->flush();
     }
 
@@ -31,8 +33,10 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        $cache = new SimpleLifestreamCache($this->cacheDir);
+        $cache = new \SimpleLifestream\Core\Cache($this->cacheDir);
         $cache->flush();
+
+        rmdir($this->cacheDir);
     }
 
     /**
@@ -40,7 +44,7 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
      */
     public function testStoreArray()
     {
-        $cache = new SimpleLifestreamCache($this->cacheDir);
+        $cache = new \SimpleLifestream\Core\Cache($this->cacheDir);
         $array = array('1', 'asdasd eregrergfdgf dfgdfgjk dfg', '#$^4@35454*(/)');
 
         $this->assertTrue($cache->store('key_array', $array, 10));
@@ -52,7 +56,7 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
      */
     public function testStoreObjects()
     {
-        $cache  = new SimpleLifestreamCache($this->cacheDir);
+        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
         $object = (object) array('1', 'asdasd eregrergfdgf dfgdfgjk dfg', '#$^4@35454*(/)');
 
         $this->assertTrue($cache->store('key_object', $object, 10));
@@ -64,7 +68,7 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
      */
     public function testStoreStrings()
     {
-        $cache  = new SimpleLifestreamCache($this->cacheDir);
+        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
         $string = 'This is a string! ? \' 345 345 sdf # @ $ % & *';
 
         $this->assertTrue($cache->store('key_string', $string, 10));
@@ -76,7 +80,7 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
      */
     public function testNonExistant()
     {
-        $cache  = new SimpleLifestreamCache($this->cacheDir);
+        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
         $this->assertNull($cache->read('unknown_key'));
     }
 
@@ -85,7 +89,7 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
      */
     public function testDuration()
     {
-        $cache  = new SimpleLifestreamCache($this->cacheDir);
+        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
 
         $this->assertTrue($cache->store('timed_string', 'Dummy Data', 1));
         sleep(2);
@@ -97,7 +101,7 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $cache  = new SimpleLifestreamCache($this->cacheDir);
+        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
         $this->assertTrue($cache->store('delete_key', 'this is an example', 10));
         $this->assertTrue($cache->delete('delete_key'));
     }
@@ -107,7 +111,8 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
      */
     public function testDisabled()
     {
-        $cache  = new SimpleLifestreamCache($this->cacheDir, false);
+        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
+        $cache->disable();
 
         $this->assertFalse($cache->store('disabled_key', 'Dummy Data', 10));
         $this->assertNull($cache->read('disabled_key'));
@@ -118,7 +123,7 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
      */
     public function testFlush()
     {
-        $cache  = new SimpleLifestreamCache($this->cacheDir);
+        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
         $cache->flush();
 
         $this->assertTrue($cache->store('flush_key1', 'Dummy Data', 10));

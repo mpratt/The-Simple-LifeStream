@@ -12,8 +12,16 @@
 
 date_default_timezone_set('America/Bogota');
 require_once(dirname(__FILE__) . '/../Lib/SimpleLifestream.php');
+
 class TestSimpleLifestream extends PHPUnit_Framework_TestCase
 {
+    protected $knownTypes = array('Twitter' => array('tweeted'),
+                                  'Github'  => array('pushEvent', 'createEvent', 'createGist', 'updateGist', 'starred', 'followed'),
+                                  'Youtube' => array('favorited'),
+                                  'StackOverflow' => array('badgeWon', 'commented', 'acceptedAnswer', 'asked', 'answered'),
+                                  'FacebookPages' => array('link'),
+                                  'Feed'    => array('posted'),
+                                  'Reddit'  => array('commented', 'posted'));
     /**
      * Test Dependencies
      */
@@ -29,12 +37,12 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
      */
     public function testTwitter()
     {
-        $lifestream = new SimpleLifestream(array('Twitter' => array('username' => 'parishilton')));
-        $lifestream->setCacheConfig('', false);
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'parishilton'));
+        $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output);
+        $this->validateOutput($output, $this->knownTypes['Twitter']);
     }
 
     /**
@@ -42,25 +50,25 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
      */
     public function testGithub()
     {
-        $lifestream = new SimpleLifestream(array('Github' => array('username' => 'mpratt')));
-        $lifestream->setCacheConfig('', false);
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Github' => 'mpratt'));
+        $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output);
+        $this->validateOutput($output, $this->knownTypes['Github']);
     }
 
     /**
-     * Test Youtube
+     *   Test Youtube
      */
     public function testYoutube()
     {
-        $lifestream = new SimpleLifestream(array('Youtube' => array('username' => 'mtppratt')));
-        $lifestream->setCacheConfig('', false);
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Youtube' => 'mtppratt'));
+        $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output);
+        $this->validateOutput($output, $this->knownTypes['Youtube']);
     }
 
     /**
@@ -68,12 +76,12 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
      */
     public function testStackOverflow()
     {
-        $lifestream = new SimpleLifestream(array('StackOverflow' => array('username' => '430087')));
-        $lifestream->setCacheConfig('', false);
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('StackOverflow' => '430087'));
+        $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output);
+        $this->validateOutput($output, $this->knownTypes['StackOverflow']);
     }
 
     /**
@@ -81,12 +89,12 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
      */
     public function testFacebookPages()
     {
-        $lifestream = new SimpleLifestream(array('FacebookPages' => array('username' => '27469195051')));
-        $lifestream->setCacheConfig('', false);
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('FacebookPages' => '27469195051'));
+        $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output);
+        $this->validateOutput($output, $this->knownTypes['FacebookPages']);
     }
 
     /**
@@ -94,16 +102,12 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
      */
     public function testReddit()
     {
-        // Display your saved links with your json saved feed in https://ssl.reddit.com/prefs/feeds/
-        // $lifestream = new SimpleLifestream(array('Reddit' => array('username' => 'mpratt',
-        //                                                            'saved_feed' => 'your-json-feed')));
-
-        $lifestream = new SimpleLifestream(array('Reddit' => array('username' => 'mpratt')));
-        $lifestream->setCacheConfig('', false);
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Reddit' => 'mpratt'));
+        $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output);
+        $this->validateOutput($output, $this->knownTypes['Reddit']);
     }
 
     /**
@@ -112,12 +116,13 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     public function testRSS()
     {
         $this->assertTrue(function_exists('simplexml_load_string'));
-        $lifestream = new SimpleLifestream(array('Atom' => array('url' => 'http://www.michael-pratt.com/blog/rss/')));
-        $lifestream->setCacheConfig('', false);
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Feed' => 'http://www.michael-pratt.com/blog/rss/'));
+        $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output);
+        $this->validateOutput($output, $this->knownTypes['Feed']);
     }
 
     /**
@@ -126,137 +131,155 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     public function testAtom()
     {
         $this->assertTrue(function_exists('simplexml_load_string'));
-        $lifestream = new SimpleLifestream(array('Atom' => array('url' => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom')));
-        $lifestream->setCacheConfig('', false);
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Feed' => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom'));
+        $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output);
+        $this->validateOutput($output, $this->knownTypes['Feed']);
     }
 
     /**
-     * Test Ini file
+     * Test Ignore Types
      */
-    public function testIniFile()
+    public function testIgnoreTypes()
     {
-        $lifestream = new SimpleLifestream(dirname(__FILE__) . '/testIni.ini');
-        $lifestream->setCacheConfig('', false);
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'parishilton'));
+        $lifestream->setCacheEngine(null);
+        $lifestream->ignoreType('tweeted');
+
         $output = $lifestream->getLifestream();
-
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output);
+        $this->assertCount(0, $output);
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'parishilton',
+                                                                   'Youtube' => 'mtppratt'));
+        $lifestream->setCacheEngine(null);
+        $lifestream->ignoreType('tweeted', 'Twitter');
+        $output = $lifestream->getLifestream();
+        $this->assertFalse($lifestream->hasErrors());
+
+        $this->validateOutput($output, $this->knownTypes['Youtube']);
     }
 
     /**
-     * Test Limit and Cache
+     * Test Custom Date Formatting
      */
-    public function testLimitAndCache()
+    public function testCustomDateFormatting()
     {
-        $lifestream = new SimpleLifestream(dirname(__FILE__) . '/testIni.ini');
-        $lifestream->setCacheConfig(dirname(__FILE__) . '/testCacheDir');
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'AlvaroUribeVel'));
+        $lifestream->setCacheEngine(null);
+        $lifestream->setDateFormat('Y-m-d');
+
+        $output = $lifestream->getLifestream();
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output, $this->knownTypes['Twitter']);
+
+        foreach ($output as $o)
+        {
+            list($y, $m, $d) = explode('-', $o['date']);
+            $this->assertTrue(checkdate($m, $d, $y));
+        }
+    }
+
+    /**
+     * Test Languages
+     */
+    public function testLanguages()
+    {
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'AlvaroUribeVel'));
+        $lifestream->setCacheEngine(null);
+        $lifestream->setLanguage('Spanish');
+
+        $output = $lifestream->getLifestream();
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output, $this->knownTypes['Twitter'], 'twitteó');
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'AlvaroUribeVel'));
+        $lifestream->setCacheEngine(null);
+        $lifestream->setLanguage(new \SimpleLifestream\Languages\Spanish());
+
+        $output = $lifestream->getLifestream();
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output, $this->knownTypes['Twitter'], 'twitteó');
+    }
+
+    /**
+     * Test Limit
+     */
+    public function testLimit()
+    {
+        $expectedTypes = array_merge($this->knownTypes['Twitter'],
+                                     $this->knownTypes['Youtube'],
+                                     $this->knownTypes['Feed']);
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'ThatKevinSmith',
+                                                                   'Youtube' => 'mtppratt',
+                                                                   'Feed'    => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom'));
+        $lifestream->setCacheEngine(null);
         $output1 = $lifestream->getLifestream(10);
 
         $this->assertFalse($lifestream->hasErrors());
         $this->assertCount(10, $output1);
-        $this->validateOutput($output1);
+        $this->validateOutput($output1, $expectedTypes);
 
-        $lifestream = new SimpleLifestream(dirname(__FILE__) . '/testIni.ini');
-        $lifestream->setCacheConfig(dirname(__FILE__) . '/testCacheDir');
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Youtube' => 'mtppratt',
+                                                                   'Twitter' => 'ThatKevinSmith',
+                                                                   'Feed'    => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom'));
+        $lifestream->setCacheEngine(null);
         $output2 = $lifestream->getLifestream(1);
 
         $this->assertFalse($lifestream->hasErrors());
         $this->assertCount(1, $output2);
-        $this->validateOutput($output2);
+        $this->validateOutput($output2, $expectedTypes);
 
-        $lifestream = new SimpleLifestream(dirname(__FILE__) . '/testIni.ini');
-        $lifestream->setCacheConfig(dirname(__FILE__) . '/testCacheDir');
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Feed'    => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom',
+                                                                   'Twitter' => 'ThatKevinSmith',
+                                                                   'Youtube' => 'mtppratt'));
+        $lifestream->setCacheEngine(null);
         $output3 = $lifestream->getLifestream(6);
 
         $this->assertFalse($lifestream->hasErrors());
         $this->assertCount(6, $output3);
-        $this->validateOutput($output3);
+        $this->validateOutput($output3, $expectedTypes);
 
         $this->assertEquals($output1[0], $output2[0], $output3[0]);
     }
 
     /**
-     * Test language
+     * Validates the output of a lifestream.
+     *
+     * @param array $output
+     * @param array $types
+     * @param string $htmlContains
+     * @return void
      */
-    public function testLanguages()
-    {
-        // English
-        $lifestream = new SimpleLifestream(array('Twitter' => array('username' => 'parishilton')));
-        $lifestream->setCacheConfig('', false);
-        $lifestream->setLanguage('en');
-        $output = $lifestream->getLifestream();
-
-        $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, 'view tweet');
-
-        // Spanish
-        $lifestream = new SimpleLifestream(array('Twitter' => array('username' => 'parishilton')));
-        $lifestream->setCacheConfig('', false);
-        $lifestream->setLanguage('eS');
-        $output = $lifestream->getLifestream();
-
-        $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, 'ver tweet');
-
-        // Non-Existant Language
-        $lifestream = new SimpleLifestream(array('Twitter' => array('username' => 'parishilton')));
-        $lifestream->setCacheConfig('', false);
-        $lifestream->setLanguage('Unknown');
-        $output = $lifestream->getLifestream();
-
-        $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, 'view');
-
-        // Custom Translation
-        $lifestream = new SimpleLifestream(array('Twitter' => array('username' => 'parishilton',
-                                                                    'translation' => array('binary' => array('view' => '0101010101010101111000110001100')))));
-        $lifestream->setCacheConfig('', false);
-        $lifestream->setLanguage('binary');
-        $output = $lifestream->getLifestream();
-
-        $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, '0101010101010101111000110001100');
-
-        // Overwrite a translation
-        $lifestream = new SimpleLifestream(array('Twitter' => array('username' => 'parishilton',
-                                                                    'translation' => array('es' => array('view' => 'deseas observar este tweet')))));
-        $lifestream->setCacheConfig('', false);
-        $lifestream->setLanguage('es');
-        $output = $lifestream->getLifestream();
-
-        $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, 'deseas observar este tweet');
-    }
-
-    /**
-     * Validates the output of a lifestream
-     */
-    protected function validateOutput($output, $searchFor = '')
+    protected function validateOutput($output, $types, $htmlContains = '')
     {
         $this->assertTrue(is_array($output));
         if (!empty($output))
         {
-            foreach ($output as $k => $o)
+            foreach ($output as $v)
             {
-                $this->assertArrayHasKey('html', $o);
-                $this->assertArrayHasKey('date', $o);
+                $this->assertArrayHasKey('service', $v);
+                $this->assertArrayHasKey('type', $v);
+                $this->assertArrayHasKey('resource', $v);
+                $this->assertArrayHasKey('url', $v);
+                $this->assertArrayHasKey('text', $v);
+                $this->assertArrayHasKey('stamp', $v);
+                $this->assertArrayHasKey('date', $v);
+                $this->assertArrayHasKey('link', $v);
+                $this->assertArrayHasKey('html', $v);
 
-                if (empty($o['html']) || !is_string($o['html']))
-                    $this->fail('**** Html key number ' . $k . ' is in the wrong format');
-                else if (empty($o['date']) || !is_numeric($o['date']) || $o['date'] < 0 || strlen($o['date']) < 10)
-                    $this->fail('**** Date key number ' . $k . ' is in the wrong format, it should be a timestamp');
-                else if (count($o) != count($o, 1))
-                    $this->warning('** Warning: Multidimensional array returned');
-                else if (!empty($searchFor))
-                    $this->assertContains($searchFor, $o['html']);
+                $this->assertTrue((in_array($v['type'], $types)));
+
+                if (!empty($contains))
+                    $this->assertContains($htmlContains, $v['html']);
             }
         }
         else
-            $this->warning('Empty Output');
+            $this->fail('Empty Output');
     }
 }
 ?>
