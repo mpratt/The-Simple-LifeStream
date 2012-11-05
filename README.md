@@ -49,7 +49,7 @@ Basic Usage
 ===========
 
 You can start by passing the service name and resources on construction.
-
+```php
     <?php
         require('SimpleLifestream.php');
         $lifestream = new \SimpleLifestream\SimpleLifestream(array('Reddit' => 'mpratt',
@@ -63,7 +63,7 @@ You can start by passing the service name and resources on construction.
         }
         echo '</ul>';
     ?>
-
+```
 Or if you prefer you can define each service individually.
 
     <?php
