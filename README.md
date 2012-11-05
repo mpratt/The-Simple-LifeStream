@@ -72,7 +72,7 @@ Or if you prefer you can define each service individually.
         $lifestream = new \SimpleLifestream\SimpleLifestream();
         $lifestream->loadService('Twitter', 'parishilton');
         $lifestream->loadService('Twitter', 'ThatKevinSmith');
-        $lifestream->loadService('FacebookPages', '27469195051);
+        $lifestream->loadService('FacebookPages', '27469195051');
         $lifestream->loadService('Youtube', 'ERB');
         $lifestream->loadService('StackOverflow', '430087');
         $lifestream->loadService('Feed', 'http://www.smodcast.com/feed/');
