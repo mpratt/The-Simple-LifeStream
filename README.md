@@ -65,7 +65,7 @@ You can start by passing the service name and resources on construction.
     ?>
 ```
 Or if you prefer you can define each service individually.
-
+```php
     <?php
         require('SimpleLifestream.php');
 
@@ -85,55 +85,55 @@ Or if you prefer you can define each service individually.
         }
         echo '</ul>';
     ?>
-
+```
 The **getLifestream()** method accepts a number, in that way you can limit the latest information you want to get.
-
+```php
     <?php
         $stream = $lifestream->getLifestream(10);
         echo count($stream); // 10
     ?>
-
+```
 You can check for errors with the **hasErrors()** and **getErrors()** methods.
-
+```php
     <?php
         $stream = $lifestream->getLifestream();
         if ($lifestream->hasErrors())
             var_dump($lifestream->getErrors());
     ?>
-
+```
 This library also has support for spanish output. You can even write your own translation object if you like
 and pass it to the **setLanguage()** method.
-
+```php
     <?php
         $lifestream->setLanguage('Spanish');
         $stream = $lifestream->getLifestream(10);
         var_dump($stream);
     ?>
-
+```
 Are there any event types you want to ignore? I got your back!
-
+```php
     <?php
         $lifestream->ignoreType('starred'); // Ignore Github Starred Repos
         $stream = $lifestream->getLifestream();
     ?>
-
+```
 You want to use another cache engine? Or disable the cache alltogether?
-
+```php
     <?php
         $lifestream->setCacheEngine(new MyCacheObject()); // Your object must implement the \SimpleLifestream\Interfaces\ICache interface.
         $lifestream->setCacheEngine(null); // Passing null, disables the cache capabilities of the library.
         $stream = $lifestream->getLifestream(40);
     ?>
-
+```
 And finally, the **date** key gives by default the timestamp of each event. You can change the format of that date by
 using the **setDateFormat()** method
-
+```php
     <?php
         $lifestream->setDateformat('Y-m-d');
         $stream = $lifestream->getLifestream(30);
         var_dump($stream);
     ?>
-
+```
 If you want to see more examples of how to use this library take a peek into the Tests directory and view the **TestSimpleLifestream.php** file.
 Otherwise inspect the source code of the library, I would say that it has a "decent" english documentation and it should be easy to follow.
 
