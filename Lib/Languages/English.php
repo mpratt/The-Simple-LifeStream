@@ -16,6 +16,7 @@ class English extends \SimpleLifestream\Core\Lang
 {
     protected $translation = array('pushEvent'   => 'pushed a new commit to {link}.',
                                    'createEvent' => 'created the {link} repository.',
+                                   'createTag'   => 'added a new tag to {link}.',
                                    'createGist'  => 'created a new Gist {link}',
                                    'updateGist'  => 'updated a Gist {link}',
                                    'starred'     => 'starred {link}.',

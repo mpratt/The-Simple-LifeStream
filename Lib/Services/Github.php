@@ -58,9 +58,19 @@ class Github extends \SimpleLifestream\Core\Adapter
                 if (empty($value['payload']['ref']) || empty($value['repository']))
                     return ;
 
-                $type = $value['type'];
-                $url  = $value['repository']['url'];
-                $text = $value['repository']['name'];
+                // Support for tags
+                if (!empty($value['payload']['ref_type']) && $value['payload']['ref_type'] == 'tag')
+                {
+                    $type = 'createTag';
+                    $url  = $value['repository']['url'];
+                    $text = basename($value['repository']['name']) . '(' . $value['payload']['ref'] . ')';
+                }
+                else
+                {
+                    $type = $value['type'];
+                    $url  = $value['repository']['url'];
+                    $text = $value['repository']['name'];
+                }
 
                 break;
 

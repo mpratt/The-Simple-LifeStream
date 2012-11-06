@@ -16,6 +16,7 @@ class Spanish extends \SimpleLifestream\Core\Lang
 {
     protected $translation = array('pushEvent'   => 'actualizó el proyecto {link}.',
                                    'createEvent' => 'creó el proyecto {link}.',
+                                   'createTag'   => 'creó un nuevo Tag para {link}.',
                                    'createGist'  => 'creó el gist {link}',
                                    'updateGist'  => 'actualizó el gist {link}',
                                    'starred'     => 'está observando a {link}.',

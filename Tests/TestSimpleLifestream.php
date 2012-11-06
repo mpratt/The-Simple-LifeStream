@@ -16,7 +16,7 @@ require_once(dirname(__FILE__) . '/../Lib/SimpleLifestream.php');
 class TestSimpleLifestream extends PHPUnit_Framework_TestCase
 {
     protected $knownTypes = array('Twitter' => array('tweeted'),
-                                  'Github'  => array('pushEvent', 'createEvent', 'createGist', 'updateGist', 'starred', 'followed'),
+                                  'Github'  => array('pushEvent', 'createEvent', 'createTag', 'createGist', 'updateGist', 'starred', 'followed'),
                                   'Youtube' => array('favorited'),
                                   'StackOverflow' => array('badgeWon', 'commented', 'acceptedAnswer', 'asked', 'answered'),
                                   'FacebookPages' => array('link'),

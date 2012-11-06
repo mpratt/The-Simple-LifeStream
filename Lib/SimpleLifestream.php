@@ -23,6 +23,7 @@ class SimpleLifestream
     protected $http       = null;
     protected $dateFormat = null;
     protected $linkTemplate = '<a href="{url}">{text}</a>';
+    protected $mergeConsecutive = false;
 
     /**
      * Instantiates available services on construction.
@@ -79,6 +80,7 @@ class SimpleLifestream
         if (empty($this->services))
             return array();
 
+        $output = array();
         if (is_object($this->cache))
         {
             $cacheIndex = md5(serialize($this->services));
@@ -100,16 +102,13 @@ class SimpleLifestream
                 }
             }
 
-            $output = $this->translate($output);
-            if (!empty($output))
-            {
-                // Sort entries by date, the latest ones come first
-                usort($output, function ($a, $b) { return $a['stamp'] < $b['stamp']; });
-
-                if (is_object($this->cache))
-                    $this->cache->store($cacheIndex, $output);
-            }
+            if (is_object($this->cache))
+                $this->cache->store($cacheIndex, $output);
         }
+
+        $output = $this->translate($output);
+        if (!empty($output))
+            usort($output, function ($a, $b) { return $a['stamp'] < $b['stamp']; });
 
         // Are there any type of events that we want to ignore?
         if (!empty($this->blacklist))
@@ -202,6 +201,15 @@ class SimpleLifestream
     public function setDateFormat($format) { $this->dateFormat = $format; }
 
     /**
+     * When set to true, the library merges consecutive actions that
+     * are equal.
+     *
+     * @param bool $merge
+     * @return void
+     */
+    public function mergeConsecutive($merge) { $this->mergeConsecutive = (bool) $merge; }
+
+    /**
      * Returns true if there were any errors on execution.
      *
      * @return bool
@@ -247,7 +255,10 @@ class SimpleLifestream
      */
     protected function translate($payload)
     {
-        $result = array();
+        if (empty($payload) || !is_array($payload))
+            return array();
+
+        $result = array(); $i = 0;
         foreach ($payload as $v)
         {
             // validate the service format
@@ -269,16 +280,25 @@ class SimpleLifestream
                                 $this->linkTemplate);
 
             $html = str_replace('{link}', $link, $this->lang->get($v['type']));
+            if ($this->mergeConsecutive && $i > 0 && $result[($i-1)]['html'] == $html)
+            {
+                $result[($i - 1)]['stamp'] = $v['stamp'];
+                $result[($i - 1)]['date'] = $date;
+            }
+            else
+            {
+                $result[$i] = array('service'  => strtolower($v['service']),
+                                    'type'     => $v['type'],
+                                    'resource' => $v['resource'],
+                                    'url'      => $v['url'],
+                                    'text'     => $v['text'],
+                                    'stamp'    => $v['stamp'],
+                                    'date'     => $date,
+                                    'link'     => $link,
+                                    'html'     => $html);
 
-            $result[] = array('service'  => strtolower($v['service']),
-                              'type'     => $v['type'],
-                              'resource' => $v['resource'],
-                              'url'      => $v['url'],
-                              'text'     => $v['text'],
-                              'stamp'    => $v['stamp'],
-                              'date'     => $date,
-                              'link'     => $link,
-                              'html'     => $html);
+                $i++;
+            }
         }
 
         return $result;

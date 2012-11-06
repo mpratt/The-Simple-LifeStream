@@ -28,7 +28,7 @@ class Curl implements \SimpleLifestream\Interfaces\IHttpRequest
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
         curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:2.0.1) Gecko/20110606 Firefox/4.0.1');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
