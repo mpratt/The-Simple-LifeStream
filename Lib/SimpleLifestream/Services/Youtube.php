@@ -15,6 +15,8 @@ namespace SimpleLifestream\Services;
 
 class Youtube extends \SimpleLifestream\Core\Adapter
 {
+    protected $url = 'http://gdata.youtube.com/feeds/api/users/%s/favorites?v=2&alt=jsonc';
+
     /**
      * Gets the data of the user and returns an array
      * with all the information.
@@ -23,11 +25,11 @@ class Youtube extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        $return = array();
-        $apiResponse = json_decode($this->http->fetch('http://gdata.youtube.com/feeds/api/users/' . $this->resource . '/favorites?v=2&alt=jsonc'), true);
-        if (!empty($apiResponse['data']['items']))
+        $response = json_decode($this->fetch(sprintf($this->url, $this->resource)), true);
+        if (!empty($response['data']['items']))
         {
-            foreach($apiResponse['data']['items'] as $value)
+            $return = array();
+            foreach($response['data']['items'] as $value)
             {
                 $return[] = array('service'  => 'youtube',
                                   'type'     => 'favorited',
@@ -36,9 +38,11 @@ class Youtube extends \SimpleLifestream\Core\Adapter
                                   'url'      => 'http://www.youtube.com/watch?v=' . $value['video']['id'],
                                   'text'     => $value['video']['title']);
             }
+
+            return $return;
         }
 
-        return $return;
+        throw new \Exception('The data returned by ' . sprintf($this->url, $this->resource) . ' seems invalid.');
     }
 }
 ?>

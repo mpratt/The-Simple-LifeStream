@@ -15,6 +15,8 @@ namespace SimpleLifestream\Services;
 
 class FacebookPages extends \SimpleLifestream\Core\Adapter
 {
+    protected $url = 'http://www.facebook.com/feeds/page.php?id=%s&format=json';
+
     /**
      * Gets the data of the user and returns an array
      * with all the information.
@@ -23,11 +25,11 @@ class FacebookPages extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        $apiResponse = json_decode($this->http->fetch('http://www.facebook.com/feeds/page.php?id=' . $this->resource . '&format=json'), true);
-        if (!empty($apiResponse['link']) && !empty($apiResponse['entries']))
-            return array_map(array($this, 'filterResponse'), $apiResponse['entries']);
+        $response = json_decode($this->fetch(sprintf($this->url, $this->resource)), true);
+        if (!empty($response['entries']))
+            return array_map(array($this, 'filterResponse'), $response['entries']);
 
-        return array();
+        throw new \Exception('No entries found on ' . sprintf($this->url, $this->resource));
     }
 
     /**
@@ -38,25 +40,19 @@ class FacebookPages extends \SimpleLifestream\Core\Adapter
      */
     protected function filterResponse($value)
     {
+        $text = $value['alternate'];
         if (!empty($value['title']))
             $text = $value['title'];
         else if (!empty($value['content']))
-            $text = (strlen($value['content']) > 130 ? substr($value['content'],0, 130) . '...' : $value['content']);
-
-        if (empty($text) || trim($text) == '')
-            $text = $value['alternate'];
-
-        if (!empty($value['author']['name']))
-            $resource = $value['author']['name'];
-        else
-            $resource = 'Facebook Pages';
+            $text = (strlen($value['content']) > 130 ? substr($value['content'], 0, 130) . '...' : $value['content']);
 
         return array('service'  => 'facebookpages',
                      'type'     => 'link',
-                     'resource' => $resource,
+                     'resource' => $value['author']['name'],
                      'stamp'    => (int) strtotime($value['published']),
                      'url'      => $value['alternate'],
                      'text'     => $text);
     }
 }
+
 ?>

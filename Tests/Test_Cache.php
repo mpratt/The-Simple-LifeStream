@@ -1,20 +1,15 @@
 <?php
 /**
- * TestSimpleLifestreamCache.php
+ * Test_Cache.php
  *
- * @author  Michael Pratt <pratt@hablarmierda.net>
- * @link http://www.michael-pratt.com/
+ * @author Michael Pratt <pratt@hablarmierda.net>
+ * @link   http://www.michael-pratt.com/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
  */
 
-date_default_timezone_set('America/Bogota');
-require_once(dirname(__FILE__) . '/../Lib/Interfaces/ICache.php');
-require_once(dirname(__FILE__) . '/../Lib/Core/Cache.php');
-
-class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
+class Test_Cache extends PHPUnit_Framework_TestCase
 {
     protected $cacheDir;
 
@@ -34,6 +29,7 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $cache = new \SimpleLifestream\Core\Cache($this->cacheDir);
+        $cache->enable();
         $cache->flush();
 
         rmdir($this->cacheDir);
@@ -70,11 +66,24 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
     {
         $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
         $string = 'This is a string! ? \' 345 345 sdf # @ $ % & *';
+        $cache->setTTL(10);
 
-        $this->assertTrue($cache->store('key_string', $string, 10));
+        $this->assertTrue($cache->store('key_string', $string));
         $this->assertEquals($cache->read('key_string'), $string);
     }
 
+    /**
+     * Test Cache Storing twice by the same key
+     */
+    public function testStoreKeyTwice()
+    {
+        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
+        $cache->setTTL(10);
+
+        $this->assertTrue($cache->store('key_string', 'This is the first string'));
+        $this->assertTrue($cache->store('key_string', 'This is the second string'));
+        $this->assertEquals($cache->read('key_string'), 'This is the second string');
+    }
     /**
      * Test Cache for nonexistant keys
      */
@@ -104,6 +113,8 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
         $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
         $this->assertTrue($cache->store('delete_key', 'this is an example', 10));
         $this->assertTrue($cache->delete('delete_key'));
+        $this->assertFalse($cache->delete('unknown_key'));
+        $this->assertFalse($cache->delete('delete_key'));
     }
 
     /**
@@ -114,7 +125,7 @@ class TestSimpleLifestreamCache extends PHPUnit_Framework_TestCase
         $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
         $cache->disable();
 
-        $this->assertFalse($cache->store('disabled_key', 'Dummy Data', 10));
+        $this->assertNull($cache->store('disabled_key', 'Dummy Data', 10));
         $this->assertNull($cache->read('disabled_key'));
     }
 

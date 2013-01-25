@@ -15,6 +15,8 @@ namespace SimpleLifestream\Services;
 
 class StackOverflow extends \SimpleLifestream\Core\Adapter
 {
+    protected $url = 'http://api.stackoverflow.com/1.0/users/%s/timeline';
+
     /**
      * Gets the data of the user and returns an array
      * with all the information.
@@ -23,11 +25,11 @@ class StackOverflow extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        $apiResponse = json_decode($this->http->fetch('http://api.stackoverflow.com/1.0/users/' . $this->resource . '/timeline'), true);
-        if (empty($apiResponse['user_timelines']))
-            return array();
+        $response = json_decode($this->fetch(sprintf($this->url, $this->resource)), true);
+        if (empty($response['user_timelines']))
+            throw new \Exception('The data returned by ' . sprintf($this->url, $this->resource) . ' seems invalid.');
 
-        return array_map(array($this, 'filterResponse'), $apiResponse['user_timelines']);
+        return array_filter(array_map(array($this, 'filterResponse'), $response['user_timelines']));
     }
 
     /**

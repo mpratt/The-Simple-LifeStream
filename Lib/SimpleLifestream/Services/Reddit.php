@@ -15,6 +15,7 @@ namespace SimpleLifestream\Services;
 
 class Reddit extends \SimpleLifestream\Core\Adapter
 {
+    protected $url = 'http://www.reddit.com/user/%s.json';
     /**
      * Gets the data of the user and returns an array
      * with all the information.
@@ -23,11 +24,11 @@ class Reddit extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        $apiResponse = json_decode($this->http->fetch('http://www.reddit.com/user/' . $this->resource. '.json'), true);
-        if (!empty($apiResponse['data']['children']))
-            return array_map(array($this, 'filterActions'), $apiResponse['data']['children']);
+        $response = json_decode($this->fetch(sprintf($this->url, $this->resource)), true);
+        if (!empty($response['data']['children']))
+            return array_filter(array_map(array($this, 'filterActions'), $response['data']['children']));
 
-        return array();
+        throw new \Exception('The data returned by ' . sprintf($this->url, $this->resource) . ' seems invalid.');
     }
 
     /**
@@ -39,40 +40,24 @@ class Reddit extends \SimpleLifestream\Core\Adapter
      */
     protected function filterActions($value)
     {
-        // We are only interested on this types
-        if (empty($value['data']) || empty($value['data']['created']))
-            return ;
+        $modes = array('t1' => array('type' => 'commented', 'text' => isset($value['data']['link_title']) ? $value['data']['link_title'] : 'Unknown'),
+                       't3' => array('type' => 'posted', 'text' => isset($value['data']['title']) ? $value['data']['title'] : 'unkown'));
 
-        $resource = $value['data']['author'];
+        if (empty($value['data']) || empty($value['kind']) || !isset($modes[$value['kind']]))
+            return array();
+
         $url = 'http://www.reddit.com';
         if (!empty($value['data']['permalink']))
             $url .= $value['data']['permalink'];
         else
             $url .= '/r/' . $value['data']['subreddit'] . '/comments/' . str_replace('t3_', '', $value['data']['link_id']) . '/#' . str_replace('t1_', '', $value['data']['name']);
 
-        switch ($value['kind'])
-        {
-            case 't1':
-                $type = 'commented';
-                $text = $value['data']['link_title'];
-                break;
-
-            case 't3':
-                $type = 'posted';
-                $text = $value['data']['title'];
-                break;
-
-            default:
-                return array();
-                break;
-        }
-
         return array('service'  => 'reddit',
-                     'type'     => lcfirst($type),
-                     'resource' => $resource,
+                     'type'     => $modes[$value['kind']]['type'],
+                     'resource' => $value['data']['author'],
                      'stamp'    => (int) $value['data']['created'],
                      'url'      => $url,
-                     'text'     => $text);
+                     'text'     => $modes[$value['kind']]['text']);
     }
 }
 ?>

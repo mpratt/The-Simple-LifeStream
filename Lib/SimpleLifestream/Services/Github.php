@@ -14,6 +14,7 @@ namespace SimpleLifestream\Services;
 
 class Github extends \SimpleLifestream\Core\Adapter
 {
+    protected $url = 'https://github.com/%s.json';
     /**
      * Gets the data of the user and returns an array
      * with all the information.
@@ -22,13 +23,12 @@ class Github extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        $apiResponse = utf8_encode($this->http->fetch('https://github.com/' . $this->resource . '.json'));
-        $apiResponse = json_decode($apiResponse, true);
+        $response = $this->fetch(sprintf($this->url, $this->resource));
+        $response = (array) json_decode($response, true);
+        if (!empty($response))
+            return array_filter(array_map(array($this, 'filterResponse'), $response));
 
-        if (!empty($apiResponse) && is_array($apiResponse))
-            return array_map(array($this, 'filterResponse'), $apiResponse);
-
-        return array();
+        throw new \Exception('No entries found on ' . sprintf($this->url, $this->resource));
     }
 
     /**
@@ -39,22 +39,21 @@ class Github extends \SimpleLifestream\Core\Adapter
      */
     protected function filterResponse($value)
     {
-        // We are only interested on this types
         if (!in_array($value['type'], array('PushEvent', 'CreateEvent', 'GistEvent', 'WatchEvent', 'FollowEvent')))
             return ;
 
         // Store the username as resource
         $resource = $value['actor'];
-
-        $html = 'unknown action';
         switch ($value['type'])
         {
             case 'CreateEvent':
             case 'PushEvent':
 
-                // Github registers CreateEvents twice! The first one is done when you create the repo via webbrowser
-                // and the second one when you actually do your first push.
-                // To avoid double-posting we just choose the second one.
+                /**
+                 * Github registers CreateEvents twice! The first one is done when you create the repo via webbrowser
+                 * and the second one when you actually do your first push.
+                 * To avoid double-posting we just choose the second one.
+                 */
                 if (empty($value['payload']['ref']) || empty($value['repository']))
                     return ;
 
@@ -95,10 +94,6 @@ class Github extends \SimpleLifestream\Core\Adapter
                 $url  = $value['url'];
                 $text = $value['payload']['target']['login'];
 
-                break;
-
-            default :
-                return array();
                 break;
         }
 

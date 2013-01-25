@@ -26,17 +26,12 @@ class Feed extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        if (!function_exists('simplexml_load_string'))
-            throw new Exception('The Feed service requires the simplexml_load_string function.');
-
-        $xmlString  = $this->http->fetch($this->resource);
+        $xmlString  = $this->fetch($this->resource);
         $this->xml  = simplexml_load_string($xmlString);
-
-        if ($this->xml === false)
-            return array();
+        if (!$this->xml)
+            throw new \Exception('Invalid rss/feed format on ' . $this->resource);
 
         $this->feedType = strtolower($this->xml->getName());
-
         switch ($this->feedType)
         {
             case 'feed':
@@ -48,7 +43,7 @@ class Feed extends \SimpleLifestream\Core\Adapter
                 break;
 
             default:
-                return array();
+                throw new \Exception('Invalid rss/feed format on ' . $this->resource);
                 break;
         }
     }
@@ -61,7 +56,7 @@ class Feed extends \SimpleLifestream\Core\Adapter
     protected function atomFeed()
     {
         $return = array();
-        if ($this->xml !== false && !empty($this->xml->entry))
+        if (!empty($this->xml->entry))
         {
             foreach ($this->xml->entry as $entry)
             {
@@ -70,7 +65,7 @@ class Feed extends \SimpleLifestream\Core\Adapter
 
                 $return[] = array('service'  => 'feed',
                                   'type'     => 'posted',
-                                  'resource' => parse_url($this->resource, PHP_URL_HOST),
+                                  'resource' => $this->resource,
                                   'stamp'    => (int) strtotime($entry->updated),
                                   'url'      => (string) $entry->link->attributes()->href,
                                   'text'     => (string) $entry->title);
@@ -88,7 +83,7 @@ class Feed extends \SimpleLifestream\Core\Adapter
     protected function rssFeed()
     {
         $return = array();
-        if ($this->xml !== false && !empty($this->xml->channel->item))
+        if (!empty($this->xml->channel->item))
         {
             foreach ($this->xml->channel->item as $item)
             {
@@ -97,7 +92,7 @@ class Feed extends \SimpleLifestream\Core\Adapter
 
                 $return[] = array('service'  => 'feed',
                                   'type'     => 'posted',
-                                  'resource' => parse_url($this->resource, PHP_URL_HOST),
+                                  'resource' => $this->resource,
                                   'stamp'    => (int) strtotime($item->pubDate),
                                   'url'      => (string) $item->link,
                                   'text'     => (string) $item->title);

@@ -21,6 +21,7 @@ abstract class Lang
      *
      * @param string $key
      * @return string
+     * @codeCoverageIgnore
      */
     public function get($key)
     {

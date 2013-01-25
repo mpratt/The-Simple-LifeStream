@@ -1,37 +1,17 @@
 <?php
 /**
- * TestSimpleLifestream.php
+ * TestMainClass.php
  *
  * @author  Michael Pratt <pratt@hablarmierda.net>
- * @link http://www.michael-pratt.com/
+ * @link    http://www.michael-pratt.com/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
  */
 
 date_default_timezone_set('America/Bogota');
-require_once(dirname(__FILE__) . '/../Lib/SimpleLifestream.php');
-
-class TestSimpleLifestream extends PHPUnit_Framework_TestCase
+class TestMainClass extends PHPUnit_Framework_TestCase
 {
-    protected $knownTypes = array('Twitter' => array('tweeted'),
-                                  'Github'  => array('pushEvent', 'createEvent', 'createTag', 'createGist', 'updateGist', 'starred', 'followed'),
-                                  'Youtube' => array('favorited'),
-                                  'StackOverflow' => array('badgeWon', 'commented', 'acceptedAnswer', 'asked', 'answered'),
-                                  'FacebookPages' => array('link'),
-                                  'Feed'    => array('posted'),
-                                  'Reddit'  => array('commented', 'posted'));
-    /**
-     * Test Dependencies
-     */
-    public function testDependencies()
-    {
-        $this->assertTrue(function_exists('curl_init'));
-        $this->assertTrue(function_exists('json_decode'));
-        $this->assertTrue(function_exists('utf8_decode'));
-    }
-
     /**
      * Test Twitter
      */
@@ -42,7 +22,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, $this->knownTypes['Twitter']);
+        $this->validateOutput($output);
     }
 
     /**
@@ -50,12 +30,12 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
      */
     public function testGithub()
     {
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Github' => 'mpratt'));
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Github' => 'ircmaxell'));
         $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, $this->knownTypes['Github']);
+        $this->validateOutput($output);
     }
 
     /**
@@ -68,7 +48,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, $this->knownTypes['Youtube']);
+        $this->validateOutput($output);
     }
 
     /**
@@ -76,12 +56,12 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
      */
     public function testStackOverflow()
     {
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('StackOverflow' => '430087'));
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('StackOverflow' => '22656'));
         $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, $this->knownTypes['StackOverflow']);
+        $this->validateOutput($output);
     }
 
     /**
@@ -89,12 +69,12 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
      */
     public function testFacebookPages()
     {
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('FacebookPages' => '27469195051'));
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('FacebookPages' => '6723083591'));
         $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, $this->knownTypes['FacebookPages']);
+        $this->validateOutput($output);
     }
 
     /**
@@ -102,12 +82,12 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
      */
     public function testReddit()
     {
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Reddit' => 'mpratt'));
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Reddit' => 'kellyjames009'));
         $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, $this->knownTypes['Reddit']);
+        $this->validateOutput($output);
     }
 
     /**
@@ -117,12 +97,12 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue(function_exists('simplexml_load_string'));
 
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Feed' => 'http://www.michael-pratt.com/blog/rss/'));
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Feed' => 'http://www.wradio.com.co/feed.aspx?id=INICIO'));
         $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, $this->knownTypes['Feed']);
+        $this->validateOutput($output);
     }
 
     /**
@@ -137,7 +117,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, $this->knownTypes['Feed']);
+        $this->validateOutput($output);
     }
 
     /**
@@ -151,16 +131,32 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
 
         $output = $lifestream->getLifestream();
         $this->assertFalse($lifestream->hasErrors());
+        $this->assertEquals(array(), $lifestream->getErrors());
         $this->assertCount(0, $output);
 
         $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'parishilton',
                                                                    'Youtube' => 'mtppratt'));
         $lifestream->setCacheEngine(null);
-        $lifestream->ignoreType('tweeted', 'Twitter');
+        $lifestream->ignoreType('tweeted');
         $output = $lifestream->getLifestream();
         $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output, 'favorited');
 
-        $this->validateOutput($output, $this->knownTypes['Youtube']);
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'parishilton',
+                                                                   'Youtube' => 'mtppratt'));
+        $lifestream->setCacheEngine(null);
+        $lifestream->ignoreType('favorited');
+        $output = $lifestream->getLifestream();
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output, 'tweeted');
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'parishilton',
+                                                                   'Youtube' => 'mtppratt'));
+        $lifestream->setCacheEngine(null);
+        $lifestream->ignoreType('favorited', 'Youtube');
+        $output = $lifestream->getLifestream();
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output, 'tweeted');
     }
 
     /**
@@ -174,7 +170,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
 
         $output = $lifestream->getLifestream();
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, $this->knownTypes['Twitter']);
+        $this->validateOutput($output);
 
         foreach ($output as $o)
         {
@@ -194,7 +190,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
 
         $output = $lifestream->getLifestream();
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, $this->knownTypes['Twitter'], 'twitteó');
+        $this->validateOutput($output, 'twitteó');
 
         $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'AlvaroUribeVel'));
         $lifestream->setCacheEngine(null);
@@ -202,7 +198,33 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
 
         $output = $lifestream->getLifestream();
         $this->assertFalse($lifestream->hasErrors());
-        $this->validateOutput($output, $this->knownTypes['Twitter'], 'twitteó');
+        $this->validateOutput($output, 'twitteó');
+    }
+
+    /**
+     * Test Languages
+     */
+    public function testLanguagesExceptions()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream();
+        $lifestream->setCacheEngine(null);
+        $lifestream->setLanguage(new TwitterMock());
+    }
+
+    /**
+     * Test Link Template
+     */
+    public function testLinkTemplate()
+    {
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('StackOverflow' => '22656'));
+        $lifestream->setCacheEngine(null);
+        $lifestream->setLinkTemplate('Hello friends');
+        $output = $lifestream->getLifestream();
+
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output, 'Hello friends');
     }
 
     /**
@@ -210,10 +232,6 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
      */
     public function testLimit()
     {
-        $expectedTypes = array_merge($this->knownTypes['Twitter'],
-                                     $this->knownTypes['Youtube'],
-                                     $this->knownTypes['Feed']);
-
         $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'ThatKevinSmith',
                                                                    'Youtube' => 'mtppratt',
                                                                    'Feed'    => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom'));
@@ -222,7 +240,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($lifestream->hasErrors());
         $this->assertCount(10, $output1);
-        $this->validateOutput($output1, $expectedTypes);
+        $this->validateOutput($output1);
 
         $lifestream = new \SimpleLifestream\SimpleLifestream(array('Youtube' => 'mtppratt',
                                                                    'Twitter' => 'ThatKevinSmith',
@@ -232,7 +250,7 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($lifestream->hasErrors());
         $this->assertCount(1, $output2);
-        $this->validateOutput($output2, $expectedTypes);
+        $this->validateOutput($output2);
 
         $lifestream = new \SimpleLifestream\SimpleLifestream(array('Feed'    => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom',
                                                                    'Twitter' => 'ThatKevinSmith',
@@ -242,20 +260,57 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($lifestream->hasErrors());
         $this->assertCount(6, $output3);
-        $this->validateOutput($output3, $expectedTypes);
+        $this->validateOutput($output3);
 
         $this->assertEquals($output1[0], $output2[0], $output3[0]);
+    }
+
+    /**
+     * Test Merges
+     */
+    public function testMerges()
+    {
+        $so = new StackOverflowMock();
+        $so->setResource('testResrouce');
+        $so->reply = file_get_contents(__DIR__ . '/Samples/SO-merges.json');
+
+        $lifestream = new SimpleLifestreamMock();
+        $lifestream->setCacheEngine(null);
+        $lifestream->services[] = $so;
+        $output = $lifestream->getLifestream();
+        $this->assertEquals(count($output), 9);
+
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output);
+
+        $lifestream->mergeConsecutive(true);
+        $output = $lifestream->getLifestream();
+        $this->assertEquals(count($output), 5);
+
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output);
+    }
+
+    /**
+     * Test the behaviour when an invalid cache is
+     * being set.
+     */
+    public function testInvalidCacheException()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream();
+        $lifestream->setCacheEngine(new TwitterMock());
     }
 
     /**
      * Validates the output of a lifestream.
      *
      * @param array $output
-     * @param array $types
      * @param string $htmlContains
      * @return void
      */
-    protected function validateOutput($output, $types, $htmlContains = '')
+    protected function validateOutput($output, $htmlContains = '')
     {
         $this->assertTrue(is_array($output));
         if (!empty($output))
@@ -271,8 +326,6 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
                 $this->assertArrayHasKey('date', $v);
                 $this->assertArrayHasKey('link', $v);
                 $this->assertArrayHasKey('html', $v);
-
-                $this->assertTrue((in_array($v['type'], $types)));
 
                 if (!empty($contains))
                     $this->assertContains($htmlContains, $v['html']);

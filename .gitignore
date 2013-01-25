@@ -1,1 +1,5 @@
 *.cache
+vendor/*
+Tests/Coverage
+composer.lock
+composer.phar

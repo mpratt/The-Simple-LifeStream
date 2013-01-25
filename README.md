@@ -1,17 +1,19 @@
 The Simple Life(stream)
 =======================
+[![Build Status](https://secure.travis-ci.org/mpratt/The-Simple-Lifestream.png?branch=master)](http://travis-ci.org/mpratt/The-Simple-Lifestream)
+
 Is a very simple and flexible library for your life-streaming purposes. It supports a bunch of third party services
 and makes it easy for you to display all that information in one single place.
 
-The sweet thing about this library is that it only returns an array with all the important data (date and html).
+The sweet thing about this library is that it only returns an array with all the important data (date, html, etc).
 This empowers you to play with that information and display that however you like.
 
 In order to have a decent performance and avoid making too many requests to other sites the library uses internally a
 Cache System based on files (file cache). The duration of each cache is 10 minutes by default, however you can modifiy
-that behaviour easily, or you can even implement your own cache engine if you like.
+that behaviour easily, or you can even implement your own cache engine if you like. Note that a cache is build only if
+there were no errors found during execution.
 
-The name of this library is inspired by that cheap reality show with Paris Hilton and Nicole Ritchie. Why? Because this
-piece of software is sexy and no matter how dumb you are, its meant to be easy to use.
+The name of this library is inspired by that cheap reality show with Paris Hilton and Nicole Ritchie.
 
 Supported Sites
 ===============
@@ -43,7 +45,37 @@ If you have any suggestions, you can use the issues tracker or you can contact m
 Requirements
 ============
 - PHP >= 5.3
-- CURL (It is needed to make http requests, however you can implement your own wrapper with "file_get_contents" for example).
+- Curl or ([The Requests Library](https://github.com/rmccue/Requests))
+
+Installation
+============
+
+### Install with Composer
+If you're using [Composer](https://github.com/composer/composer) to manage
+dependencies, you can add this library with it.
+
+    {
+        "require": {
+            "mpratt/SimpleLifestream": ">=2.0"
+        },
+        "autoload": {
+            "psr-0": {"SimpleLifestream": "Lib/"}
+        }
+    }
+
+Then you just need to run `composer.phar install`
+This will also install the [Requests](https://github.com/rmccue/Requests) library, which is used to make http requests.
+
+
+### Standalone Installation (without Composer or Requests)
+Download/clone this repository, place the `Lib/SimpleLifestream` directory on your project vendor directory.
+You will need an autoloader class that is [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md) compatible, and register this library.
+Something around this lines:
+
+    $loader->registerNamespace('SimpleLifestream', 'path/to/vendor/SimpleLifestream');
+
+You can manually install the [Requests](https://github.com/rmccue/Requests) and register its autoloader. If the Requests library wasnt found, the
+library will use Curl internally to make http requests.
 
 Basic Usage
 ===========
@@ -51,7 +83,7 @@ Basic Usage
 You can start by passing the service name and resources on construction.
 ```php
     <?php
-        require('SimpleLifestream.php');
+        require 'your-autoloader.php';
         $lifestream = new \SimpleLifestream\SimpleLifestream(array('Reddit' => 'mpratt',
                                                                    'Github' => 'mpratt'));
 
@@ -86,14 +118,14 @@ Or if you prefer you can define each service individually.
         echo '</ul>';
     ?>
 ```
-The **getLifestream()** method accepts a number, in that way you can limit the latest information you want to get.
+The `getLifestream()` method accepts a number, in that way you can limit the latest information you want to get.
 ```php
     <?php
         $stream = $lifestream->getLifestream(10);
         echo count($stream); // 10
     ?>
 ```
-You can check for errors with the **hasErrors()** and **getErrors()** methods.
+You can check for errors with the `hasErrors()` and `getErrors()` methods.
 ```php
     <?php
         $stream = $lifestream->getLifestream();
@@ -102,7 +134,7 @@ You can check for errors with the **hasErrors()** and **getErrors()** methods.
     ?>
 ```
 This library also has support for spanish output. You can even write your own translation object if you like
-and pass it to the **setLanguage()** method.
+and pass it to the `setLanguage()` method.
 ```php
     <?php
         $lifestream->setLanguage('Spanish');
@@ -113,7 +145,8 @@ and pass it to the **setLanguage()** method.
 Are there any event types you want to ignore? I got your back!
 ```php
     <?php
-        $lifestream->ignoreType('starred'); // Ignore Github Starred Repos
+        $lifestream->ignoreType('starred', 'Github'); // Ignore Github Starred Repos
+        $lifestream->ignoreType('favorited'); // Ignore all favorited actions
         $stream = $lifestream->getLifestream();
     ?>
 ```
@@ -125,21 +158,13 @@ You want to use another cache engine? Or disable the cache alltogether?
         $stream = $lifestream->getLifestream(40);
     ?>
 ```
-And finally, the **date** key gives by default the timestamp of each event. You can change the format of that date by
-using the **setDateFormat()** method
-```php
-    <?php
-        $lifestream->setDateformat('Y-m-d');
-        $stream = $lifestream->getLifestream(30);
-        var_dump($stream);
-    ?>
-```
-If you want to see more examples of how to use this library take a peek into the Tests directory and view the **TestSimpleLifestream.php** file.
+If you want to see more examples of how to use this library take a peek into the Tests directory and view the files.
 Otherwise inspect the source code of the library, I would say that it has a "decent" english documentation and it should be easy to follow.
 
 Sample Output
 =============
 
+```php
     <?php
 
         $lifestream = new \SimpleLifestream\SimpleLifestream(array('Reddit' => 'mpratt',
@@ -187,6 +212,7 @@ Sample Output
               }
         }
     ?>
+```
 
 License
 =======

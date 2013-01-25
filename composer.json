@@ -1,5 +1,5 @@
 {
-    "name": "TheSimpleLifestream/TheSimpleLifestream",
+    "name": "mpratt/The-Simple-Lifestream",
     "type": "library",
     "description": "A library that returns lifestream events from a bunch of social sites/services.",
     "keywords": ["lifestream","lifestreaming","life-stream"],
@@ -14,6 +14,10 @@
         }
     ],
     "require": {
-        "php": ">=5.3.2"
+        "php": ">=5.3.2",
+        "rmccue/requests": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {"SimpleLifestream": "Lib/"}
     }
 }

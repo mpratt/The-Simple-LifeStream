@@ -1,0 +1,88 @@
+{
+  "total": 59,
+  "page": 1,
+  "pagesize": 30,
+  "user_timelines": [
+    {
+      "user_id": 430087,
+      "timeline_type": "askoranswered",
+      "post_id": 10756461,
+      "post_type": "answer",
+      "action": "answered",
+      "creation_date": 1337957032,
+      "description": "PHP login wont work, and no errors is show"
+    },
+    {
+      "user_id": 430087,
+      "timeline_type": "badge",
+     "action": "awarded",
+      "creation_date": 1345846912,
+      "description": "Yearling",
+      "detail": "Active member for a year, earning at least 200 reputation"
+    },
+    {
+      "user_id": 430087,
+      "timeline_type": "badge",
+      "action": "awarded",
+      "creation_date": 1345846912,
+      "description": "Yearling",
+      "detail": "Active member for a year, earning at least 200 reputation"
+    },
+    {
+      "user_id": 430087,
+      "timeline_type": "badge",
+      "action": "awarded",
+      "creation_date": 1345846912,
+      "description": "Yearling",
+      "detail": "Active member for a year, earning at least 200 reputation"
+    },
+    {
+      "user_id": 430087,
+      "timeline_type": "badge",
+      "action": "awarded",
+      "creation_date": 1345846912,
+      "description": "Yearling",
+      "detail": "Active member for a year, earning at least 200 reputation"
+    },
+    {
+      "user_id": 430087,
+      "timeline_type": "comment",
+      "post_id": 10800806,
+      "post_type": "answer",
+      "comment_id": 14057713,
+      "action": "comment",
+      "creation_date": 1338313315,
+      "description": "Image Randomization using GD library",
+      "detail": "can you provide a sample image?"
+    },
+    {
+      "user_id": 430087,
+      "timeline_type": "askoranswered",
+      "post_id": 10756896,
+      "post_type": "answer",
+      "action": "answered",
+      "creation_date": 1337958495,
+      "description": "Newline in PHP command line"
+    },
+    {
+      "user_id": 430087,
+      "timeline_type": "comment",
+      "post_id": 10756461,
+      "post_type": "answer",
+      "comment_id": 13980309,
+      "action": "comment",
+      "creation_date": 1337957778,
+      "description": "PHP login wont work, and no errors is show",
+      "detail": "By the code sample you are giving, if you remove the `session_start` in your init.inc.php the `isset($_SESSION['username'])` is always going to evaluate to false. If you are already using __output buffering__, then there is no need to remove the `session_start` code"
+    },
+    {
+      "user_id": 430087,
+      "timeline_type": "askoranswered",
+      "post_id": 10756461,
+      "post_type": "answer",
+      "action": "answered",
+      "creation_date": 1337957032,
+      "description": "PHP login wont work, and no errors is show"
+    }
+  ]
+}

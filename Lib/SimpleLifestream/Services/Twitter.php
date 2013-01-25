@@ -15,6 +15,8 @@ namespace SimpleLifestream\Services;
 
 class Twitter extends \SimpleLifestream\Core\Adapter
 {
+    protected $url = 'http://api.twitter.com/1/statuses/user_timeline.json?screen_name=%s';
+
     /**
      * Gets the data of the user and returns an array
      * with all the information.
@@ -23,11 +25,11 @@ class Twitter extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        $apiResponse = json_decode($this->http->fetch('http://api.twitter.com/1/statuses/user_timeline.json?screen_name=' . $this->resource), true);
-        if (!isset($apiResponse['error']) && !empty($apiResponse))
-            return array_map(array($this, 'filterResponse'), $apiResponse);
+        $response = json_decode($this->fetch(sprintf($this->url, $this->resource)), true);
+        if (!empty($response) && empty($response['errors']) && empty($response['error']))
+            return array_filter(array_map(array($this, 'filterResponse'), $response));
 
-        return array();
+        throw new \Exception('The data returned by ' . sprintf($this->url, $this->resource) . ' seems invalid.');
     }
 
     /**

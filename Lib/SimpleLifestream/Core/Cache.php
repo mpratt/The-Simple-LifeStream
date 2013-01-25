@@ -28,15 +28,11 @@ class Cache implements \SimpleLifestream\Interfaces\ICache
     {
         $this->ttl = (60*10);
         $this->location = $location;
-        if ($this->enabled)
-        {
-            if (!file_exists($this->location))
-                mkdir($this->location, 0755);
 
-            if (!is_writable($this->location) || !is_dir($this->location))
-                $this->enabled = false;
-        }
-        else
+        if (!file_exists($this->location))
+            mkdir($this->location, 0755);
+
+        if (!is_writable($this->location) || !is_dir($this->location))
             $this->enabled = false;
     }
 
@@ -50,10 +46,10 @@ class Cache implements \SimpleLifestream\Interfaces\ICache
      */
     public function store($key, $data, $ttl = 0)
     {
-        if (!$this->enabled || empty($data) || empty($key))
-            return false;
+        if (!$this->enabled)
+            return null;
 
-        $dataArray = array('expire_time' => (time() + ((is_numeric($ttl) && $ttl > 0 ? $ttl : $this->ttl))),
+        $dataArray = array('expire_time' => (time() + (!empty($ttl) ? (int) $ttl : $this->ttl)),
                            'content'     => $data,
                            'created'     => date('Y-m-d H:i:s'));
 
@@ -98,7 +94,7 @@ class Cache implements \SimpleLifestream\Interfaces\ICache
             return null;
 
         $data = unserialize(file_get_contents($file));
-        if (!$data || !is_array($data) || empty($data['expire_time']) || empty($data['content']) || ($data['expire_time'] < time()))
+        if (!$data || ((int) $data['expire_time'] < time()))
         {
             $this->delete($key);
             return null;
@@ -158,4 +154,5 @@ class Cache implements \SimpleLifestream\Interfaces\ICache
         return $this->prefix . '-' . str_replace(array('/', '"', '\'', '.'), '', $key) . '_' . md5($key) . '.cache';
     }
 }
+
 ?>
