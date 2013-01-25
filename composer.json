@@ -1,5 +1,5 @@
 {
-    "name": "mpratt/The-Simple-Lifestream",
+    "name": "mpratt/simple-lifestream",
     "type": "library",
     "description": "A library that returns lifestream events from a bunch of social sites/services.",
     "keywords": ["lifestream","lifestreaming","life-stream"],

@@ -56,7 +56,7 @@ dependencies, you can add this library with it.
 
     {
         "require": {
-            "mpratt/SimpleLifestream": ">=2.0"
+            "mpratt/simple-lifestream": ">=2.0"
         },
         "autoload": {
             "psr-0": {"SimpleLifestream": "Lib/"}
@@ -182,7 +182,7 @@ Sample Output
                     ["url"]=> string(42) "https://github.com/mpratt/Bolido-Framework"
                     ["text"]=> string(16) "Bolido-Framework"
                     ["stamp"]=> int(1348070514)
-                    ["date"]=> int(1348070514)
+                    ["date"]=> string(xx) Y-m-d H:i:s
                     ["link"]=> string(73) "<a href="https://github.com/mpratt/Bolido-Framework">Bolido-Framework</a>"
                     ["html"]=> string(97) "pushed a new commit to <a href="https://github.com/mpratt/Bolido-Framework">Bolido-Framework</a>."
               }
@@ -194,7 +194,7 @@ Sample Output
                 ["url"]=> string(52) "http://www.reddit.com/r/aww/comments/103fz6/#c6a9nqy"
                 ["text"]=> string(41) "Went for a hike and found some adorable. "
                 ["stamp"]=> int(1348027287)
-                ["date"]=> int(1348027287)
+                ["date"]=> string(xx) Y-m-d H:i:s
                 ["link"]=> string(108) "<a href="http://www.reddit.com/r/aww/comments/103fz6/#c6a9nqy">Went for a hike and found some adorable. </a>"
                 ["html"]=> string(124) "commented on "<a href="http://www.reddit.com/r/aww/comments/103fz6/#c6a9nqy">Went for a hike and found some adorable. </a>"."
               }
@@ -206,7 +206,7 @@ Sample Output
                 ["url"]=> string(51) "http://www.reddit.com/r/PHP/comments/t662j/#c4khrop"
                 ["text"]=> string(21) "Parsing Youtube links"
                 ["stamp"]=> int(1336249690)
-                ["date"]=> int(1336249690)
+                ["date"]=> string(xx) Y-m-d H:i:s
                 ["link"]=> string(87) "<a href="http://www.reddit.com/r/PHP/comments/t662j/#c4khrop">Parsing Youtube links</a>"
                 ["html"]=> string(103) "commented on "<a href="http://www.reddit.com/r/PHP/comments/t662j/#c4khrop">Parsing Youtube links</a>"."
               }
