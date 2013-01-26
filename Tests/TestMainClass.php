@@ -82,7 +82,7 @@ class TestMainClass extends PHPUnit_Framework_TestCase
      */
     public function testReddit()
     {
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Reddit' => 'kellyjames009'));
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Reddit' => 'mpratt'));
         $lifestream->setCacheEngine(null);
         $output = $lifestream->getLifestream();
 

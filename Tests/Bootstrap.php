@@ -62,49 +62,49 @@ function checkServiceKeys(array $result, array $types)
  *
  * @codeCoverageIgnore
  */
-class FacebookPagesMock extends \SimpleLifestream\Services\FacebookPages { public $reply; protected function fetch($url) { return $this->reply; } }
+class FacebookPagesMock extends \SimpleLifestream\Services\FacebookPages { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
 
 /**
  * A class used to test the Feed Service Provider
  *
  * @codeCoverageIgnore
  */
-class FeedMock extends \SimpleLifestream\Services\Feed { public $reply; protected function fetch($url) { return $this->reply; } }
+class FeedMock extends \SimpleLifestream\Services\Feed { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
 
 /**
  * A class used to test the Github Service Provider
  *
  * @codeCoverageIgnore
  */
-class GithubMock extends \SimpleLifestream\Services\Github { public $reply; protected function fetch($url) { return $this->reply; } }
+class GithubMock extends \SimpleLifestream\Services\Github { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
 
 /**
  * A class used to test the Reddit Service Provider
  *
  * @codeCoverageIgnore
  */
-class RedditMock extends \SimpleLifestream\Services\Reddit { public $reply; protected function fetch($url) { return $this->reply; } }
+class RedditMock extends \SimpleLifestream\Services\Reddit { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
 
 /**
  * A class used to test the StackOverflow Service Provider
  *
  * @codeCoverageIgnore
  */
-class StackOverflowMock extends \SimpleLifestream\Services\StackOverflow { public $reply; protected function fetch($url) { return $this->reply; } }
+class StackOverflowMock extends \SimpleLifestream\Services\StackOverflow { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
 
 /**
  * A class used to test the Twitter Service Provider
  *
  * @codeCoverageIgnore
  */
-class TwitterMock extends \SimpleLifestream\Services\Twitter { public $reply; protected function fetch($url) { return $this->reply; } }
+class TwitterMock extends \SimpleLifestream\Services\Twitter { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
 
 /**
  * A class used to test the Youtube Service Provider
  *
  * @codeCoverageIgnore
  */
-class YoutubeMock extends \SimpleLifestream\Services\Youtube { public $reply; protected function fetch($url) { return $this->reply; } }
+class YoutubeMock extends \SimpleLifestream\Services\Youtube { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
 
 /**
  * A class used to test the main SimpleLifestream merging capabilities

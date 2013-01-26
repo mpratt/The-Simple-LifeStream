@@ -1,6 +1,6 @@
 The Simple Life(stream)
 =======================
-[![Build Status](https://secure.travis-ci.org/mpratt/The-Simple-Lifestream.png?branch=master)](http://travis-ci.org/mpratt/The-Simple-Lifestream)
+[![Build Status](https://secure.travis-ci.org/mpratt/The-Simple-LifeStream.png?branch=master)](http://travis-ci.org/mpratt/The-Simple-LifeStream)
 
 Is a very simple and flexible library for your life-streaming purposes. It supports a bunch of third party services
 and makes it easy for you to display all that information in one single place.
@@ -56,6 +56,7 @@ dependencies, you can add this library with it.
 
     {
         "require": {
+            "rmccue/requests": "dev-master",
             "mpratt/simple-lifestream": ">=2.0"
         },
         "autoload": {
