@@ -144,8 +144,8 @@ class Test_Cache extends PHPUnit_Framework_TestCase
         $this->assertEquals($cache->flush(), 3);
 
         $this->assertNull($cache->read('flush_key1'));
-        $this->assertNull($cache->read('flush_key1'));
-        $this->assertNull($cache->read('flush_key1'));
+        $this->assertNull($cache->read('flush_key2'));
+        $this->assertNull($cache->read('flush_key3'));
     }
 }
 ?>

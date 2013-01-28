@@ -72,6 +72,7 @@ class Feed extends \SimpleLifestream\Core\Adapter
             }
         }
 
+        $this->xml = $this->feedType = null;
         return $return;
     }
 
@@ -99,6 +100,7 @@ class Feed extends \SimpleLifestream\Core\Adapter
             }
         }
 
+        $this->xml = $this->feedType = null;
         return $return;
     }
 }

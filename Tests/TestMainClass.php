@@ -242,27 +242,22 @@ class TestMainClass extends PHPUnit_Framework_TestCase
         $this->assertCount(10, $output1);
         $this->validateOutput($output1);
 
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Youtube' => 'mtppratt',
-                                                                   'Twitter' => 'ThatKevinSmith',
-                                                                   'Feed'    => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom'));
-        $lifestream->setCacheEngine(null);
         $output2 = $lifestream->getLifestream(1);
-
         $this->assertFalse($lifestream->hasErrors());
         $this->assertCount(1, $output2);
         $this->validateOutput($output2);
 
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Feed'    => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom',
-                                                                   'Twitter' => 'ThatKevinSmith',
-                                                                   'Youtube' => 'mtppratt'));
-        $lifestream->setCacheEngine(null);
         $output3 = $lifestream->getLifestream(6);
-
         $this->assertFalse($lifestream->hasErrors());
         $this->assertCount(6, $output3);
         $this->validateOutput($output3);
 
         $this->assertEquals($output1[0], $output2[0], $output3[0]);
+        $this->assertEquals($output1[1], $output3[1]);
+        $this->assertEquals($output1[2], $output3[2]);
+        $this->assertEquals($output1[3], $output3[3]);
+        $this->assertEquals($output1[4], $output3[4]);
+        $this->assertEquals($output1[5], $output3[5]);
     }
 
     /**

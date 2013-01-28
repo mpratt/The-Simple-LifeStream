@@ -1,6 +1,7 @@
 <?php
 /**
- * TestFacebookPages.php
+ * Bootstrap.php
+ * The test bootstrap file
  *
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
