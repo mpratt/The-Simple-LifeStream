@@ -12,7 +12,7 @@
  */
 namespace SimpleLifestream\Languages;
 
-class Spanish extends \SimpleLifestream\Core\Lang
+class Spanish extends \SimpleLifestream\LanguageAdapter
 {
     protected $translation = array('pushEvent'   => 'actualizó el proyecto {link}.',
                                    'createEvent' => 'creó el proyecto {link}.',

@@ -12,7 +12,7 @@
  */
 namespace SimpleLifestream\Languages;
 
-class English extends \SimpleLifestream\Core\Lang
+class English extends \SimpleLifestream\LanguageAdapter
 {
     protected $translation = array('pushEvent'   => 'pushed a new commit to {link}.',
                                    'createEvent' => 'created the {link} repository.',
