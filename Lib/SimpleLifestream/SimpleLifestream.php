@@ -3,6 +3,7 @@
  * SimpleLifestream.php
  * The main class of this library.
  *
+ * @package SimpleLifestream
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -13,16 +14,21 @@
 
 namespace SimpleLifestream;
 
+use \SimpleLifestream\FileCache,
+    \SimpleLifestream\Languages\English,
+    \SimpleLifestream\Languages\Spanish,
+    \SimpleLifestream\HttpRequest;
+
 class SimpleLifestream
 {
     protected $services   = array();
+    protected $config     = array();
     protected $errors     = array();
     protected $blacklist  = array();
-    protected $cache      = null;
-    protected $lang       = null;
     protected $dateFormat = 'Y-m-d H:i:s';
     protected $linkTemplate = '<a href="{url}">{text}</a>';
     protected $mergeConsecutive = false;
+    protected $http = null;
 
     /**
      * Instantiates available services on construction.
@@ -31,15 +37,24 @@ class SimpleLifestream
      *                       and it depends on each service.
      * @return void
      */
-    public function __construct(array $config = array())
+    public function __construct(array $services = array(), array $config = array())
     {
-        $this->cache = new \SimpleLifestream\Core\Cache(dirname(__FILE__) . '/Cache');
-        $this->lang  = new \SimpleLifestream\Languages\English();
+        $this->config = array_merge(
+            array(
+                'lang' => new English(),
+                'cache' => true,
+                'cache_dir' => __DIR__ . '/Cache',
+                'cache_ttl' => (60*10),
+                'cache_prefix' => 'SimpleLifestreamFileCache',
+            ),
+            $config
+        );
 
-        if (!empty($config))
+        $this->http = new HttpRequest(new FileCache($this->config));
+        if (!empty($services))
         {
-            foreach ($config as $service => $resource)
-                $this->loadService($service, $resource);
+            foreach ($services as $name => $resource)
+                $this->loadService($name, $resource);
         }
     }
 
@@ -54,9 +69,7 @@ class SimpleLifestream
     public function loadService($service, $resource)
     {
         $class = '\SimpleLifestream\Services\\' . $service;
-        $serviceObject = new $class();
-        $serviceObject->setResource($resource);
-        $this->services[] = $serviceObject;
+        $this->services[] = new $class($this->http, $resource);
     }
 
     /**
@@ -71,51 +84,25 @@ class SimpleLifestream
         if (empty($this->services))
             return array();
 
-        $cacheIndex = md5(serialize($this->services));
-        $output = (array) $this->cache->read($cacheIndex);
-        if (empty($output))
+        $output = array();
+        foreach ($this->services as $service)
         {
-            $output = array();
-            foreach ($this->services as $service)
-            {
-                try {
-                    $output = array_filter(array_merge($output, $service->getApiData()));
-                } catch (\Exception $e) {
-                    $this->errors[] = $e->getMessage();
-                    $this->cache->disable();
-                }
+            try {
+                $output = array_filter(array_merge($output, $service->getApiData()));
+            } catch (\Exception $e) {
+                $this->errors[] = $e->getMessage();
             }
-
-            $this->cache->store($cacheIndex, $output);
         }
 
         $output = $this->translate($output);
-        usort($output, function ($a, $b) { return $a['stamp'] < $b['stamp']; });
-
-        if ($this->mergeConsecutive)
-            $output = $this->deleteConsecutive($output);
+        usort($output, function ($a, $b) {
+            return $a['stamp'] < $b['stamp'];
+        });
 
         if ($limit > 0 && count($output) > $limit)
             $output = array_slice($output, 0, $limit);
 
         return $output;
-    }
-
-    /**
-     * Sets a custom cache engine.
-     *
-     * @param object An Object with caching capabilities and respects the Icache Interface.
-     *               Null will disable the cache engine.
-     * @return void
-     */
-    public function setCacheEngine($cache = null)
-    {
-        if ($cache instanceof \SimpleLifestream\Interfaces\ICache)
-            $this->cache = $cache;
-        else if (is_null($cache))
-            $this->cache->disable();
-        else
-            throw new \InvalidArgumentException('Invalid Cache Engine Given');
     }
 
     /**
@@ -125,25 +112,6 @@ class SimpleLifestream
      * @return void
      */
     public function setLinkTemplate($template) { $this->linkTemplate = $template; }
-
-    /**
-     * Sets the Default Language
-     *
-     * @param mixed $lang
-     * @return void
-     */
-    public function setLanguage($lang)
-    {
-        if ($lang instanceof \SimpleLifestream\Core\Lang)
-            $this->lang = $lang;
-        else if (is_string($lang))
-        {
-            $class = '\SimpleLifestream\Languages\\' . $lang;
-            $this->lang = new $class();
-        }
-        else
-            throw new \InvalidArgumentException('Invalid Language Engine given');
-    }
 
     /**
      * Returns an array with errors catched while executing the script.
@@ -176,7 +144,7 @@ class SimpleLifestream
      *
      * @return bool
      */
-    public function hasErrors() { return (bool) (!empty($this->errors)); }
+    public function hasErrors() { return (!empty($this->errors)); }
 
     /**
      * Returns an array with errors catched while executing the script.
@@ -184,6 +152,19 @@ class SimpleLifestream
      * @return array
      */
     public function getErrors() { return $this->errors; }
+
+    /**
+     * Returns the last error
+     *
+     * @return string
+     */
+    public function getLastError()
+    {
+        if (!empty($this->errors))
+            return end($this->errors);
+
+        return ;
+    }
 
     /**
      * Validates and translates the values returned by the
@@ -197,62 +178,49 @@ class SimpleLifestream
         if (empty($payload))
             return array();
 
-        $defaultValues = array('stamp' => 0,
-                               'type'  => 'unknown',
-                               'service' => 'unknown',
-                               'url'  => '',
-                               'text' => '',
-                               'date' => '',
-                               'resource' => '');
+        $defaultValues = array(
+            'stamp' => 0,
+            'type'  => 'unknown',
+            'service' => 'unknown',
+            'url'  => '',
+            'text' => '',
+            'date' => '',
+            'resource' => ''
+        );
 
+        $i = 0;
         $result = array();
         foreach ($payload as $v)
         {
             $v = array_merge($defaultValues, $v);
-            $v['type']  = lcfirst($v['type']);
-            $v['stamp'] = (int) $v['stamp'];
-            $v['date']  = date($this->dateFormat, $v['stamp']);
-            $v['text']  = htmlspecialchars($v['text'], ENT_QUOTES, 'UTF-8', false);
-            $v['url']   = htmlspecialchars($v['url'], ENT_QUOTES, 'UTF-8', false);
-            $v['service'] = strtolower($v['service']);
+            $v = array(
+                'type'  => lcfirst($v['type']),
+                'stamp' => (int) $v['stamp'],
+                'date'  => date($this->dateFormat, $v['stamp']),
+                'text'  => htmlspecialchars($v['text'], ENT_QUOTES, 'UTF-8', false),
+                'url'   => htmlspecialchars($v['url'], ENT_QUOTES, 'UTF-8', false),
+                'service' => strtolower($v['service']),
+            );
 
             $link = str_replace(array_map(function ($n){
                 return '{' . $n . '}';
             }, array_keys($v)), array_values($v), $this->linkTemplate);
 
-            $html = str_replace('{link}', $link, $this->lang->get($v['type']));
-            $result[] = array_merge($v, array('link' => $link, 'html' => $html));
+            if ($this->mergeConsecutive)
+                $id = md5($v['text'] . $v['url']);
+            else
+                $id = $i;
+
+            $result[$id] = array_merge($v, array(
+                    'link' => $link,
+                    'html' =>  str_replace('{link}', $link, $this->config['lang']->get($v['type']))
+                )
+            );
+
+            $i++;
         }
 
         return $this->deleteBlacklisted($result);
-    }
-
-    /**
-     * Merges/Deletes consecutive actions.
-     *
-     * @param array $payload
-     * @return array
-     */
-    protected function deleteConsecutive(array $payload)
-    {
-        $count = count($payload);
-        if ($count > 1)
-        {
-            $i = 0;
-            while ($i < $count)
-            {
-                if (isset($payload[($i+1)]) && $payload[$i]['html'] == $payload[($i+1)]['html'])
-                {
-                    $payload[($i+1)]['date']  = $payload[$i]['date'];
-                    $payload[($i+1)]['stamp'] = $payload[$i]['stamp'];
-                    unset($payload[$i]);
-                }
-
-                $i++;
-            }
-        }
-
-        return $payload;
     }
 
     /**
