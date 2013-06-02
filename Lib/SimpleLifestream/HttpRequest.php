@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace SimpleLifestream\Interfaces\IHttp;
+namespace SimpleLifestream;
 
-class HttpRequest
+class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
 {
     protected $config, $cache;
 
