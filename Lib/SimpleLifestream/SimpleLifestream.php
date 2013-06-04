@@ -186,7 +186,6 @@ class SimpleLifestream
             'text' => '',
             'date' => '',
             'resource' => '',
-            'additional' => array()
         );
 
         $i = 0;
@@ -201,6 +200,7 @@ class SimpleLifestream
                 'text'  => htmlspecialchars($v['text'], ENT_QUOTES, 'UTF-8', false),
                 'url'   => htmlspecialchars($v['url'], ENT_QUOTES, 'UTF-8', false),
                 'service' => strtolower($v['service']),
+                'resource' => $v['resource'],
             );
 
             $link = str_replace(array_map(function ($n){
@@ -208,7 +208,7 @@ class SimpleLifestream
             }, array_keys($v)), array_values($v), $this->linkTemplate);
 
             if ($this->mergeConsecutive)
-                $id = md5($v['type'] . $v['text']);
+                $id = md5($v['service'] . $v['type'] . $v['text']);
             else
                 $id = $i;
 
