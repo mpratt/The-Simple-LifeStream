@@ -50,7 +50,7 @@ class SimpleLifestream
             $config
         );
 
-        $this->http = new HttpRequest(new FileCache($this->config));
+        $this->http = new HttpRequest($this->config, new FileCache($this->config));
         if (!empty($services))
         {
             foreach ($services as $name => $resource)
@@ -185,7 +185,8 @@ class SimpleLifestream
             'url'  => '',
             'text' => '',
             'date' => '',
-            'resource' => ''
+            'resource' => '',
+            'additional' => array()
         );
 
         $i = 0;
@@ -207,7 +208,7 @@ class SimpleLifestream
             }, array_keys($v)), array_values($v), $this->linkTemplate);
 
             if ($this->mergeConsecutive)
-                $id = md5($v['text'] . $v['url']);
+                $id = md5($v['type'] . $v['text']);
             else
                 $id = $i;
 

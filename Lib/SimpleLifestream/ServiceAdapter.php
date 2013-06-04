@@ -31,7 +31,7 @@ abstract class ServiceAdapter
      * @param string $resource
      * @return void
      */
-    public function __construct(\SimpleLifestream\IHttp $http, $resource)
+    public function __construct(\SimpleLifestream\Interfaces\IHttp $http, $resource)
     {
         $this->http = $http;
         $this->resource = $resource;

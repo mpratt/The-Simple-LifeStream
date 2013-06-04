@@ -19,10 +19,9 @@ interface ICache
      *
      * @param string $key The Identifier key for the file
      * @param mixed $data The data that is going to be saved
-     * @param int $ttl The time in seconds that the cache is going to last
      * @return bool True if the cache was saved successfully. False otherwise
      */
-    public function store($key, $data, $ttl = 0);
+    public function store($key, $data);
 
     /**
      * Enables Caching capabilities

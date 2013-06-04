@@ -1,6 +1,6 @@
 <?php
 /**
- * Lang.php
+ * LanguageAdapter.php
  * Every translation should extend this class.
  *
  * @author  Michael Pratt <pratt@hablarmierda.net>
@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  *
  */
-namespace SimpleLifestream\Core;
+namespace SimpleLifestream;
 
-abstract class Lang
+abstract class LanguageAdapter
 {
     protected $translation;
 
@@ -21,7 +21,6 @@ abstract class Lang
      *
      * @param string $key
      * @return string
-     * @codeCoverageIgnore
      */
     public function get($key)
     {

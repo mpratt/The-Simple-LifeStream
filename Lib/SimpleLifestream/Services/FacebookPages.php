@@ -13,7 +13,7 @@
 
 namespace SimpleLifestream\Services;
 
-class FacebookPages extends \SimpleLifestream\Core\Adapter
+class FacebookPages extends \SimpleLifestream\ServiceAdapter
 {
     protected $url = 'http://www.facebook.com/feeds/page.php?id=%s&format=json';
 
@@ -25,7 +25,7 @@ class FacebookPages extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        $response = json_decode($this->fetch(sprintf($this->url, $this->resource)), true);
+        $response = json_decode($this->http->get(sprintf($this->url, $this->resource)), true);
         if (!empty($response['entries']))
             return array_map(array($this, 'filterResponse'), $response['entries']);
 
@@ -40,11 +40,12 @@ class FacebookPages extends \SimpleLifestream\Core\Adapter
      */
     protected function filterResponse($value)
     {
-        $text = $value['alternate'];
         if (!empty($value['title']))
             $text = $value['title'];
         else if (!empty($value['content']))
             $text = (strlen($value['content']) > 130 ? substr($value['content'], 0, 130) . '...' : $value['content']);
+        else
+            $text = $value['alternate'];
 
         return array('service'  => 'facebookpages',
                      'type'     => 'link',

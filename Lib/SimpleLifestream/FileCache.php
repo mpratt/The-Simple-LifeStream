@@ -9,9 +9,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace SimpleLifestream\Core;
+namespace SimpleLifestream;
 
-class Cache implements \SimpleLifestream\Interfaces\ICache
+class FileCache implements \SimpleLifestream\Interfaces\ICache
 {
     protected $prefix, $ttl, $location, $enabled;
 

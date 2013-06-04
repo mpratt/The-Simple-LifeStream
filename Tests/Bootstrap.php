@@ -10,20 +10,21 @@
  * file that was distributed with this source code.
  */
 
-date_default_timezone_set('America/Bogota');
-require __DIR__ . '/../vendor/autoload.php';
+date_default_timezone_set('UTC');
+require __DIR__ . '/../Lib/SimpleLifestream/Autoload.php';
 
 /**
  * Checks that service provider returns consistent data
  *
+ * @param object $testObject
  * @param array $result
  * @param array $types
+ * @param array $additional
  * @return bool
  *
  * @throws InvalidArgumentException when an inconsistency is found.
- * @codeCoverageIgnore
  */
-function checkServiceKeys(array $result, array $types)
+function checkServiceKeys($test, array $result, array $types, array $additional = array())
 {
     $services = array('facebookpages',
                       'feed',
@@ -35,82 +36,44 @@ function checkServiceKeys(array $result, array $types)
 
     foreach ($result as $r)
     {
-        if (!in_array($r['service'], $services))
-            throw new InvalidArgumentException('Unknown Service ' . $r['service']);
-
-        if (!in_array($r['type'], $types))
-            throw new InvalidArgumentException('Invalid type given ' . $r['type']);
-
-        if (empty($r['resource']))
-            throw new InvalidArgumentException('The resource key shouldnt be empty');
-
-        if (!is_numeric($r['stamp']) || empty($r['stamp']) || strlen($r['stamp']) < 10)
-            throw new InvalidArgumentException('The stamp seems to be invalid ' . $r['stamp']);
-
-        if (empty($r['text']))
-            throw new InvalidArgumentException('The text key shouldnt be empty');
+        $test->assertTrue(in_array($r['service'], $services), 'Unknown Service ' . $r['service']);
+        $test->assertTrue(in_array($r['type'], $types), 'Unknown Type ' . $r['type']);
+        $test->assertTrue(!empty($r['resource']), 'The Resource Key shouldnt be empty');
+        $test->assertTrue(is_numeric($r['stamp']), 'The stamp seems to be invalid ' . $r['stamp']);
+        $test->assertTrue(strlen($r['stamp']) >= 10, 'The stamp seems to be invalid ' . $r['stamp']);
+        $test->assertTrue(!empty($r['text']), 'The Text key shouldnt be empty');
 
         $url = parse_url($r['url']);
-        if (!$url || empty($url['host']))
-            throw new InvalidArgumentException('The url ' . $r['url'] . ' seems to be invalid');
+        $test->assertTrue(!empty($url['host']), 'The Url seems to be invalid ' . $r['url']);
+
+        if (!empty($additional))
+        {
+            $test->assertTrue(is_array($r['additional']), 'The additional key should be an array');
+
+            foreach ($additional as $a)
+                $test->assertTrue(!empty($r['additional'][$a]), 'The Additional, key should have an array with a key named ' . $a);
+        }
     }
 
     return true;
 }
 
 /**
- * A class used to test the FB Pages Service Provider
- *
- * @codeCoverageIgnore
- */
-class FacebookPagesMock extends \SimpleLifestream\Services\FacebookPages { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
-
-/**
- * A class used to test the Feed Service Provider
- *
- * @codeCoverageIgnore
- */
-class FeedMock extends \SimpleLifestream\Services\Feed { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
-
-/**
- * A class used to test the Github Service Provider
- *
- * @codeCoverageIgnore
- */
-class GithubMock extends \SimpleLifestream\Services\Github { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
-
-/**
- * A class used to test the Reddit Service Provider
- *
- * @codeCoverageIgnore
- */
-class RedditMock extends \SimpleLifestream\Services\Reddit { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
-
-/**
- * A class used to test the StackOverflow Service Provider
- *
- * @codeCoverageIgnore
- */
-class StackOverflowMock extends \SimpleLifestream\Services\StackOverflow { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
-
-/**
- * A class used to test the Twitter Service Provider
- *
- * @codeCoverageIgnore
- */
-class TwitterMock extends \SimpleLifestream\Services\Twitter { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
-
-/**
- * A class used to test the Youtube Service Provider
- *
- * @codeCoverageIgnore
- */
-class YoutubeMock extends \SimpleLifestream\Services\Youtube { public $reply; protected function fetch($url, array $headers = array(), array $options = array()) { return $this->reply; } }
-
-/**
- * A class used to test the main SimpleLifestream merging capabilities
- *
- * @codeCoverageIgnore
+ * Testing Mocks
  */
 class SimpleLifestreamMock extends \SimpleLifestream\SimpleLifestream { public $services = array(); }
+
+class FileCacheMock extends \SimpleLifestream\FileCache
+{
+    public function __construct(array $config = array()){}
+    public function store($key, $data) { return false; }
+    public function read($key) { return false; }
+}
+
+class MockHttp implements \SimpleLifestream\Interfaces\IHttp
+{
+    protected $reply;
+    public function __construct($reply) { $this->reply = $reply; }
+    public function get($url) { $url = false; return $this->reply; }
+}
 ?>

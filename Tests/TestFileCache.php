@@ -9,17 +9,23 @@
  * file that was distributed with this source code.
  */
 
-class Test_Cache extends PHPUnit_Framework_TestCase
+class TestFileCache extends PHPUnit_Framework_TestCase
 {
-    protected $cacheDir;
+    protected $cacheConfig;
 
     /**
      * Setup the environment
      */
     public function setUp()
     {
-        $this->cacheDir = dirname(__FILE__) . '/testCacheDir';
-        $cache = new \SimpleLifestream\Core\Cache($this->cacheDir);
+        $this->cacheConfig = array(
+            'cache' => true,
+            'cache_dir' => __DIR__ . '/Samples',
+            'cache_ttl' => 10,
+            'cache_prefix' => 'testPrefix'
+        );
+
+        $cache = new \SimpleLifestream\FileCache($this->cacheConfig);
         $cache->flush();
     }
 
@@ -28,11 +34,9 @@ class Test_Cache extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        $cache = new \SimpleLifestream\Core\Cache($this->cacheDir);
+        $cache = new \SimpleLifestream\FileCache($this->cacheConfig);
         $cache->enable();
         $cache->flush();
-
-        rmdir($this->cacheDir);
     }
 
     /**
@@ -40,10 +44,10 @@ class Test_Cache extends PHPUnit_Framework_TestCase
      */
     public function testStoreArray()
     {
-        $cache = new \SimpleLifestream\Core\Cache($this->cacheDir);
+        $cache = new \SimpleLifestream\FileCache($this->cacheConfig);
         $array = array('1', 'asdasd eregrergfdgf dfgdfgjk dfg', '#$^4@35454*(/)');
 
-        $this->assertTrue($cache->store('key_array', $array, 10));
+        $this->assertTrue($cache->store('key_array', $array));
         $this->assertEquals($cache->read('key_array'), $array);
     }
 
@@ -52,10 +56,10 @@ class Test_Cache extends PHPUnit_Framework_TestCase
      */
     public function testStoreObjects()
     {
-        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
+        $cache  = new \SimpleLifestream\FileCache($this->cacheConfig);
         $object = (object) array('1', 'asdasd eregrergfdgf dfgdfgjk dfg', '#$^4@35454*(/)');
 
-        $this->assertTrue($cache->store('key_object', $object, 10));
+        $this->assertTrue($cache->store('key_object', $object));
         $this->assertEquals($cache->read('key_object'), $object);
     }
 
@@ -64,9 +68,8 @@ class Test_Cache extends PHPUnit_Framework_TestCase
      */
     public function testStoreStrings()
     {
-        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
+        $cache  = new \SimpleLifestream\FileCache($this->cacheConfig);
         $string = 'This is a string! ? \' 345 345 sdf # @ $ % & *';
-        $cache->setTTL(10);
 
         $this->assertTrue($cache->store('key_string', $string));
         $this->assertEquals($cache->read('key_string'), $string);
@@ -77,8 +80,7 @@ class Test_Cache extends PHPUnit_Framework_TestCase
      */
     public function testStoreKeyTwice()
     {
-        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
-        $cache->setTTL(10);
+        $cache  = new \SimpleLifestream\FileCache($this->cacheConfig);
 
         $this->assertTrue($cache->store('key_string', 'This is the first string'));
         $this->assertTrue($cache->store('key_string', 'This is the second string'));
@@ -89,7 +91,7 @@ class Test_Cache extends PHPUnit_Framework_TestCase
      */
     public function testNonExistant()
     {
-        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
+        $cache  = new \SimpleLifestream\FileCache($this->cacheConfig);
         $this->assertNull($cache->read('unknown_key'));
     }
 
@@ -98,10 +100,17 @@ class Test_Cache extends PHPUnit_Framework_TestCase
      */
     public function testDuration()
     {
-        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
+        $cache  = new \SimpleLifestream\FileCache(
+            array_merge($this->cacheConfig, array(
+                    'cache_ttl' => 1
+                )
+            )
+        );
 
-        $this->assertTrue($cache->store('timed_string', 'Dummy Data', 1));
+        $this->assertTrue($cache->store('timed_string', 'Dummy Data'));
+
         sleep(2);
+
         $this->assertNull($cache->read('timed_string'));
     }
 
@@ -110,8 +119,9 @@ class Test_Cache extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
-        $this->assertTrue($cache->store('delete_key', 'this is an example', 10));
+        $cache  = new \SimpleLifestream\FileCache($this->cacheConfig);
+
+        $this->assertTrue($cache->store('delete_key', 'this is an example'));
         $this->assertTrue($cache->delete('delete_key'));
         $this->assertFalse($cache->delete('unknown_key'));
         $this->assertFalse($cache->delete('delete_key'));
@@ -122,10 +132,10 @@ class Test_Cache extends PHPUnit_Framework_TestCase
      */
     public function testDisabled()
     {
-        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
+        $cache  = new \SimpleLifestream\FileCache($this->cacheConfig);
         $cache->disable();
 
-        $this->assertNull($cache->store('disabled_key', 'Dummy Data', 10));
+        $this->assertNull($cache->store('disabled_key', 'Dummy Data'));
         $this->assertNull($cache->read('disabled_key'));
     }
 
@@ -134,12 +144,12 @@ class Test_Cache extends PHPUnit_Framework_TestCase
      */
     public function testFlush()
     {
-        $cache  = new \SimpleLifestream\Core\Cache($this->cacheDir);
+        $cache  = new \SimpleLifestream\FileCache($this->cacheConfig);
         $cache->flush();
 
-        $this->assertTrue($cache->store('flush_key1', 'Dummy Data', 10));
-        $this->assertTrue($cache->store('flush_key2', 'Dummy Data', 10));
-        $this->assertTrue($cache->store('flush_key3', 'Dummy Data', 10));
+        $this->assertTrue($cache->store('flush_key1', 'Dummy Data'));
+        $this->assertTrue($cache->store('flush_key2', 'Dummy Data'));
+        $this->assertTrue($cache->store('flush_key3', 'Dummy Data'));
 
         $this->assertEquals($cache->flush(), 3);
 
