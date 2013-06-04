@@ -13,7 +13,7 @@
 
 namespace SimpleLifestream\Services;
 
-class Twitter extends \SimpleLifestream\Core\Adapter
+class Twitter extends \SimpleLifestream\ServiceAdapter
 {
     protected $url = 'http://api.twitter.com/1/statuses/user_timeline.json?screen_name=%s';
 
@@ -25,7 +25,7 @@ class Twitter extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        $response = json_decode($this->fetch(sprintf($this->url, $this->resource)), true);
+        $response = json_decode($this->http->get(sprintf($this->url, $this->resource)), true);
         if (!empty($response) && empty($response['errors']) && empty($response['error']))
             return array_filter(array_map(array($this, 'filterResponse'), $response));
 
