@@ -6,12 +6,12 @@ Is a very simple and flexible library for your life-streaming purposes. It suppo
 and makes it easy for you to display all that information in one single place.
 
 The sweet thing about this library is that it only returns an array with all the important data (date, html, etc).
-This empowers you to play with that information and display that however you like.
+This empowers you to play with that information and display that however you like. A couple of formatters are also available
+and you can use them to ouput data in any way you like, see the examples below for more information.
 
 In order to have a decent performance and avoid making too many requests to other sites the library uses internally a
-Cache System based on files (file cache). The duration of each cache is 10 minutes by default, however you can modifiy
-that behaviour easily, or you can even implement your own cache engine if you like. Note that a cache is build only if
-there were no errors found during execution.
+Cache System based on files (file cache). The duration of each cache is 10 minutes by default, however you can modify
+that behaviour easily.
 
 The name of this library is inspired by that cheap reality show with Paris Hilton and Nicole Ritchie.
 
@@ -45,43 +45,39 @@ If you have any suggestions, you can use the issues tracker or you can contact m
 Requirements
 ============
 - PHP >= 5.3
-- Curl or ([The Requests Library](https://github.com/rmccue/Requests))
+- Curl or the `allow_url_fopen` directive enabled on the php.ini
 
 Installation
 ============
 
 ### Install with Composer
 If you're using [Composer](https://github.com/composer/composer) to manage
-dependencies, you can add this library with it.
+dependencies, you can add this library with by adding the following lines
+in your composer.json file.
 
-    {
         "require": {
-            "rmccue/requests": "dev-master",
-            "mpratt/simple-lifestream": ">=2.0"
-        },
-        "autoload": {
-            "psr-0": {"SimpleLifestream": "Lib/"}
+            "mpratt/simple-lifestream": ">=3.0"
         }
-    }
 
-Then you just need to run `composer.phar install`
-This will also install the [Requests](https://github.com/rmccue/Requests) library, which is used to make http requests.
+After that you only need to run `composer.phar install`
 
-
-### Standalone Installation (without Composer or Requests)
+### Standalone Installation (without Composer)
 Download/clone this repository, place the `Lib/SimpleLifestream` directory on your project vendor directory.
-You will need an autoloader class that is [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md) compatible, and register this library.
-Something around this lines:
+Now you can either include the `Autoloader.php` file
+
+    require 'path/to/SimpleLifestream/Autoload.php';
+    $lifestream = new \SimpleLifestream\SimpleLifestream($services);
+
+Or you could use an autoloader class that is [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md) compatible, and register
+this library. Something around this lines:
 
     $loader->registerNamespace('SimpleLifestream', 'path/to/vendor/SimpleLifestream');
-
-You can manually install the [Requests](https://github.com/rmccue/Requests) and register its autoloader. If the Requests library wasnt found, the
-library will use Curl internally to make http requests.
 
 Basic Usage
 ===========
 
-You can start by passing the service name and resources on construction.
+You can start by passing the service name and resource (username or url depending on which service you are
+going to use) on construction.
 ```php
     <?php
         require 'your-autoloader.php';
@@ -89,15 +85,15 @@ You can start by passing the service name and resources on construction.
                                                                    'Github' => 'mpratt'));
 
         $stream = $lifestream->getLifestream();
-        echo '<ul>';
         foreach ($stream as $s)
         {
-            echo '<li>' . $s['html'] . '</li>';
+            echo $s['html'];
         }
-        echo '</ul>';
     ?>
 ```
-Or if you prefer you can define each service individually.
+
+Or if you prefer you can define each service individually. By using this method you can
+set different usernames for a single Service.
 ```php
     <?php
         require('SimpleLifestream.php');
@@ -105,6 +101,7 @@ Or if you prefer you can define each service individually.
         $lifestream = new \SimpleLifestream\SimpleLifestream();
         $lifestream->loadService('Twitter', 'parishilton');
         $lifestream->loadService('Twitter', 'ThatKevinSmith');
+        $lifestream->loadService('Twitter', 'YourOtherUserName');
         $lifestream->loadService('FacebookPages', '27469195051');
         $lifestream->loadService('Youtube', 'ERB');
         $lifestream->loadService('StackOverflow', '430087');
@@ -119,31 +116,59 @@ Or if you prefer you can define each service individually.
         echo '</ul>';
     ?>
 ```
-The `getLifestream()` method accepts a number, in that way you can limit the latest information you want to get.
+
+The `getLifestream()` method accepts a number, which can be used to limit the latest information you want to get.
 ```php
     <?php
         $stream = $lifestream->getLifestream(10);
         echo count($stream); // 10
     ?>
 ```
-You can check for errors with the `hasErrors()` and `getErrors()` methods.
+
+You can check for errors with the `hasErrors()` and `getErrors()` methods. There is also a `getLastError()` method available.
 ```php
     <?php
         $stream = $lifestream->getLifestream();
         if ($lifestream->hasErrors())
+        {
             var_dump($lifestream->getErrors());
+
+            echo $lifestream->getLastError();
+        }
     ?>
 ```
-This library also has support for spanish output. You can even write your own translation object if you like
-and pass it to the `setLanguage()` method.
+
+The `SimpleLifestream` constructor, accepts a second parameter, an array with configuration directives
+that you can use to overwrite the behaviour of the library
 ```php
     <?php
-        $lifestream->setLanguage('Spanish');
+        $config = array(
+            'lang' => new \SimpleLifestream\Languages\Spanish(),
+            'cache_dir' => '/path/to/new/cache/dir',
+            'cache_ttl' => (60*20), // Modify the time to live
+            'timeout' => 5, // A custom timeout, for the http requests
+            'user_agent' => 'My Custom UserAgent For Http Requests',
+        );
+
+        $services = array('Github' => 'mpratt');
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream($services, $config);
+    ?>
+```
+
+This library also has support for spanish output. You can even write your own translation object if you like.
+```php
+    <?php
+        $config = array('lang' => new \SimpleLifestream\Languages\Spanish());
+        $services = array('Twitter' => 'parishilton');
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream($services, $config);
         $stream = $lifestream->getLifestream(10);
         var_dump($stream);
     ?>
 ```
-Are there any event types you want to ignore? I got your back!
+
+Are there any event types you want to ignore? I've got your back!
 ```php
     <?php
         $lifestream->ignoreType('starred', 'Github'); // Ignore Github Starred Repos
@@ -151,16 +176,42 @@ Are there any event types you want to ignore? I got your back!
         $stream = $lifestream->getLifestream();
     ?>
 ```
-You want to use another cache engine? Or disable the cache alltogether?
+
+You want to specify another directory for the cache engine?
 ```php
     <?php
-        $lifestream->setCacheEngine(new MyCacheObject()); // Your object must implement the \SimpleLifestream\Interfaces\ICache interface.
-        $lifestream->setCacheEngine(null); // Passing null, disables the cache capabilities of the library.
-        $stream = $lifestream->getLifestream(40);
+        $config = array('cache_dir' => '/path/to/your/dir');
+        $services = array('Twitter' => 'parishilton');
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream($services, $config);
+        $stream = $lifestream->getLifestream(10);
+        var_dump($stream);
     ?>
 ```
-If you want to see more examples of how to use this library take a peek into the Tests directory and view the files.
+
+Or if you like to disable Caching
+```php
+    <?php
+        $config = array('cache' => false);
+        $services = array('Twitter' => 'parishilton');
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream($services, $config);
+    ?>
+```
+
+Or perhaps make the cache last longer?
+```php
+    <?php
+        $config = array('cache_ttl' => (60*30)); // 30 minutes
+        $services = array('Twitter' => 'parishilton');
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream($services, $config);
+    ?>
+```
+
+If you want to see more examples of how to use this library take a peak into the Tests directory and view the files.
 Otherwise inspect the source code of the library, I would say that it has a "decent" english documentation and it should be easy to follow.
+The Test Coverage is also fairly decent.
 
 Sample Output
 =============
