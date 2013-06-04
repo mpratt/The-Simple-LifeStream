@@ -13,7 +13,7 @@
 
 namespace SimpleLifestream\Services;
 
-class Youtube extends \SimpleLifestream\Core\Adapter
+class Youtube extends \SimpleLifestream\ServiceAdapter
 {
     protected $url = 'http://gdata.youtube.com/feeds/api/users/%s/favorites?v=2&alt=jsonc';
 
@@ -25,7 +25,7 @@ class Youtube extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        $response = json_decode($this->fetch(sprintf($this->url, $this->resource)), true);
+        $response = json_decode($this->http->get(sprintf($this->url, $this->resource)), true);
         if (!empty($response['data']['items']))
         {
             $return = array();
