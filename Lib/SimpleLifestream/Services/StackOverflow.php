@@ -13,7 +13,7 @@
 
 namespace SimpleLifestream\Services;
 
-class StackOverflow extends \SimpleLifestream\Core\Adapter
+class StackOverflow extends \SimpleLifestream\ServiceAdapter
 {
     protected $url = 'http://api.stackoverflow.com/1.0/users/%s/timeline';
 
@@ -25,7 +25,7 @@ class StackOverflow extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        $response = json_decode($this->fetch(sprintf($this->url, $this->resource)), true);
+        $response = json_decode($this->http->get(sprintf($this->url, $this->resource)), true);
         if (empty($response['user_timelines']))
             throw new \Exception('The data returned by ' . sprintf($this->url, $this->resource) . ' seems invalid.');
 
