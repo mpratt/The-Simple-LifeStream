@@ -13,7 +13,7 @@
 
 namespace SimpleLifestream\Services;
 
-class Feed extends \SimpleLifestream\Core\Adapter
+class Feed extends \SimpleLifestream\ServiceAdapter
 {
     protected $xml;
     protected $feedType;
@@ -26,7 +26,7 @@ class Feed extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        $xmlString  = $this->fetch($this->resource);
+        $xmlString  = $this->http->get($this->resource);
         $this->xml  = simplexml_load_string($xmlString);
         if (!$this->xml)
             throw new \Exception('Invalid rss/feed format on ' . $this->resource);
