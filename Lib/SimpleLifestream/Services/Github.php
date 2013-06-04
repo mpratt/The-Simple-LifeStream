@@ -12,7 +12,7 @@
  */
 namespace SimpleLifestream\Services;
 
-class Github extends \SimpleLifestream\Core\Adapter
+class Github extends \SimpleLifestream\ServiceAdapter
 {
     protected $url = 'https://github.com/%s.json';
     /**
@@ -23,7 +23,7 @@ class Github extends \SimpleLifestream\Core\Adapter
      */
     public function getApiData()
     {
-        $response = $this->fetch(sprintf($this->url, $this->resource));
+        $response = $this->http->get(sprintf($this->url, $this->resource));
         $response = (array) json_decode($response, true);
         if (!empty($response))
             return array_filter(array_map(array($this, 'filterResponse'), $response));
