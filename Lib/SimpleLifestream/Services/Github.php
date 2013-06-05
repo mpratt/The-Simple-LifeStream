@@ -39,7 +39,7 @@ class Github extends \SimpleLifestream\ServiceAdapter
      */
     protected function filterResponse($value)
     {
-        if (!in_array($value['type'], array('PushEvent', 'CreateEvent', 'GistEvent', 'WatchEvent', 'FollowEvent')))
+        if (empty($value['type']) || !in_array($value['type'], array('PushEvent', 'CreateEvent', 'GistEvent', 'WatchEvent', 'FollowEvent')))
             return ;
 
         // Store the username as resource
