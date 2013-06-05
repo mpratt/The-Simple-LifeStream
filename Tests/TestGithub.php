@@ -112,8 +112,6 @@ class TestGithub extends PHPUnit_Framework_TestCase
      */
     public function testServiceInvalidAnswer()
     {
-        $this->setExpectedException('Exception');
-
         $http = new MockHttp(json_encode(array('entries', 'bentries')));
         $fb = new \SimpleLifestream\Services\Github($http, 'testResource');
         $output = $fb->getApiData();
