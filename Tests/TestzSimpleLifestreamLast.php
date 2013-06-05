@@ -203,7 +203,7 @@ class TestzSimpleLifestreamLast extends PHPUnit_Framework_TestCase
         $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'ThatKevinSmith',
                                                                    'Youtube' => 'mtppratt',
                                                                    'Feed'    => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom')
-                                                               , array('cache' => true));
+                                                               , array('cache' => false));
 
         $output1 = $lifestream->getLifestream(10);
 
