@@ -21,6 +21,8 @@ use \SimpleLifestream\FileCache,
 
 class SimpleLifestream
 {
+    const VERSION = '3.0';
+
     protected $services   = array();
     protected $config     = array();
     protected $errors     = array();

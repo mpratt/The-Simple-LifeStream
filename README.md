@@ -108,12 +108,6 @@ set different usernames for a single Service.
         $lifestream->loadService('Feed', 'http://www.smodcast.com/feed/');
 
         $stream = $lifestream->getLifestream();
-        echo '<ul>';
-        foreach ($stream as $s)
-        {
-            echo '<li>' . $s['html'] . '</li>';
-        }
-        echo '</ul>';
     ?>
 ```
 
@@ -173,6 +167,7 @@ Are there any event types you want to ignore? I've got your back!
     <?php
         $lifestream->ignoreType('starred', 'Github'); // Ignore Github Starred Repos
         $lifestream->ignoreType('favorited'); // Ignore all favorited actions
+
         $stream = $lifestream->getLifestream();
     ?>
 ```
@@ -209,7 +204,46 @@ Or perhaps make the cache last longer?
     ?>
 ```
 
-If you want to see more examples of how to use this library take a peak into the Tests directory and view the files.
+Lets talk about output formatters. There are a couple of formatters that can help you
+display the data in different ways. The first one is the `HtmlList` Formatter. This is
+how it goes:
+```php
+    <?php
+        $services = array('Twitter' => 'parishilton');
+        $lifestream = new \SimpleLifestream\SimpleLifestream($services);
+        $lifestream = new \SimpleLifestream\Formatters\HtmlList($lifestream);
+        echo $lifestream->getLifestream(3);
+
+        /* This prints something round this lines:
+           <ul class="simplelifestream">
+            <li class="servicename"><a href="...">text 1</a></li>
+            <li class="servicename"><a href="...">text 2</a></li>
+            <li class="servicename"><a href="...">text 3</a></li>
+            <li class="servicename"><a href="...">text 4</a></li>
+           </ul>
+        */
+    ?>
+```
+
+The other formatter is a little more flexible, you can use it define your own template
+and with the help of some placeholders, you can interpolate the data fetched by the library.
+```php
+    <?php
+        $services = array('Twitter' => 'parishilton');
+        $lifestream = new \SimpleLifestream\SimpleLifestream($services);
+        $lifestream = new \SimpleLifestream\Formatters\Template($lifestream);
+        $lifestream->setTemplate('<div class="{service}">{text}{link}</div>');
+        echo $lifestream->getLifestream();
+
+        /* This prints something round this lines:
+            <div class="servicename">a text <a href="..">a link</a></div>
+            <div class="servicename">another text <a href="..">a link</a></div>
+            <div class="servicename">and more text <a href="..">a link</a></div>
+        */
+    ?>
+```
+
+If you want to see more examples of how to use this library take a peak inside the Tests directory and view the files.
 Otherwise inspect the source code of the library, I would say that it has a "decent" english documentation and it should be easy to follow.
 The Test Coverage is also fairly decent.
 
