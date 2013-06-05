@@ -80,7 +80,7 @@ class TestTwitter extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Exception');
 
-        $http = new MockHttp(json_encode(array('entries', 'bentries')));
+        $http = new MockHttp(null);
         $fb = new \SimpleLifestream\Services\Twitter($http, 'testResource');
         $fb->getApiData();
     }
