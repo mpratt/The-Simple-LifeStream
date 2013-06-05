@@ -62,7 +62,7 @@ class Github extends \SimpleLifestream\ServiceAdapter
                 {
                     $type = 'createTag';
                     $url  = $value['repository']['url'];
-                    $text = basename($value['repository']['name']) . '(' . $value['payload']['ref'] . ')';
+                    $text = basename($value['repository']['name']) . ' (' . $value['payload']['ref'] . ')';
                 }
                 else
                 {
