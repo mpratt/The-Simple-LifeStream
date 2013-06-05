@@ -210,7 +210,7 @@ class SimpleLifestream
             }, array_keys($v)), array_values($v), $this->linkTemplate);
 
             if ($this->mergeConsecutive)
-                $id = md5($v['service'] . $v['type'] . $v['text']);
+                $id = md5($v['service'] . $v['type'] . $v['text'] . date('Ymd', $v['stamp']));
             else
                 $id = $i;
 
