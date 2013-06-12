@@ -36,7 +36,7 @@ class HtmlList
     public function getLifestream($count = 0)
     {
         $this->lifestream->beforeTemplate('<ul class="simplelifestream">');
-        $this->lifestream->setTemplate('<li class="{service}">{link}</li>');
+        $this->lifestream->setTemplate('<li class="{service}">{date} - {link}</li>');
         $this->lifestream->afterTemplate('</ul>');
 
         return $this->lifestream->getLifestream($count);
