@@ -28,7 +28,6 @@ Supported Sites
     - Finds badges won.
 - Github
     - Finds create and push events on a repo.
-    - Finds create and push events on a gist.
     - Finds starred repos.
     - Finds followed users.
 - Reddit
