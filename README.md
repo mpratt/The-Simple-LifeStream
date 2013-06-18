@@ -20,7 +20,8 @@ Supported Sites
 - Youtube
     - Finds all the videos added to the favorite playlist.
 - Twitter
-    - If the account can be accessed publicly, the library finds the latest tweets.
+    - Finds The latests Tweets. Important! You have to register an app in order to do this.
+      More information in the `Special Cases` Part.
 - StackOverflow
     - Finds the recent comments you have done.
     - Finds answers and questions you have written.
@@ -44,7 +45,7 @@ If you have any suggestions, you can use the issues tracker or you can contact m
 Requirements
 ============
 - PHP >= 5.3
-- Curl or the `allow_url_fopen` directive enabled on the php.ini
+- Curl (This Library uses Guzzle)
 
 Installation
 ============
@@ -55,22 +56,10 @@ dependencies, you can add this library with by adding the following lines
 in your composer.json file.
 
         "require": {
-            "mpratt/simple-lifestream": ">=3.0"
+            "mpratt/simple-lifestream": ">=3.1"
         }
 
 After that you only need to run `composer.phar install`
-
-### Standalone Installation (without Composer)
-Download/clone this repository, place the `Lib/SimpleLifestream` directory on your project vendor directory.
-Now you can either include the `Autoloader.php` file
-
-    require 'path/to/SimpleLifestream/Autoload.php';
-    $lifestream = new \SimpleLifestream\SimpleLifestream($services);
-
-Or you could use an autoloader class that is [PSR-0](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md) compatible, and register
-this library. Something around this lines:
-
-    $loader->registerNamespace('SimpleLifestream', 'path/to/vendor/SimpleLifestream');
 
 Basic Usage
 ===========
@@ -98,12 +87,11 @@ set different usernames for a single Service.
         require('SimpleLifestream.php');
 
         $lifestream = new \SimpleLifestream\SimpleLifestream();
-        $lifestream->loadService('Twitter', 'parishilton');
-        $lifestream->loadService('Twitter', 'ThatKevinSmith');
-        $lifestream->loadService('Twitter', 'YourOtherUserName');
-        $lifestream->loadService('FacebookPages', '27469195051');
         $lifestream->loadService('Youtube', 'ERB');
+        $lifestream->loadService('Youtube', 'OtherChannelName');
+        $lifestream->loadService('Youtube', 'YetAnother');
         $lifestream->loadService('StackOverflow', '430087');
+        $lifestream->loadService('FacebookPages', '27469195051');
         $lifestream->loadService('Feed', 'http://www.smodcast.com/feed/');
 
         $stream = $lifestream->getLifestream();
@@ -153,7 +141,7 @@ This library also has support for spanish output. You can even write your own tr
 ```php
     <?php
         $config = array('lang' => new \SimpleLifestream\Languages\Spanish());
-        $services = array('Twitter' => 'parishilton');
+        $services = array('Youtube' => 'mychannel');
 
         $lifestream = new \SimpleLifestream\SimpleLifestream($services, $config);
         $stream = $lifestream->getLifestream(10);
@@ -175,7 +163,7 @@ You want to specify another directory for the cache engine?
 ```php
     <?php
         $config = array('cache_dir' => '/path/to/your/dir');
-        $services = array('Twitter' => 'parishilton');
+        $services = array('Youtube' => 'mychannel');
 
         $lifestream = new \SimpleLifestream\SimpleLifestream($services, $config);
         $stream = $lifestream->getLifestream(10);
@@ -187,7 +175,7 @@ Or if you like to disable Caching
 ```php
     <?php
         $config = array('cache' => false);
-        $services = array('Twitter' => 'parishilton');
+        $services = array('Youtube' => 'mychannel');
 
         $lifestream = new \SimpleLifestream\SimpleLifestream($services, $config);
     ?>
@@ -197,7 +185,7 @@ Or perhaps make the cache last longer?
 ```php
     <?php
         $config = array('cache_ttl' => (60*30)); // 30 minutes
-        $services = array('Twitter' => 'parishilton');
+        $services = array('Youtube' => 'mychannel');
 
         $lifestream = new \SimpleLifestream\SimpleLifestream($services, $config);
     ?>
@@ -208,7 +196,7 @@ display the data in different ways. The first one is the `HtmlList` Formatter. T
 how it goes:
 ```php
     <?php
-        $services = array('Twitter' => 'parishilton');
+        $services = array('Youtube' => 'mychannel');
         $lifestream = new \SimpleLifestream\SimpleLifestream($services);
         $lifestream = new \SimpleLifestream\Formatters\HtmlList($lifestream);
         echo $lifestream->getLifestream(3);
@@ -228,7 +216,7 @@ The other formatter is a little more flexible, you can use it define your own te
 and with the help of some placeholders, you can interpolate the data fetched by the library.
 ```php
     <?php
-        $services = array('Twitter' => 'parishilton');
+        $services = array('Youtube' => 'mychannel');
         $lifestream = new \SimpleLifestream\SimpleLifestream($services);
         $lifestream = new \SimpleLifestream\Formatters\Template($lifestream);
         $lifestream->setTemplate('<div class="{service}">{text}{link}</div>');
@@ -245,6 +233,27 @@ and with the help of some placeholders, you can interpolate the data fetched by 
 If you want to see more examples of how to use this library take a peak inside the Tests directory and view the files.
 Otherwise inspect the source code of the library, I would say that it has a "decent" english documentation and it should be easy to follow.
 The Test Coverage is also fairly decent.
+
+Special Cases
+=============
+In order to use the `Twitter Service` you must first register an app, and pass the data as follows:
+
+```php
+    <?php
+        $services = array('Twitter' => array(
+            'consumer_key'    => 'Your Consumer key',
+            'consumer_secret' => 'Your Consumer Secret',
+            'token'           => 'Your Token',
+            'token_secret'    => 'Your Token Secret',
+            'user' => 'Your User Name'
+        ));
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream($services);
+        $output = $lifestream->getLifestream();
+
+        print_r($output);
+    ?>
+```
 
 Sample Output
 =============
