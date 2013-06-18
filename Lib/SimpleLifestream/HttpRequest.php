@@ -27,7 +27,7 @@ class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
     {
         $config = array_intersect_key($config, array_flip(array('user_agent', 'timeout')));
         $this->config = array_merge(array(
-            'user_agent' => 'Mozilla 5.0/ PHP/SimpleLifestream',
+            'user_agent' => 'PHP/SimpleLifestream',
             'timeout' => 0
         ), $config);
 
@@ -40,9 +40,10 @@ class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
      * and returns the value.
      *
      * @param string $url
+     * @param bool $uncompress
      * @return string
      */
-    public function get($url)
+    public function get($url, $uncompress = false)
     {
         $url = trim($url);
         $id = 'http_' . md5($url);
@@ -50,7 +51,7 @@ class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
         $return = $this->cache->read($id);
         if (empty($return))
         {
-            $return = $this->makeRequest($url);
+            $return = $this->makeGetRequest($url, $uncompress);
             $this->cache->store($id, $return);
         }
 
@@ -58,75 +59,71 @@ class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
     }
 
     /**
+     * Sends an Oauth request
+     *
+     * @param string $string
+     * @return void
+     */
+    public function oauth1Request($url, array $OauthData = array())
+    {
+        if (!class_exists('\Guzzle\Http\Client'))
+            throw new \RuntimeException('You need to install Guzzle');
+
+        $id = 'http_oauth_' . md5($url);
+        $return = $this->cache->read($id);
+
+        if (empty($return))
+        {
+            unset($OauthData['user']);
+
+            $client = new \Guzzle\Http\Client($url);
+            $oauth = new \Guzzle\Plugin\Oauth\OauthPlugin($OauthData);
+            $client->addSubscriber($oauth);
+
+            $response = $client->get()->send();
+            $return = $response->getBody();
+
+            $this->cache->store($id, $return);
+        }
+
+        return $return;
+    }
+
+
+    /**
      * Executes http requests
      *
      * @param string $url
+     * @param bool $uncompress
      * @return string
      *
-     * @throws Exception when an error ocurred or if no way to do a request exists
+     * @throws RuntimeException when Guzzle or Curl are not available
      */
-    protected function makeRequest($url)
+    protected function makeGetRequest($url, $uncompress = false)
     {
         if (function_exists('curl_init'))
-            return $this->fetchWithCurl($url);
+        {
+            if (class_exists('\Guzzle\Http\Client'))
+            {
+                $options = array(
+                    CURLOPT_USERAGENT => $this->config['user_agent'],
+                    CURLOPT_CONNECTTIMEOUT => $this->config['timeout']
+                );
 
-        return $this->fetchWithFileGetContents($url);
-    }
+                $client = new \Guzzle\Http\Client($url, $options);
+                $response = $client->get()->send();
+                $response = $response->getBody();
 
-    /**
-     * Uses Curl to fetch data from an url
-     *
-     * @param string $url
-     * @return string
-     *
-     * @throws Exception when the returned status code is not 200 or no data was found
-     */
-    protected function fetchWithCurl($url)
-    {
-        $options = array(
-            CURLOPT_URL => $url,
-            CURLOPT_USERAGENT => $this->config['user_agent'],
-            CURLOPT_CONNECTTIMEOUT => $this->config['timeout'],
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HEADER => false,
-            CURLOPT_ENCODING => 'UTF-8',
-            CURLOPT_RETURNTRANSFER => 1
-        );
+                if ($uncompress && is_callable(array($response, 'uncompress')))
+                    $response->uncompress();
 
-        $ch = curl_init();
-        curl_setopt_array($ch, $options);
-        $data = curl_exec($ch);
-        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+                return (string) $response;
+            }
 
-        if (empty($data) || !in_array($status, array('200')))
-            throw new \Exception($status . ': Invalid response for ' . $url);
+            throw new \RuntimeException('You need to install Guzzle');
+        }
 
-        return $data;
-    }
-
-    /**
-     * Uses file_get_contents to fetch data from an url
-     *
-     * @param string $url
-     * @return string
-     *
-     * @throws Exception when allow_url_fopen is disabled or when no data was returned
-     */
-    protected function fetchWithFileGetContents($url)
-    {
-        if (!ini_get('allow_url_fopen'))
-            throw new \Exception('Could not execute lookup, allow_url_fopen is disabled');
-
-        $context = array('http' => array(
-            'method' => 'GET',
-            'user_agent' => $this->config['user_agent']
-        ));
-
-        if ($data = file_get_contents($url, false, stream_context_create($context)))
-            return $data;
-
-        throw new \Exception('Invalid Server Response from ' . $url);
+        throw new \RuntimeException('You need to have curl installed');
     }
 }
 

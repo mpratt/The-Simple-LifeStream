@@ -11,6 +11,7 @@
  */
 
 date_default_timezone_set('UTC');
+require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../Lib/SimpleLifestream/Autoload.php';
 
 /**
@@ -74,6 +75,7 @@ class MockHttp implements \SimpleLifestream\Interfaces\IHttp
 {
     protected $reply;
     public function __construct($reply) { $this->reply = $reply; }
-    public function get($url) { $url = false; return $this->reply; }
+    public function get($url) { return $this->reply; }
+    public function oauth1Request($url, array $OauthData = array()) { return $this->reply; }
 }
 ?>

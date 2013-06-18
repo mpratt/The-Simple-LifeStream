@@ -14,7 +14,8 @@
         }
     ],
     "require": {
-        "php": ">=5.3.2"
+        "php": ">=5.3.2",
+        "guzzle/guzzle":"~3.7"
     },
     "autoload": {
         "psr-0": {"SimpleLifestream": "Lib/"}

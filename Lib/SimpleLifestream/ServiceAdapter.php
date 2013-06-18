@@ -28,7 +28,7 @@ abstract class ServiceAdapter
      * Constructor
      *
      * @param object $http Instance of \SimpleLifestream\Interfaces\IHttp
-     * @param string $resource
+     * @param mixed $resource
      * @return void
      */
     public function __construct(\SimpleLifestream\Interfaces\IHttp $http, $resource)

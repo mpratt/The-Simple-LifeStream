@@ -16,7 +16,16 @@ class TestzSimpleLifestreamLast extends PHPUnit_Framework_TestCase
      */
     public function testTwitter()
     {
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'parishilton'), array('cache' => false));
+        if (!is_file(__DIR__ . '/TwitterCredentials.php'))
+        {
+            $this->markTestSkipped('No twitter Credentials Found');
+            return ;
+        }
+
+        require __DIR__ . '/TwitterCredentials.php';
+        $data = array_merge(array('user' => 'HablarMierda'), $oauth);
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => $data), array('cache' => false));
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
@@ -114,7 +123,16 @@ class TestzSimpleLifestreamLast extends PHPUnit_Framework_TestCase
      */
     public function testIgnoreTypes()
     {
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'parishilton'), array('cache' => false));
+        if (!is_file(__DIR__ . '/TwitterCredentials.php'))
+        {
+            $this->markTestSkipped('No twitter Credentials Found');
+            return ;
+        }
+
+        require __DIR__ . '/TwitterCredentials.php';
+        $data = array_merge(array('user' => 'HablarMierda'), $oauth);
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => $data), array('cache' => false));
         $lifestream->ignoreType('tweeted');
 
         $output = $lifestream->getLifestream();
@@ -122,7 +140,7 @@ class TestzSimpleLifestreamLast extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $lifestream->getErrors());
         $this->assertCount(0, $output);
 
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'parishilton',
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => $data,
                                                                    'Youtube' => 'mtppratt'), array('cache' => false));
 
         $lifestream->ignoreType('tweeted');
@@ -130,7 +148,7 @@ class TestzSimpleLifestreamLast extends PHPUnit_Framework_TestCase
         $this->assertFalse($lifestream->hasErrors());
         $this->validateOutput($output, 'favorited');
 
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'parishilton',
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => $data,
                                                                    'Youtube' => 'mtppratt'), array('cache' => false));
 
         $lifestream->ignoreType('favorited');
@@ -138,7 +156,7 @@ class TestzSimpleLifestreamLast extends PHPUnit_Framework_TestCase
         $this->assertFalse($lifestream->hasErrors());
         $this->validateOutput($output, 'tweeted');
 
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'parishilton',
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => $data,
                                                                    'Youtube' => 'mtppratt'), array('cache' => false));
 
         $lifestream->ignoreType('favorited', 'Youtube');
@@ -152,7 +170,7 @@ class TestzSimpleLifestreamLast extends PHPUnit_Framework_TestCase
      */
     public function testCustomDateFormatting()
     {
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'AlvaroUribeVel'), array('cache' => false));
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Youtube' => 'mtppratt'), array('cache' => false));
         $lifestream->setDateFormat('Y-m-d');
 
         $output = $lifestream->getLifestream();
@@ -171,12 +189,12 @@ class TestzSimpleLifestreamLast extends PHPUnit_Framework_TestCase
      */
     public function testLanguages()
     {
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'AlvaroUribeVel'), array('cache' => false, 'lang' => new \SimpleLifestream\Languages\Spanish()));
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Youtube' => 'mtppratt'), array('cache' => false, 'lang' => new \SimpleLifestream\Languages\Spanish()));
         $output = $lifestream->getLifestream();
 
         $this->assertFalse($lifestream->hasErrors());
         $this->assertEquals($lifestream->getLastError(), '');
-        $this->validateOutput($output, 'twitteó');
+        $this->validateOutput($output, 'a sus favoritos.');
 
         $lang = new \SimpleLifestream\Languages\English();
         $this->assertEquals('{resource}', $lang->get('test-unknown-key-return'));
@@ -187,7 +205,7 @@ class TestzSimpleLifestreamLast extends PHPUnit_Framework_TestCase
      */
     public function testLinkTemplate()
     {
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('StackOverflow' => '22656'));
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Reddit' => 'mpratt'));
         $lifestream->setLinkTemplate('Hello friends');
         $output = $lifestream->getLifestream();
 
@@ -200,10 +218,17 @@ class TestzSimpleLifestreamLast extends PHPUnit_Framework_TestCase
      */
     public function testLimit()
     {
-        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => 'ThatKevinSmith',
-                                                                   'Youtube' => 'mtppratt',
-                                                                   'Feed'    => 'http://en.wikipedia.org/w/index.php?title=Special:RecentChanges&feed=atom')
-                                                               , array('cache' => false));
+        if (!is_file(__DIR__ . '/TwitterCredentials.php'))
+        {
+            $this->markTestSkipped('No twitter Credentials Found');
+            return ;
+        }
+
+        require __DIR__ . '/TwitterCredentials.php';
+        $data = array_merge(array('user' => 'HablarMierda'), $oauth);
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array('Twitter' => $data,
+                                                                   'Youtube' => 'mtppratt') , array('cache' => false));
 
         $output1 = $lifestream->getLifestream(10);
 
