@@ -25,7 +25,8 @@ class StackOverflow extends \SimpleLifestream\ServiceAdapter
      */
     public function getApiData()
     {
-        $response = json_decode($this->http->get(sprintf($this->url, $this->resource)), true);
+        $request = $this->http->get(sprintf($this->url, $this->resource), true);
+        $response = json_decode($request, true);
         if (empty($response['user_timelines']))
             throw new \Exception('The data returned by ' . sprintf($this->url, $this->resource) . ' seems invalid.');
 
