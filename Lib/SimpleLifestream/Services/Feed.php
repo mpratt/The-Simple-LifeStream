@@ -1,8 +1,8 @@
 <?php
 /**
  * Feed.php
- * A service that reads Atom and RSS feeds
  *
+ * @package Services
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -13,17 +13,18 @@
 
 namespace SimpleLifestream\Services;
 
+/**
+ * A service that reads Atom and RSS feeds
+ */
 class Feed extends \SimpleLifestream\ServiceAdapter
 {
+    /** @var object Instance of SimpleXmlElement */
     protected $xml;
+
+    /** @var string The type of the xml feed 'feed' for atom and 'rss' for RSS */
     protected $feedType;
 
-    /**
-     * Gets the data of the url and returns an array
-     * with all the information.
-     *
-     * @return array
-     */
+    /** inline {@inheritdoc} */
     public function getApiData()
     {
         $xmlString  = $this->http->get($this->resource);
@@ -49,7 +50,7 @@ class Feed extends \SimpleLifestream\ServiceAdapter
     }
 
     /**
-     * Detects Atom feeds and organizes the data properly.
+     * Converts and organizes data from a Atom feed
      *
      * @return array
      */
@@ -77,7 +78,7 @@ class Feed extends \SimpleLifestream\ServiceAdapter
     }
 
     /**
-     * Detects RSS feeds and organizes the data properly.
+     * Converts and organizes data from a RSS feed
      *
      * @return array
      */

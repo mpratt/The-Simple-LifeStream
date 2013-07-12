@@ -1,8 +1,8 @@
 <?php
 /**
  * StackOverflow.php
- * A service for Stack Overflow
  *
+ * @package Services
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -13,16 +13,15 @@
 
 namespace SimpleLifestream\Services;
 
+/**
+ * A service for Stack Overflow
+ */
 class StackOverflow extends \SimpleLifestream\ServiceAdapter
 {
+    /** @var string The api url for this service */
     protected $url = 'http://api.stackoverflow.com/1.0/users/%s/timeline';
 
-    /**
-     * Gets the data of the user and returns an array
-     * with all the information.
-     *
-     * @return array
-     */
+    /** inline {@inheritdoc} */
     public function getApiData()
     {
         $options = array();

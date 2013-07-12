@@ -1,8 +1,8 @@
 <?php
 /**
  * English.php
- * Translation to the english language
  *
+ * @package Languages
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -12,8 +12,12 @@
  */
 namespace SimpleLifestream\Languages;
 
+/**
+ * Translation to the english language
+ */
 class English extends \SimpleLifestream\LanguageAdapter
 {
+    /** inline {@inheritdoc} */
     protected $translation = array('pushEvent'   => 'pushed a new commit to {link}.',
                                    'createEvent' => 'created the {link} repository.',
                                    'createTag'   => 'added a new tag to {link}.',

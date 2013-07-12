@@ -1,8 +1,8 @@
 <?php
 /**
  * Github.php
- * A service for Github
  *
+ * @package Services
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -12,15 +12,15 @@
  */
 namespace SimpleLifestream\Services;
 
+/**
+ * A service for Github
+ */
 class Github extends \SimpleLifestream\ServiceAdapter
 {
+    /** @var string The api url for this service */
     protected $url = 'https://github.com/%s.json';
-    /**
-     * Gets the data of the user and returns an array
-     * with all the information.
-     *
-     * @return array
-     */
+
+    /** inline {@inheritdoc} */
     public function getApiData()
     {
         $response = $this->http->get(sprintf($this->url, $this->resource));

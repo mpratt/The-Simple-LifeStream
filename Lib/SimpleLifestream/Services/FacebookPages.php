@@ -1,8 +1,8 @@
 <?php
 /**
  * FacebookPages.php
- * A service for Facebook Pages
  *
+ * @package Services
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -13,16 +13,15 @@
 
 namespace SimpleLifestream\Services;
 
+/**
+ * A service for Facebook Pages
+ */
 class FacebookPages extends \SimpleLifestream\ServiceAdapter
 {
+    /** @var string The api url for this service */
     protected $url = 'http://www.facebook.com/feeds/page.php?id=%s&format=json';
 
-    /**
-     * Gets the data of the user and returns an array
-     * with all the information.
-     *
-     * @return array
-     */
+    /** inline {@inheritdoc} */
     public function getApiData()
     {
         $response = json_decode($this->http->get(sprintf($this->url, $this->resource)), true);

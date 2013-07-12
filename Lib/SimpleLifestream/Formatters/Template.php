@@ -2,6 +2,7 @@
 /**
  * Template.php
  *
+ * @package SimpleLifestream
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -11,11 +12,23 @@
  */
 namespace SimpleLifestream\Formatters;
 
+/**
+ * A formatter that acts as a Decorator for the main library.
+ * It outputs the lifestream data as a custom string.
+ */
 class Template
 {
+
+    /** @var object Instance of \SimpleLifestream\SimpleLifestream */
     protected $lifestream;
+
+    /** @var string The template with placeholders to be replaces */
     protected $template;
+
+    /** @var string String to be set after the template */
     protected $afterTemplate = '';
+
+    /** @var string String to be set before the template */
     protected $beforeTemplate = '';
 
     /**
@@ -64,7 +77,8 @@ class Template
     }
 
     /**
-     * Process the data and constructs the template
+     * Process the data and constructs the template, replacing
+     * the found placeholders wirh actual values.
      *
      * @param array $data
      * @return string

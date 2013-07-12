@@ -1,8 +1,8 @@
 <?php
 /**
  * LanguageAdapter.php
- * Every translation should extend this class.
  *
+ * @package SimpleLifestream
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -12,8 +12,15 @@
  */
 namespace SimpleLifestream;
 
+/**
+ * Abstract Class responsable of helping with translations.
+ * Every translation should extend this class.
+ *
+ * @abstract
+ */
 abstract class LanguageAdapter
 {
+    /** @var array Associative array with translations */
     protected $translation;
 
     /**

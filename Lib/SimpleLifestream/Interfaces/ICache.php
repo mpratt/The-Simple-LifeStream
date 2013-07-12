@@ -1,8 +1,8 @@
 <?php
 /**
  * ICache.php
- * This Interface defines the rules for a class that wants to cache data.
  *
+ * @package Interfaces
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -12,6 +12,9 @@
  */
 namespace SimpleLifestream\Interfaces;
 
+/**
+ * This Interface defines the rules for a class that wants to cache data.
+ */
 interface ICache
 {
     /**

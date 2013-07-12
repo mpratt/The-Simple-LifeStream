@@ -1,8 +1,8 @@
 <?php
 /**
  * Spanish.php
- * Translation to the english language
  *
+ * @package Languages
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -12,8 +12,12 @@
  */
 namespace SimpleLifestream\Languages;
 
+/**
+ * Translation to the spanish language
+ */
 class Spanish extends \SimpleLifestream\LanguageAdapter
 {
+    /** inline {@inheritdoc} */
     protected $translation = array('pushEvent'   => 'actualizó el proyecto {link}.',
                                    'createEvent' => 'creó el proyecto {link}.',
                                    'createTag'   => 'creó un nuevo Tag para {link}.',
