@@ -40,10 +40,11 @@ class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
      * and returns the value.
      *
      * @param string $url
+     * @param array $options
      * @param bool $uncompress
      * @return string
      */
-    public function get($url, $uncompress = false)
+    public function get($url, array $options = array(), $uncompress = false)
     {
         $url = trim($url);
         $id = 'http_' . md5($url);
@@ -51,7 +52,7 @@ class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
         $return = $this->cache->read($id);
         if (empty($return))
         {
-            $return = $this->makeGetRequest($url, $uncompress);
+            $return = $this->makeGetRequest($url, $options, $uncompress);
             $this->cache->store($id, $return);
         }
 
@@ -69,7 +70,7 @@ class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
         if (!class_exists('\Guzzle\Http\Client'))
             throw new \RuntimeException('You need to install Guzzle');
 
-        $id = 'http_oauth_' . md5($url);
+        $id = 'http_oauth_' . md5($url . $OauthData['user']);
         $return = $this->cache->read($id);
 
         if (empty($return))
@@ -83,10 +84,10 @@ class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
             $response = $client->get()->send();
             $return = $response->getBody();
 
-            $this->cache->store($id, $return);
+            $this->cache->store($id, (string) $return);
         }
 
-        return $return;
+        return (string) $return;
     }
 
 
@@ -97,33 +98,29 @@ class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
      * @param bool $uncompress
      * @return string
      *
-     * @throws RuntimeException when Guzzle or Curl are not available
+     * @throws RuntimeException when Guzzle is not installed
      */
-    protected function makeGetRequest($url, $uncompress = false)
+    protected function makeGetRequest($url, array $options = array(), $uncompress = false)
     {
-        if (function_exists('curl_init'))
+        if (class_exists('\Guzzle\Http\Client'))
         {
-            if (class_exists('\Guzzle\Http\Client'))
-            {
-                $options = array(
-                    CURLOPT_USERAGENT => $this->config['user_agent'],
-                    CURLOPT_CONNECTTIMEOUT => $this->config['timeout']
-                );
+            $defaultOptions = array(
+                CURLOPT_USERAGENT => $this->config['user_agent'],
+                CURLOPT_CONNECTTIMEOUT => $this->config['timeout'],
+                CURLOPT_ENCODING => '',
+            );
 
-                $client = new \Guzzle\Http\Client($url, $options);
-                $response = $client->get()->send();
-                $response = $response->getBody();
+            $client = new \Guzzle\Http\Client($url, array_merge($defaultOptions, $options));
+            $response = $client->get()->send();
+            $response = $response->getBody();
 
-                if ($uncompress && is_callable(array($response, 'uncompress')))
-                    $response->uncompress();
+            if ($uncompress && is_callable(array($response, 'uncompress')))
+                $response->uncompress();
 
-                return (string) $response;
-            }
-
-            throw new \RuntimeException('You need to install Guzzle');
+            return (string) $response;
         }
 
-        throw new \RuntimeException('You need to have curl installed');
+        throw new \RuntimeException('You need to install Guzzle');
     }
 }
 

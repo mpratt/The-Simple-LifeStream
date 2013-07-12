@@ -12,7 +12,6 @@
 
 date_default_timezone_set('UTC');
 require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../Lib/SimpleLifestream/Autoload.php';
 
 /**
  * Checks that service provider returns consistent data

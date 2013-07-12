@@ -42,7 +42,8 @@ class Twitter extends \SimpleLifestream\ServiceAdapter
                 throw new \InvalidArgumentException('You need to specify the key ' . $k . ' on the Twitter Service');
         }
 
-        $response = json_decode($this->http->oauth1Request(sprintf($this->url, $this->resource['user']), $this->resource), true);
+        $response = (string) $this->http->oauth1Request(sprintf($this->url, $this->resource['user']), $this->resource);
+        $response = json_decode($response, true);
         if (!empty($response) && empty($response['errors']) && empty($response['error']))
             return array_filter(array_map(array($this, 'filterResponse'), $response));
 
