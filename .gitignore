@@ -1,4 +1,3 @@
-*.cache
 vendor/*
 Docs/*
 Tests/Coverage

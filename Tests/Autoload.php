@@ -1,7 +1,6 @@
 <?php
 /**
- * Bootstrap.php
- * The test bootstrap file
+ * Autoload.php
  *
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
@@ -11,7 +10,11 @@
  */
 
 date_default_timezone_set('UTC');
-require __DIR__ . '/../vendor/autoload.php';
+
+if (file_exists(__DIR__ . '/../vendor/autoload.php'))
+    require __DIR__ . '/../vendor/autoload.php';
+else
+    require __DIR__ . '/../Lib/SimpleLifestream/Autoload.php';
 
 /**
  * Checks that service provider returns consistent data
@@ -63,18 +66,17 @@ function checkServiceKeys($test, array $result, array $types, array $additional 
  */
 class SimpleLifestreamMock extends \SimpleLifestream\SimpleLifestream { public $services = array(); }
 
-class FileCacheMock extends \SimpleLifestream\FileCache
+class CacheMock extends \SimpleLifestream\Cache\File
 {
-    public function __construct(array $config = array()){}
-    public function store($key, $data) { return false; }
-    public function read($key) { return false; }
+    public function __construct(array $config = array()){ $this->config = $config; }
+    public function store($key, $data) { unset($key, $data); return false; }
+    public function read($key) { unset($key); return false; }
 }
 
-class MockHttp implements \SimpleLifestream\Interfaces\IHttp
+class MockHttp extends \SimpleLifestream\HttpRequest
 {
     protected $reply;
     public function __construct($reply) { $this->reply = $reply; }
-    public function get($url) { return $this->reply; }
-    public function oauth1Request($url, array $OauthData = array()) { return $this->reply; }
+    public function fetch($url) { unset($url); return $this->reply; }
 }
 ?>
