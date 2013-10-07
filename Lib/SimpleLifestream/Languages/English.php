@@ -15,25 +15,26 @@ namespace SimpleLifestream\Languages;
 /**
  * Translation to the english language
  */
-class English extends \SimpleLifestream\LanguageAdapter
+class English extends Adapter
 {
     /** inline {@inheritdoc} */
-    protected $translation = array('pushEvent'   => 'pushed a new commit to {link}.',
-                                   'createEvent' => 'created the {link} repository.',
-                                   'createTag'   => 'added a new tag to {link}.',
-                                   'createGist'  => 'created a new Gist {link}',
-                                   'updateGist'  => 'updated a Gist {link}',
-                                   'starred'     => 'starred {link}.',
-                                   'favorited'   => 'favorited {link}.',
-                                   'followed'    => 'followed {link}.',
-                                   'commented'   => 'commented on "{link}".',
-                                   'posted'      => 'posted {link}.',
-                                   'tweeted'     => 'tweeted "{link}".',
-                                   'link'        => '{link}.',
-                                   'answered'    => 'answered the "{link}" question.',
-                                   'asked'       => 'asked "{link}".',
-                                   'acceptedAnswer' => 'accepted an answer for "{link}".',
-                                   'badgeWon'    => 'won the {link} badge.'
-                               );
+    protected $translation = array(
+        'link'        => '{link}.',
+        'posted'      => 'posted {link}.',
+        'starred'     => 'starred {link}.',
+        'followed'    => 'followed {link}.',
+        'commented'   => 'commented on "{link}".',
+        'answered'    => 'answered the "{link}" question.',
+        'accepted'    => 'accepted an answer for "{link}".',
+        'asked'       => 'asked "{link}".',
+        'badge'       => 'got the {link} badge.',
+        'repo-released' => 'released version {link}',
+        'repo-create' => 'created the {link} repository.',
+        'repo-push'   => 'pushed a new commit to {link}.',
+        'repo-pull-opened'  => 'opened a new pull request for {link}',
+        'repo-issue-created'  => 'created a new issue on {link}',
+        'tweeted'     => 'tweeted "{link}".',
+        'favorited'   => 'favorited {link}.',
+    );
 }
 ?>

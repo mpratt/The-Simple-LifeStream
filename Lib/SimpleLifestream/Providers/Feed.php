@@ -23,7 +23,7 @@ class Feed extends Adapter
 
     /** inline {@inheritdoc} */
     protected $settings = array(
-        'action' => 'posted'
+        'type' => 'posted'
     );
 
     /** inline {@inheritdoc} */
@@ -56,7 +56,7 @@ class Feed extends Adapter
         foreach ($this->xml->entry as $entry)
         {
             $return[] = array(
-                'type'     => $this->settings['action'],
+                'type'     => $this->settings['type'],
                 'service'  => 'feed',
                 'stamp'    => (int) strtotime($entry->updated),
                 'url'      => (string) $entry->link->attributes()->href,
@@ -80,7 +80,7 @@ class Feed extends Adapter
         {
             $return[] = array(
                 'service'  => 'feed',
-                'type'     => $this->settings['action'],
+                'type'     => $this->settings['type'],
                 'stamp'    => (int) strtotime($item->pubDate),
                 'text'     => (string) $item->title,
                 'url'      => (string) $item->link,

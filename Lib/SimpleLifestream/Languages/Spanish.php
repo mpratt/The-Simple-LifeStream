@@ -15,25 +15,26 @@ namespace SimpleLifestream\Languages;
 /**
  * Translation to the spanish language
  */
-class Spanish extends \SimpleLifestream\LanguageAdapter
+class Spanish extends Adapter
 {
     /** inline {@inheritdoc} */
-    protected $translation = array('pushEvent'   => 'actualizó el proyecto {link}.',
-                                   'createEvent' => 'creó el proyecto {link}.',
-                                   'createTag'   => 'creó un nuevo Tag para {link}.',
-                                   'createGist'  => 'creó el gist {link}',
-                                   'updateGist'  => 'actualizó el gist {link}',
-                                   'starred'     => 'está observando a {link}.',
-                                   'favorited'   => 'agregó {link} a sus favoritos.',
-                                   'followed'    => 'se suscribió a {link}.',
-                                   'commented'   => 'comentó en "{link}".',
-                                   'posted'      => 'escribió {link}.',
-                                   'tweeted'     => 'twitteó "{link}".',
-                                   'link'        => '{link}.',
-                                   'answered'    => 'contestó la pregunta "{link}".',
-                                   'asked'       => 'preguntó "{link}".',
-                                   'acceptedAnswer' => 'aceptó una respuesta a "{link}".',
-                                   'badgeWon'    => 'ganó la insignia {link}.'
-                               );
+    protected $translation = array(
+        'link'        => '{link}.',
+        'posted'      => 'escribió {link}.',
+        'starred'     => 'esta observando a {link}.',
+        'followed'    => 'se suscribió a {link}.',
+        'commented'   => 'comentó en "{link}".',
+        'answered'    => 'contestó la pregunta "{link}".',
+        'accepted'    => 'aceptó una respuesta para "{link}".',
+        'asked'       => 'preguntó "{link}".',
+        'badge'       => 'ganó la insignia {link}.',
+        'repo-released' => 'liberó la version {link}',
+        'repo-create' => 'creó el proyecto {link}.',
+        'repo-push'   => 'actualizó el proyecto {link}.',
+        'repo-pull-opened'  => 'creó un pull request para {link}',
+        'repo-issue-created'  => 'escribió un reporte para {link}',
+        'tweeted'     => 'trinó "{link}".',
+        'favorited'   => 'agregó {link} a sus favoritos.',
+    );
 }
 ?>

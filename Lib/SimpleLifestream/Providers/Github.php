@@ -65,11 +65,11 @@ class Github extends Adapter
                 $text = $value['repo']['name'];
                 if ($value['payload']['ref_type'] == 'tag')
                 {
-                    $type = 'released';
+                    $type = 'repo-released';
                     $text = $value['payload']['ref'] . ' (' . basename($value['repo']['name']) . ')';
                 }
                 else
-                    $type = str_replace('event', '', $value['type']);
+                    $type = 'repo-' . str_replace('event', '', $value['type']);
 
                 $url = $value['repo']['url'];
                 break;
@@ -93,14 +93,14 @@ class Github extends Adapter
                 if ($value['payload']['action'] != 'opened')
                     return array();
 
-                $type = 'pull' . $value['payload']['action'];
+                $type = 'repo-pull-' . strtolower($value['payload']['action']);
                 $url  = $value['payload']['pull_request']['html_url'];
                 $text = $value['repo']['name'];
                 break;
 
             case 'issuecommentevent':
 
-                $type = 'issue' . $value['payload']['action'];
+                $type = 'repo-issue-' . strtolower($value['payload']['action']);
                 $url  = $value['payload']['issue']['url'];
                 $text = $value['payload']['issue']['title'];
                 break;
