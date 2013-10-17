@@ -23,12 +23,17 @@ class Feed extends Adapter
 
     /** inline {@inheritdoc} */
     protected $settings = array(
-        'type' => 'posted'
+        'type' => 'posted',
+        'service' => 'feed',
+        'resource_name' => '',
     );
 
     /** inline {@inheritdoc} */
     public function getApiData()
     {
+        if (empty($this->settings['resource_name']))
+            $this->settings['resource_name'] = $this->getApiUrl();
+
         $response = $this->http->fetch($this->getApiUrl());
         $this->xml = simplexml_load_string($response);
 
@@ -54,11 +59,11 @@ class Feed extends Adapter
         {
             $return[] = array(
                 'type'     => $this->settings['type'],
-                'service'  => 'feed',
+                'service'  => $this->settings['service'],
                 'stamp'    => (int) strtotime($entry->updated),
                 'url'      => (string) $entry->link->attributes()->href,
                 'text'     => (string) $entry->title,
-                'resource' => $this->getApiUrl(),
+                'resource' => $this->settings['resource_name'],
             );
         }
 
@@ -76,12 +81,12 @@ class Feed extends Adapter
         foreach ($this->xml->channel->item as $item)
         {
             $return[] = array(
-                'service'  => 'feed',
+                'service'  => $this->settings['service'],
                 'type'     => $this->settings['type'],
                 'stamp'    => (int) strtotime($item->pubDate),
                 'text'     => (string) $item->title,
                 'url'      => (string) $item->link,
-                'resource' => $this->getApiUrl(),
+                'resource' => $this->settings['resource_name'],
             );
         }
 

@@ -3,6 +3,14 @@ Supported Sites
 More detailed information about each stream and instantiation instructions, are found
 on this file.
 
+### DailyMotion
+Finds uploaded videos.
+Requires: The User name
+
+```php
+    new \SimpleLifestream\Stream('DailyMotion', 'Movieline');
+```
+
 ### FacebookPages
 Remember that a Facebook Page is different from a profile Page.
 The page id is required, if you dont know how to find it, look at [this stackoverflow question](http://stackoverflow.com/questions/3130433/get-facebook-fan-page-id).

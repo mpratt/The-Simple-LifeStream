@@ -19,22 +19,23 @@ class English extends Adapter
 {
     /** inline {@inheritdoc} */
     protected $translation = array(
-        'link'        => '{link}.',
-        'posted'      => 'posted {link}.',
-        'starred'     => 'starred {link}.',
-        'followed'    => 'followed {link}.',
-        'commented'   => 'commented on {link}.',
-        'answered'    => 'answered the question: {link}.',
-        'accepted'    => 'accepted an answer for {link}.',
-        'asked'       => 'asked {link}.',
-        'badge'       => 'earned the {link} badge.',
+        'link' => '{link}.',
+        'posted' => 'posted {link}.',
+        'starred' => 'starred {link}.',
+        'followed' => 'followed {link}.',
+        'commented' => 'commented on {link}.',
+        'answered' => 'answered the question: {link}.',
+        'accepted' => 'accepted an answer for {link}.',
+        'asked' => 'asked {link}.',
+        'badge' => 'earned the {link} badge.',
         'repo-released' => 'released version {link}.',
         'repo-created' => 'created the {link} repository.',
-        'repo-pushed'  => 'pushed a new commit to {link}.',
+        'repo-pushed' => 'pushed a new commit to {link}.',
         'repo-pull-opened' => 'opened a new pull request for {link}.',
         'repo-issue-created' => 'created a new issue on {link}.',
-        'tweeted'     => 'tweeted: {link}.',
-        'favorited'   => 'favorited {link}.',
+        'tweeted' => 'tweeted: {link}.',
+        'favorited' => 'favorited {link}.',
+        'uploaded-video' => 'uploaded the video {link}.',
     );
 }
 ?>

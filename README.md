@@ -18,6 +18,7 @@ The name of this library is inspired by that old cheap reality show with Paris H
 Supported Sites
 ===============
 
+- DaliyMotion
 - FacebookPages
 - Atom/RSS Feeds
 - Github
