@@ -24,11 +24,11 @@ class Template
     /** @var string The template with placeholders to be replaces */
     protected $template;
 
-    /** @var string String to be set after the template */
-    protected $afterTemplate = '';
-
-    /** @var string String to be set before the template */
+    /** @var string String to be showed before the template */
     protected $beforeTemplate = '';
+
+    /** @var string String to be showed after the template */
+    protected $afterTemplate = '';
 
     /**
      * Constructor
@@ -96,7 +96,7 @@ class Template
      */
     protected function processTemplate(array $data = array())
     {
-        if (empty($data) || empty($this->template))
+        if (empty($this->template))
             return ;
 
         $return = $this->beforeTemplate;

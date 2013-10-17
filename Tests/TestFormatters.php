@@ -73,7 +73,7 @@ class TestFormatters extends TestService
         $formatter = new \SimpleLifestream\Formatters\HtmlList($this->lifestream);
         $return = $formatter->getLifestream();
 
-        $this->assertTrue((bool) preg_match('~^<ul class="simplelifestream">(.*?)</ul>$~', $return));
+        $this->assertTrue((bool) preg_match('~^<ul class="simplelifestream">(.*?)</ul>$~is', $return));
     }
 
     public function testHtmlListFormatter2()
@@ -90,6 +90,41 @@ class TestFormatters extends TestService
 
         $formatter = new \SimpleLifestream\Formatters\HtmlList($this->lifestream);
         $formatter->UnknownMethod();
+    }
+
+    public function testFormatterReal()
+    {
+        $streams = array(new \SimpleLifestream\Stream('Reddit', 'mpratt'));
+
+        // Instantiate stream before decorating
+        $lifestream = new \SimpleLifestream\SimpleLifestream();
+        $lifestream->loadStreams($streams);
+
+        $lifestream = new \SimpleLifestream\Formatters\HtmlList($lifestream);
+        $output = $lifestream->getLifestream();
+
+        $this->assertTrue(!empty($output));
+        $this->assertTrue((bool) preg_match('~^<ul class="simplelifestream">(.*?)</ul>$~is', $output));
+        $this->assertFalse($lifestream->hasErrors());
+
+        // Load Streams already decorated
+        $lifestream = new \SimpleLifestream\SimpleLifestream();
+        $lifestream = new \SimpleLifestream\Formatters\HtmlList($lifestream);
+        $lifestream->loadStreams($streams);
+        $output = $lifestream->getLifestream();
+
+        $this->assertTrue(!empty($output));
+        $this->assertTrue((bool) preg_match('~^<ul class="simplelifestream">(.*?)</ul>$~is', $output));
+        $this->assertFalse($lifestream->hasErrors());
+
+        // Check Output and method chaining
+        $lifestream = new \SimpleLifestream\SimpleLifestream();
+        $lifestream = new \SimpleLifestream\Formatters\HtmlList($lifestream);
+        $output = $lifestream->loadStreams($streams)->getLifestream();
+
+        $this->assertTrue(!empty($output));
+        $this->assertTrue((bool) preg_match('~^<ul class="simplelifestream">(.*?)</ul>$~is', $output));
+        $this->assertFalse($lifestream->hasErrors());
     }
 }
 ?>
