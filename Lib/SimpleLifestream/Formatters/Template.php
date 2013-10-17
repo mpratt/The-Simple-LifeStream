@@ -2,7 +2,7 @@
 /**
  * Template.php
  *
- * @package SimpleLifestream
+ * @package Formatters
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -18,7 +18,6 @@ namespace SimpleLifestream\Formatters;
  */
 class Template
 {
-
     /** @var object Instance of \SimpleLifestream\SimpleLifestream */
     protected $lifestream;
 
@@ -74,6 +73,18 @@ class Template
     {
         $return = $this->lifestream->getLifestream($count);
         return $this->processTemplate($return);
+    }
+
+    /**
+     * Loads the streams
+     *
+     * @param array $providers Array with \SimpleLifestream\Stream objects
+     * @return object Instance of this object
+     */
+    public function loadStreams(array $providers)
+    {
+        $this->lifestream->loadStreams($providers);
+        return $this;
     }
 
     /**

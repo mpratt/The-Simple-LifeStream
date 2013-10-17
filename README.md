@@ -1,6 +1,6 @@
 The Simple Life(stream)
 =======================
-[![Build Status](https://secure.travis-ci.org/mpratt/The-Simple-LifeStream.png?branch=master)](http://travis-ci.org/mpratt/The-Simple-LifeStream)
+[![Build Status](https://secure.travis-ci.org/mpratt/The-Simple-LifeStream.png?branch=master)](http://travis-ci.org/mpratt/The-Simple-LifeStream) [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mpratt/The-Simple-LifeStream/badges/quality-score.png?s=5ce8505d3304732575b54e37df6057333645040c)](https://scrutinizer-ci.com/g/mpratt/The-Simple-LifeStream/) [![Code Coverage](https://scrutinizer-ci.com/g/mpratt/The-Simple-LifeStream/badges/coverage.png?s=d3f6c51de6584f1ae196cb609bfaacd54c2e34be)](https://scrutinizer-ci.com/g/mpratt/The-Simple-LifeStream/) [![Latest Stable Version](https://poser.pugx.org/mpratt/simple-lifestream/version.png)](https://packagist.org/packages/mpratt/simple-lifestream) [![Total Downloads](https://poser.pugx.org/mpratt/simple-lifestream/downloads.png)](https://packagist.org/packages/mpratt/simple-lifestream)
 
 Is a very simple and flexible library for your life-streaming purposes. It supports a bunch of third party services
 and makes it easy for you to display all that information in one single place.
@@ -13,7 +13,7 @@ In order to have a decent performance and avoid making too many requests to othe
 Cache System based on files (file cache). The duration of each cache is 10 minutes by default, however you can modify
 that behaviour easily.
 
-The name of this library is inspired by that cheap reality show with Paris Hilton and Nicole Ritchie.
+The name of this library is inspired by that old cheap reality show with Paris Hilton and Nicole Ritchie.
 
 Supported Sites
 ===============
@@ -150,6 +150,69 @@ output to be in spanish, you just need to write:
         echo $d['html'];
 ```
 
+Stream Configuration
+====================
+
+The `\SimpleLifestream\Stream` object needs two parameters. The first one is a string containing the name of the Provider.
+When an Invalid Provider is given, an `InvalidArgumentException` is thrown.
+
+The second argument can be a string giving the relevant resource/username or an array with important configuration options.
+The regular way of registring a stream is:
+
+```php
+    $streams = array(
+        new \SimpleLifestream\Stream('Github', 'mpratt'),
+        new \SimpleLifestream\Stream('Youtube', 'ERB'),
+    );
+```
+
+Or use an associative array with the `resource` key:
+```php
+    $streams = array(
+        new \SimpleLifestream\Stream('Github', array('resource' => 'mpratt')),
+        new \SimpleLifestream\Stream('Youtube', array('resource' => 'ERB')),
+    );
+```
+
+The `resource` key is used internally and is interpreted as the relevant username/url/userid needed for
+the current provider.
+
+That being said, the Twitter service requires additional information in order to retrieve the tweets. Remember that you have to  [register an app](http://dev.twitter.com/apps)
+in order to use the Twitter Provider.
+
+```php
+    $streams = array(
+        new \SimpleLifestream\Stream('twitter', array(
+            'consumer_key'    => 'your consumer key',
+            'consumer_secret' => 'your consumer secret',
+            'access_token' => 'you access token',
+            'access_token_secret' => 'your access token secret',
+            'resource' => 'your username',
+        ))
+    );
+
+    $lifestream = new \SimpleLifestream\SimpleLifestream();
+    $output = $lifestream->loadStreams($streams)->getLifestream();
+    print_r($output);
+```
+
+You can use this technique on a few providers to modify their behaviour in some ways. For example the StackExchange Provider
+gives you access to all the sites inside the StackExchange web ring, not just stackOverflow. Lets say for example we want
+to get the data from a user in `http://programmers.stackexchange.com`.
+
+```php
+    $streams = array(
+        new \SimpleLifestream\Stream('StackExchange', array(
+            'site' => 'programmers',
+            'resource' => '430087',
+        ))
+    );
+
+    $lifestream = new \SimpleLifestream\SimpleLifestream();
+    $output = $lifestream->loadStreams($streams)->getLifestream();
+    print_r($output);
+```
+
 Advanced Usage
 ==============
 
@@ -178,10 +241,10 @@ all that information. You can ignore it if you want by using the `ignore()` meth
     $data = $lifestream->getLifestream();
 ```
 
-Or you can restrict the action to a particulas stream provider
+Or you can restrict the action to a particular stream provider
 
 ```php
-    // Tell the library to Ignore all starred actions/types only for the
+    // Tell the library to Ignore all starred actions/types only from the
     // Github Provider
     $lifestream->ignore('favorited', 'Github');
 
@@ -201,7 +264,7 @@ how it goes:
         $lifestream = new \SimpleLifestream\Formatters\HtmlList($lifestream);
         echo $lifestream->getLifestream(4);
 
-        /* This prints something round this lines:
+        /* This prints something around this lines:
            <ul class="simplelifestream">
             <li class="servicename"><a href="...">text 1</a></li>
             <li class="servicename"><a href="...">text 2</a></li>
@@ -234,69 +297,6 @@ and with the help of some placeholders, you can interpolate the data fetched by 
 If you want to see more examples of how to use this library take a peak inside the Tests directory and view the files.
 Otherwise inspect the source code of the library, I would say that it has a "decent" english documentation and it should be easy to follow.
 The Test Coverage is also fairly decent.
-
-Stream Configuration
-====================
-
-The `\SimpleLifestream\Stream` object needs two parameters. The first one is a string containing the name of the Provider.
-When an Invalid Provider is given, an Exception is thrown.
-
-The second argument can be a string giving the relevant resource/username or an array with important configuration options.
-The regular way of registring a stream is:
-
-```php
-    $streams = array(
-        new \SimpleLifestream\Stream('Github', 'mpratt'),
-        new \SimpleLifestream\Stream('Youtube', 'ERB'),
-    );
-```
-
-Or use an associative array with the `resource` key:
-```php
-    $streams = array(
-        new \SimpleLifestream\Stream('Github', array('resource' => 'mpratt')),
-        new \SimpleLifestream\Stream('Youtube', array('resource' => 'ERB')),
-    );
-```
-
-The `resource` key is used internally and is interpreted as the relevant username/url/userid needed for
-the current provider.
-
-That being said, the Twitter service requires additional information in order to retrieve the tweets. Remember that you have to  [register an app](http://dev.twitter.com/apps)
-in order to use the Twitter Provider.
-
-```php
-    $streams = array(
-        new \SimpleLifestream\Stream('twitter', array(
-            'consumer_key'    => 'your consumer key',
-            'consumer_secret' => 'your consumer secret',
-            'token'           => 'you access token',
-            'token_secret'    => 'your access token secret',
-            'resource' => 'your username',
-        ))
-    );
-
-    $lifestream = new \SimpleLifestream\SimpleLifestream();
-    $output = $lifestream->loadStreams($streams)->getLifestream();
-    print_r($output);
-```
-
-You can use this technique on a few providers to modify their behaviour in some ways. For example the StackExchange Provider
-gives you access to all the sites inside the StackExchange web ring, not just stackOverflow. Lets say for example we want
-to get the data from a user in `http://programmers.stackexchange.com`.
-
-```php
-    $streams = array(
-        new \SimpleLifestream\Stream('StackExchange', array(
-            'site' => 'programmers',
-            'resource' => '430087',
-        ))
-    );
-
-    $lifestream = new \SimpleLifestream\SimpleLifestream();
-    $output = $lifestream->loadStreams($streams)->getLifestream();
-    print_r($output);
-```
 
 
 License

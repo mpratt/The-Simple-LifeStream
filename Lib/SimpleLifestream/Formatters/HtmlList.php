@@ -2,7 +2,7 @@
 /**
  * HtmlList.php
  *
- * @package Formatter
+ * @package Formatters
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
