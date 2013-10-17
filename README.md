@@ -19,6 +19,7 @@ Supported Sites
 ===============
 
 - DaliyMotion
+- Delicious
 - FacebookPages
 - Atom/RSS Feeds
 - Github

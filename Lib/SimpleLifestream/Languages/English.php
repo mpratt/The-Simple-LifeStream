@@ -35,6 +35,7 @@ class English extends Adapter
         'repo-issue-created' => 'created a new issue on {link}.',
         'tweeted' => 'tweeted: {link}.',
         'favorited' => 'favorited {link}.',
+        'bookmarked' => 'bookmarked {link}.',
         'uploaded-video' => 'uploaded the video {link}.',
     );
 }

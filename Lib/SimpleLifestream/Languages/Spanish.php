@@ -35,6 +35,7 @@ class Spanish extends Adapter
         'repo-issue-created' => 'escribió un reporte para {link}',
         'tweeted' => 'trinó {link}.',
         'favorited' => 'agregó {link} a sus favoritos.',
+        'bookmarked' => 'guardó {link}.',
         'uploaded-video'  => 'subió el video {link}.',
     );
 }

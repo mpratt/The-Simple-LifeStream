@@ -11,6 +11,14 @@ Requires: The User name
     new \SimpleLifestream\Stream('DailyMotion', 'Movieline');
 ```
 
+### Delicious
+Finds bookmarked urls
+Requires: The User name
+
+```php
+    new \SimpleLifestream\Stream('Delicious', 'andrei.z');
+```
+
 ### FacebookPages
 Remember that a Facebook Page is different from a profile Page.
 The page id is required, if you dont know how to find it, look at [this stackoverflow question](http://stackoverflow.com/questions/3130433/get-facebook-fan-page-id).
