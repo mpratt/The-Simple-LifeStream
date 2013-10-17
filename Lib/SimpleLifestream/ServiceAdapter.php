@@ -1,8 +1,8 @@
 <?php
 /**
  * ServiceAdapter.php
- * Every service should extend this class.
  *
+ * @package SimpleLifestream
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -12,8 +12,16 @@
  */
 namespace SimpleLifestream;
 
+/**
+ * This class provides a minor logic for every service and
+ * it acts as a "Interface" for them.
+ * Every service should extend this class.
+ *
+ * @abstract
+ */
 abstract class ServiceAdapter
 {
+    /** @var string This property refers as the contextual username/url/userid for the current service */
     protected $resource;
 
     /**
@@ -21,6 +29,7 @@ abstract class ServiceAdapter
      * with all the information.
      *
      * @return array
+     * @throws Exception When an error happened, no matter what kind.
      */
     abstract public function getApiData();
 
@@ -28,7 +37,7 @@ abstract class ServiceAdapter
      * Constructor
      *
      * @param object $http Instance of \SimpleLifestream\Interfaces\IHttp
-     * @param mixed $resource
+     * @param mixed $resource Mostly the username of url of a given service.
      * @return void
      */
     public function __construct(\SimpleLifestream\Interfaces\IHttp $http, $resource)

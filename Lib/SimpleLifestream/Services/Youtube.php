@@ -1,8 +1,8 @@
 <?php
 /**
  * Youtube.php
- * A service for youtube
  *
+ * @package Services
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -13,16 +13,15 @@
 
 namespace SimpleLifestream\Services;
 
+/**
+ * A service for youtube
+ */
 class Youtube extends \SimpleLifestream\ServiceAdapter
 {
+    /** @var string The api url for this service */
     protected $url = 'http://gdata.youtube.com/feeds/api/users/%s/favorites?v=2&alt=jsonc';
 
-    /**
-     * Gets the data of the user and returns an array
-     * with all the information.
-     *
-     * @return array
-     */
+    /** inline {@inheritdoc} */
     public function getApiData()
     {
         $response = json_decode($this->http->get(sprintf($this->url, $this->resource)), true);

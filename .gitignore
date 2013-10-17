@@ -1,5 +1,6 @@
 *.cache
 vendor/*
+Docs/*
 Tests/Coverage
 Tests/TwitterCredentials.php
 composer.lock

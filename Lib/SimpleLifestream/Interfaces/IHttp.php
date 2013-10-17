@@ -1,9 +1,8 @@
 <?php
 /**
  * IHttp.php
- * This Interface defines the rules for a class that wants to make
- * Http Requests.
  *
+ * @package Interfaces
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -13,6 +12,10 @@
  */
 namespace SimpleLifestream\Interfaces;
 
+/**
+ * This Interface defines the common methods for a class that wants to make
+ * Http Requests.
+ */
 interface IHttp
 {
     /**

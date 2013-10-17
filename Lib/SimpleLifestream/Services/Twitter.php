@@ -1,8 +1,8 @@
 <?php
 /**
  * Twiter.php
- * A service for Twitter
  *
+ * @package Services
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -13,16 +13,15 @@
 
 namespace SimpleLifestream\Services;
 
+/**
+ * A service for Twitter
+ */
 class Twitter extends \SimpleLifestream\ServiceAdapter
 {
+    /** @var string The api url for this service */
     protected $url = 'http://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=%s';
 
-    /**
-     * Gets the data of the user and returns an array
-     * with all the information.
-     *
-     * @return array
-     */
+    /** inline {@inheritdoc} */
     public function getApiData()
     {
         $keys = array(

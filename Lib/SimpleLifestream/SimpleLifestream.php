@@ -1,7 +1,6 @@
 <?php
 /**
  * SimpleLifestream.php
- * The main class of this library.
  *
  * @package SimpleLifestream
  * @author  Michael Pratt <pratt@hablarmierda.net>
@@ -19,24 +18,44 @@ use \SimpleLifestream\FileCache,
     \SimpleLifestream\Languages\Spanish,
     \SimpleLifestream\HttpRequest;
 
+/**
+ * The main Class for this library
+ */
 class SimpleLifestream
 {
+    /** @var int The version of this library */
     const VERSION = '3.1.1';
 
+    /** @var array Array with the loaded services. */
     protected $services   = array();
+
+    /** @var array Associative array wwith configuration directives */
     protected $config     = array();
+
+    /** @var array An array with all the caught errors */
     protected $errors     = array();
+
+    /** @var array An array with blacklisted services or service types. */
     protected $blacklist  = array();
+
+    /** @var string The Date Format for the output array */
     protected $dateFormat = 'Y-m-d H:i:s';
+
+    /** @var string The template used for links */
     protected $linkTemplate = '<a href="{url}">{text}</a>';
+
+    /** @var bool Wether or not to merge consecutive entries */
     protected $mergeConsecutive = false;
+
+    /** @var object Instance of \SimpleLifestream\Interfaces\IHttp */
     protected $http = null;
 
     /**
      * Instantiates available services on construction.
      *
-     * @param array $config  An array with the service name and resource. A resource could be a username or a resource
-     *                       and it depends on each service.
+     * @param array $services  Associative array with service name and resource. A resource could be a username, an url,
+     *                         the user id. It depends on each service.
+     * @param array $config  Associative array with configuration directives.
      * @return void
      */
     public function __construct(array $services = array(), array $config = array())
@@ -160,13 +179,7 @@ class SimpleLifestream
      *
      * @return string
      */
-    public function getLastError()
-    {
-        if (!empty($this->errors))
-            return end($this->errors);
-
-        return ;
-    }
+    public function getLastError() { return end($this->errors); }
 
     /**
      * Validates and translates the values returned by the
@@ -227,7 +240,7 @@ class SimpleLifestream
     }
 
     /**
-     * Removes blacklisted actions
+     * Removes blacklisted actions/services
      *
      * @param array $payload
      * @return array

@@ -1,8 +1,8 @@
 <?php
 /**
- * Cache.php
- * This class has the hability to cache data into a file.
+ * FileCache.php
  *
+ * @package SimpleLifestream
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -11,14 +11,27 @@
  */
 namespace SimpleLifestream;
 
+/**
+ * This class has the hability to cache data into a file.
+ */
 class FileCache implements \SimpleLifestream\Interfaces\ICache
 {
-    protected $prefix, $ttl, $location, $enabled;
+    /** @var string A prefix string for the filecache */
+    protected $prefix;
+
+    /** @var int The duration of the cache files in seconds */
+    protected $ttl;
+
+    /** @var string The location where the cache is going to be stored */
+    protected $location;
+
+    /** @var bool true when the filecache is enabled */
+    protected $enabled;
 
     /**
      * Construct
      *
-     * @param string $location The path where the files are going to be stored
+     * @param array $config Associative array with configuration directives.
      * @return void
      */
     public function __construct(array $config = array())
@@ -136,7 +149,7 @@ class FileCache implements \SimpleLifestream\Interfaces\ICache
     }
 
     /**
-     * Calculates the filename for $key
+     * Generates the filename for the given $key
      *
      * @param string $key The key identifier for the file
      * @return string

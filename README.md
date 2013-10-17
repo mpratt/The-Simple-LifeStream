@@ -20,7 +20,7 @@ Supported Sites
 - Youtube
     - Finds all the videos added to the favorite playlist.
 - Twitter
-    - Finds The latests Tweets. Important! You have to register an app in order to do this.
+    - Finds The latests Tweets. Important! You have to [register an app](http://dev.twitter.com/apps) in order to do this.
       More information in the `Special Cases` Part.
 - StackOverflow
     - Finds the recent comments you have done.
@@ -199,7 +199,7 @@ how it goes:
         $services = array('Youtube' => 'mychannel');
         $lifestream = new \SimpleLifestream\SimpleLifestream($services);
         $lifestream = new \SimpleLifestream\Formatters\HtmlList($lifestream);
-        echo $lifestream->getLifestream(3);
+        echo $lifestream->getLifestream(4);
 
         /* This prints something round this lines:
            <ul class="simplelifestream">
@@ -236,8 +236,8 @@ The Test Coverage is also fairly decent.
 
 Special Cases
 =============
-In order to use the `Twitter Service` you must first register an app, and pass the data as follows:
-
+In order to use the `Twitter Service` you must first [register an app](http://dev.twitter.com/apps), you can then generate an access token and secret
+from the same page and pass the data as follows:
 ```php
     <?php
         $services = array('Twitter' => array(

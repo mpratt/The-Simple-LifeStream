@@ -12,9 +12,16 @@
 
 namespace SimpleLifestream;
 
+/**
+ * Class in charge of making http requests
+ */
 class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
 {
-    protected $config, $cache;
+    /** @var array Configuration array */
+    protected $config;
+
+    /** @var object Instance of \SimpleLifestream\Interfaces\ICache */
+    protected $cache;
 
     /**
      * Constructor
@@ -90,11 +97,11 @@ class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
         return (string) $return;
     }
 
-
     /**
      * Executes http requests
      *
      * @param string $url
+     * @param array $options
      * @param bool $uncompress
      * @return string
      *

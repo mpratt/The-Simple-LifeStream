@@ -2,6 +2,7 @@
 /**
  * HtmlList.php
  *
+ * @package Formatter
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -11,8 +12,13 @@
  */
 namespace SimpleLifestream\Formatters;
 
+/**
+ * A formatter that acts as a Decorator for the main library.
+ * It outputs the lifestream data as a string - Html list.
+ */
 class HtmlList
 {
+    /** @var object Instance of \SimpleLifestream\Formatters\Template */
     protected $lifestream;
 
     /**
@@ -53,10 +59,7 @@ class HtmlList
      */
     public function __call($method, $args)
     {
-        if (is_callable(array($this->lifestream, $method)))
-            return call_user_func_array(array($this->lifestream, $method), $args);
-
-        throw new \InvalidArgumentException('No method ' . $method . ' was found');
+        return call_user_func_array(array($this->lifestream, $method), $args);
     }
 }
 
