@@ -36,6 +36,9 @@ class Youtube extends Adapter
     /** inline {@inheritdoc} */
     protected function filterResponse(array $value = array())
     {
+        if (!isset($value['video']['thumbnail']['sqDefault']))
+            $value['video']['thumbnail']['sqDefault'] = 'http://s.ytimg.com/yts/img/youtube_logo_stacked-vfl225ZTx.png';
+
         return array(
             'service'  => 'youtube',
             'type'     => 'favorited',

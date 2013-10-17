@@ -87,8 +87,11 @@ class Stream
             if (!is_array($response))
                 throw new \Exception(sprintf('Invalid/Empty answer from the url: %s', $this->provider->getApiUrl()));
 
-            return array_filter($this->normalizeResponse($response));
-        } catch (\Exception $e) { $this->errors[] = $e->getMessage(); }
+            return $this->normalizeResponse(array_filter($response));
+        } catch (\Exception $e) {
+            $this->errors[] = $e->getMessage();
+            // $this->errors[] = $e->getTraceAsString();
+        }
 
         return array();
     }

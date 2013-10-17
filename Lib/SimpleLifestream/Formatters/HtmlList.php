@@ -59,10 +59,7 @@ class HtmlList
      */
     public function __call($method, $args)
     {
-        if (is_callable(array($this->lifestream, $method)))
-            return call_user_func_array(array($this->lifestream, $method), $args);
-
-        throw new \InvalidArgumentException('No method ' . $method . ' was found');
+        return call_user_func_array(array($this->lifestream, $method), $args);
     }
 }
 

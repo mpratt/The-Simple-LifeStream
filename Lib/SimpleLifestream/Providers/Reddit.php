@@ -68,16 +68,22 @@ class Reddit extends Adapter
             ),
         );
 
-        return array(
-            'service'  => 'reddit',
-            'type'     => $modes[$value['kind']]['type'],
-            'resource' => $value['data']['author'],
-            'stamp'    => (int) $value['data']['created_utc'],
-            'url'      => $url,
-            'text'     => $modes[$value['kind']]['text'],
-            'username' => $value['data']['author'],
-            'subreddit' => $value['data']['subreddit'],
-        );
+        $text = $modes[$value['kind']]['title'];
+        if (!empty($text))
+        {
+            return array(
+                'service'  => 'reddit',
+                'type'     => $modes[$value['kind']]['type'],
+                'resource' => $value['data']['author'],
+                'stamp'    => (int) $value['data']['created_utc'],
+                'url'      => $url,
+                'text'     => $text,
+                'username' => $value['data']['author'],
+                'subreddit' => $value['data']['subreddit'],
+            );
+        }
+
+        return array();
     }
 
     /**

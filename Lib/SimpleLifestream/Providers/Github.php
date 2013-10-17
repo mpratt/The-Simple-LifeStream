@@ -18,17 +18,7 @@ namespace SimpleLifestream\Providers;
 class Github extends Adapter
 {
     /** inline {@inheritdoc} */
-    protected $url = 'https://github.com/%s.json';
-
-    /** @var array Allowed Types for this stream */
-    protected $allowedTypes = array(
-        'pushevent',
-        'createevent',
-        'followevent',
-        'watchevent',
-        'issuecommentevent',
-        'pullrequestevent',
-    );
+    protected $url = 'https://api.github.com/users/%s/events';
 
     /** inline {@inheritdoc} */
     public function getApiData()
@@ -46,9 +36,6 @@ class Github extends Adapter
     protected function filterResponse($value)
     {
         $value['type'] = strtolower($value['type']);
-        if (!in_array($value['type'], $this->allowedTypes))
-            return array();
-
         switch ($value['type'])
         {
             case 'createevent':
@@ -69,7 +56,14 @@ class Github extends Adapter
                     $text = $value['payload']['ref'] . ' (' . basename($value['repo']['name']) . ')';
                 }
                 else
-                    $type = 'repo-' . str_replace('event', '', $value['type']);
+                {
+                    $actions = array(
+                        'create' => 'repo-created',
+                        'push' => 'repo-pushed',
+                    );
+
+                    $type = $actions[str_replace('event', '', $value['type'])];
+                }
 
                 $url = $value['repo']['url'];
                 break;
@@ -84,7 +78,7 @@ class Github extends Adapter
             case 'followevent':
 
                 $type = 'followed';
-                $url  = $value['url'];
+                $url  = $value['payload']['target']['url'];
                 $text = $value['payload']['target']['login'];
                 break;
 
@@ -104,6 +98,9 @@ class Github extends Adapter
                 $url  = $value['payload']['issue']['url'];
                 $text = $value['payload']['issue']['title'];
                 break;
+
+            default:
+                return array();
         }
 
         return array(

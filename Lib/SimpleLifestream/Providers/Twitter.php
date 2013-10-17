@@ -26,8 +26,8 @@ class Twitter extends Adapter
     protected $settings = array(
         'consumer_key' => '',
         'consumer_secret' => '',
-        'token' => '',
-        'token_secret' => '',
+        'access_token' => '',
+        'access_token_secret' => '',
         'resource' => '',
         'count' => 50,
     );
@@ -38,7 +38,7 @@ class Twitter extends Adapter
         $url = $this->getApiUrl();
         $oauth = array(
             'oauth_consumer_key' => $this->settings['consumer_key'],
-            'oauth_token' => $this->settings['token'],
+            'oauth_token' => $this->settings['access_token'],
             'oauth_nonce' => uniqid(),
             'oauth_signature_method' => 'HMAC-SHA1',
             'oauth_timestamp' => time(),
@@ -48,17 +48,25 @@ class Twitter extends Adapter
         );
 
         $baseInfo = $this->buildBaseString($url, 'GET', $oauth);
-        $compositeKey = rawurlencode($this->settings['consumer_secret']) . '&' . rawurlencode($this->settings['token_secret']);
+        $compositeKey = rawurlencode($this->settings['consumer_secret']) . '&' . rawurlencode($this->settings['access_token_secret']);
         $oauthSignature = base64_encode(hash_hmac('sha1', $baseInfo, $compositeKey, true));
         $oauth = array_merge($oauth, array('oauth_signature' => $oauthSignature));
         $header = array($this->buildAuthorizationHeader($oauth), 'Expect:');
-        $options = array(CURLOPT_HTTPHEADER => $header);
+
+        // In case curl is not installed
+        if (!defined('CURLOPT_HTTPHEADER'))
+            define('CURLOPT_HTTPHEADER', 'dummy_value');
+
+        $options = array(
+            'curl' => array(CURLOPT_HTTPHEADER => $header),
+            'fopen' => array('header' => $header),
+        );
 
         $response = $this->http->fetch($url, $options);
         $response = json_decode($response, true);
 
         if (!empty($response))
-            return array_filter(array_map(array($this, 'filterResponse'), $response));
+            return array_map(array($this, 'filterResponse'), $response);
 
         return null;
     }
@@ -105,12 +113,14 @@ class Twitter extends Adapter
     /** inline {@inheritdoc} */
     protected function filterResponse($value)
     {
-        return array('service'  => 'twitter',
-                     'type'     => 'tweeted',
-                     'resource' => $this->settings['resource'],
-                     'stamp'    => (int) strtotime($value['created_at']),
-                     'url'      => 'http://twitter.com/#!/' . $this->settings['resource'] . '/status/' . $value['id_str'],
-                     'text'     => $value['text']);
+        return array(
+            'service'  => 'twitter',
+            'type'     => 'tweeted',
+            'resource' => $this->settings['resource'],
+            'stamp'    => (int) strtotime($value['created_at']),
+            'url'      => 'http://twitter.com/#!/' . $this->settings['resource'] . '/status/' . $value['id_str'],
+            'text'     => $value['text']
+        );
     }
 }
 ?>

@@ -99,7 +99,7 @@ class SimpleLifestream
                 if (!$errors = $provider->getErrors())
                     $cacheItems[$key]->set($response);
 
-                $this->errors = array_merge($this->errors, $errors);
+                $this->errors = array_merge($this->errors, (array) $errors);
             }
 
             $output = array_merge($output, $response);
@@ -119,13 +119,13 @@ class SimpleLifestream
     }
 
     /**
-     * Returns an array with errors catched while executing the script.
+     * Tells the library which types should be ignored
      *
      * @param string $type     The type of event that should be ignored
      * @param string $service  When specified ignore only the $type on this service
      * @return void
      */
-    public function ignoreType($type, $service = '') { $this->config['blacklist'][strtolower($type . $service)] = true;  }
+    public function ignore($type, $service = '') { $this->config['blacklist'][strtolower($type . $service)] = true;  }
 
     /**
      * Validates and translates the values returned by the

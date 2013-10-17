@@ -42,9 +42,6 @@ class Feed extends Adapter
             return null;
     }
 
-    /** inline {@inheritdoc} */
-    public function getApiUrl() { return $this->settings['resource']; }
-
     /**
      * Converts and organizes data from a Atom feed
      *

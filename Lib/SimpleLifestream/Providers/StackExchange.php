@@ -11,7 +11,7 @@
  *
  */
 
-namespace SimpleLifestream\Services;
+namespace SimpleLifestream\Providers;
 
 /**
  * A provider for StackOverflow/StackExchange sites
