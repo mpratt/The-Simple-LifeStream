@@ -29,6 +29,7 @@ class Stream
         'twitter' => '\SimpleLifestream\Providers\Twitter',
         'youtube' => '\SimpleLifestream\Providers\Youtube',
         'delicious' => '\SimpleLifestream\Providers\Delicious',
+        'deviantart' => '\SimpleLifestream\Providers\Deviantart',
         'dailymotion' => '\SimpleLifestream\Providers\DailyMotion',
         'stackexchange' => '\SimpleLifestream\Providers\StackExchange',
         'stackoverflow' => '\SimpleLifestream\Providers\StackExchange',

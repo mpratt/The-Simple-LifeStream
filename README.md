@@ -20,6 +20,7 @@ Supported Sites
 
 - DaliyMotion
 - Delicious
+- Deviantart
 - FacebookPages
 - Atom/RSS Feeds
 - Github
