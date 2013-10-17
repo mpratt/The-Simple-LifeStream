@@ -78,7 +78,6 @@ class Reddit extends Adapter
                 'stamp'    => (int) $value['data']['created_utc'],
                 'url'      => $url,
                 'text'     => $text,
-                'username' => $value['data']['author'],
                 'subreddit' => $value['data']['subreddit'],
             );
         }

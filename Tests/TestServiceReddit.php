@@ -21,7 +21,7 @@ class TestServiceReddit extends TestService
         $stream = $this->getStream('Reddit', 'mpratt');
         $response = $stream->getResponse();
 
-        $this->checkResponseIntegrity('Reddit', $response, array('username', 'subreddit'));
+        $this->checkResponseIntegrity('Reddit', $response, array('subreddit'));
 
         $errors = $stream->getErrors();
         $this->assertTrue(empty($errors));
@@ -41,7 +41,7 @@ class TestServiceReddit extends TestService
         $stream = $this->getStream('Reddit', 'dummySample1', 'dafaqau-2013-10-15.json');
         $response = $stream->getResponse();
 
-        $this->checkResponseIntegrity('Reddit', $response, array('username', 'subreddit'));
+        $this->checkResponseIntegrity('Reddit', $response, array('subreddit'));
 
         // It should be 100, but two titles had the string '0', evaluating them as false
         $this->assertEquals(98, count($response));
@@ -55,7 +55,7 @@ class TestServiceReddit extends TestService
         $stream = $this->getStream('Reddit', 'dummySample2', 'hellolizzie-2013-10-15.json');
         $response = $stream->getResponse();
 
-        $this->checkResponseIntegrity('Reddit', $response, array('username', 'subreddit'));
+        $this->checkResponseIntegrity('Reddit', $response, array('subreddit'));
         $this->assertEquals(100, count($response));
 
         $errors = $stream->getErrors();
@@ -67,7 +67,7 @@ class TestServiceReddit extends TestService
         $stream = $this->getStream('Reddit', 'dummySample3', 'lepotaters-2013-10-15.json');
         $response = $stream->getResponse();
 
-        $this->checkResponseIntegrity('Reddit', $response, array('username', 'subreddit'));
+        $this->checkResponseIntegrity('Reddit', $response, array('subreddit'));
         $this->assertEquals(80, count($response));
 
         $errors = $stream->getErrors();

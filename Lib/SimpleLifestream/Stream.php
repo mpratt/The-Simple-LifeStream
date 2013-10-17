@@ -22,6 +22,8 @@ class Stream
     protected $providers = array(
         'facebookpages' => '\SimpleLifestream\Providers\FacebookPages',
         'feed' => '\SimpleLifestream\Providers\Feed',
+        'atom' => '\SimpleLifestream\Providers\Feed',
+        'rss'  => '\SimpleLifestream\Providers\Feed',
         'github' => '\SimpleLifestream\Providers\Github',
         'reddit' => '\SimpleLifestream\Providers\Reddit',
         'twitter' => '\SimpleLifestream\Providers\Twitter',
