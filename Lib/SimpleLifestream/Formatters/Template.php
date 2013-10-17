@@ -2,7 +2,7 @@
 /**
  * Template.php
  *
- * @package SimpleLifestream
+ * @package Formatters
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *
@@ -18,18 +18,17 @@ namespace SimpleLifestream\Formatters;
  */
 class Template
 {
-
     /** @var object Instance of \SimpleLifestream\SimpleLifestream */
     protected $lifestream;
 
     /** @var string The template with placeholders to be replaces */
     protected $template;
 
-    /** @var string String to be set after the template */
-    protected $afterTemplate = '';
-
-    /** @var string String to be set before the template */
+    /** @var string String to be showed before the template */
     protected $beforeTemplate = '';
+
+    /** @var string String to be showed after the template */
+    protected $afterTemplate = '';
 
     /**
      * Constructor
@@ -77,6 +76,18 @@ class Template
     }
 
     /**
+     * Loads the streams
+     *
+     * @param array $providers Array with \SimpleLifestream\Stream objects
+     * @return object Instance of this object
+     */
+    public function loadStreams(array $providers)
+    {
+        $this->lifestream->loadStreams($providers);
+        return $this;
+    }
+
+    /**
      * Process the data and constructs the template, replacing
      * the found placeholders wirh actual values.
      *
@@ -85,7 +96,7 @@ class Template
      */
     protected function processTemplate(array $data = array())
     {
-        if (empty($data) || empty($this->template))
+        if (empty($this->template))
             return ;
 
         $return = $this->beforeTemplate;

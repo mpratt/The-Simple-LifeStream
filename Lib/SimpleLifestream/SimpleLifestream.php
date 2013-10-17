@@ -13,152 +13,184 @@
 
 namespace SimpleLifestream;
 
-use \SimpleLifestream\FileCache,
-    \SimpleLifestream\Languages\English,
-    \SimpleLifestream\Languages\Spanish,
-    \SimpleLifestream\HttpRequest;
-
 /**
  * The main Class for this library
  */
 class SimpleLifestream
 {
     /** @var int The version of this library */
-    const VERSION = '3.1.1';
+    const VERSION = '4.0';
 
-    /** @var array Array with the loaded services. */
-    protected $services   = array();
+    /** @var array Array with the loaded providers. */
+    protected $providers = array();
 
     /** @var array Associative array wwith configuration directives */
-    protected $config     = array();
+    protected $config = array();
 
     /** @var array An array with all the caught errors */
-    protected $errors     = array();
-
-    /** @var array An array with blacklisted services or service types. */
-    protected $blacklist  = array();
-
-    /** @var string The Date Format for the output array */
-    protected $dateFormat = 'Y-m-d H:i:s';
-
-    /** @var string The template used for links */
-    protected $linkTemplate = '<a href="{url}">{text}</a>';
-
-    /** @var bool Wether or not to merge consecutive entries */
-    protected $mergeConsecutive = false;
-
-    /** @var object Instance of \SimpleLifestream\Interfaces\IHttp */
-    protected $http = null;
+    protected $errors = array();
 
     /**
      * Instantiates available services on construction.
      *
-     * @param array $services  Associative array with service name and resource. A resource could be a username, an url,
-     *                         the user id. It depends on each service.
      * @param array $config  Associative array with configuration directives.
      * @return void
      */
-    public function __construct(array $services = array(), array $config = array())
+    public function __construct(array $config = array())
     {
-        $this->config = array_merge(
-            array(
-                'lang' => new English(),
-                'cache' => true,
-                'cache_dir' => __DIR__ . '/Cache',
-                'cache_ttl' => (60*10),
-                'cache_prefix' => 'SimpleLifestreamFileCache',
-            ),
-            $config
+        $this->config = array_merge(array(
+            'blacklist' => array(),
+            'date_format' => 'Y-m-d H:i',
+            'link_format' => '<a href="{url}">{text}</a>',
+            'merge_strategy' => 'Ymd',
+            'language' => 'English',
+        ), $config);
+
+        $this->config['blacklist'] = array_map('strtolower',
+            array_flip($this->config['blacklist'])
         );
-
-        $this->http = new HttpRequest($this->config, new FileCache($this->config));
-        if (!empty($services))
-        {
-            foreach ($services as $name => $resource)
-                $this->loadService($name, $resource);
-        }
     }
 
     /**
-     * Instantiates and initializes a service object!
-     * It stores the object in the services array property.
+     * Loads the streams
      *
-     * @param string $service
-     * @param string $resource The resource related to the service, like a username or url
-     * @return void
+     * @param array $providers Array with \SimpleLifestream\Stream objects
+     * @return object Instance of this object
      */
-    public function loadService($service, $resource)
+    public function loadStreams(array $providers)
     {
-        $class = '\SimpleLifestream\Services\\' . $service;
-        $this->services[] = new $class($this->http, $resource);
+        $providers = array_filter($providers, function ($p){
+            return ($p instanceof Stream);
+        });
+
+        $result = array();
+        $http = new \SimpleLifestream\HttpRequest($this->config);
+
+        foreach ($providers as $p)
+        {
+            $p->registerHttpConsumer($http);
+            $result[$p->getId()] = $p;
+        }
+
+        $this->providers = array_merge($this->providers, $result);
+        return $this;
     }
 
     /**
-     * Calls all available Services and fetches its data.
+     * Calls all available streams and gets the relevant data.
      * Returns an array with the results found sorted by date.
      *
-     * @param int $limit The maximal amount of entries you want to get, 0 shows everything fetched
+     * @param int $limit The maximal amount of entries you want to get, 0 disables it
      * @return array
      */
     public function getLifestream($limit = 0)
     {
-        if (empty($this->services))
-            return array();
-
         $output = array();
-        foreach ($this->services as $service)
+        $cachePool  = new \SimpleLifestream\Cache\Pool($this->config);
+        $cacheItems = $cachePool->getItems(array_keys($this->providers));
+
+        foreach ($this->providers as $key => $provider)
         {
-            try {
-                $output = array_filter(array_merge($output, $service->getApiData()));
-            } catch (\Exception $e) {
-                $this->errors[] = $e->getMessage();
+            if ($cacheItems[$key]->isHit())
+                $response = $cacheItems[$key]->get();
+            else
+            {
+                $response = $provider->getResponse();
+                if (!$errors = $provider->getErrors())
+                    $cacheItems[$key]->set($response);
+
+                $this->errors = array_merge($this->errors, (array) $errors);
             }
+
+            $output = array_merge($output, $response);
         }
 
-        $output = $this->translate($output);
+        $output = $this->translate(array_filter($output));
+        $output = $this->deleteBlacklisted($output);
+
         usort($output, function ($a, $b) {
             return $a['stamp'] < $b['stamp'];
         });
 
-        if ($limit > 0 && count($output) > $limit)
+        if ($limit > 0)
             $output = array_slice($output, 0, $limit);
 
         return $output;
     }
 
     /**
-     * Changes the way a link is displayed by the library.
-     *
-     * @param string $template The template with a {url} and {text} placeholder
-     * @return void
-     */
-    public function setLinkTemplate($template) { $this->linkTemplate = $template; }
-
-    /**
-     * Returns an array with errors catched while executing the script.
+     * Tells the library which types should be ignored
      *
      * @param string $type     The type of event that should be ignored
      * @param string $service  When specified ignore only the $type on this service
      * @return void
      */
-    public function ignoreType($type, $service = '') { $this->blacklist[lcfirst($type)] = strtolower($service); }
+    public function ignore($type, $service = '') { $this->config['blacklist'][strtolower($type . $service)] = true;  }
 
     /**
-     * Sets the date format for each event.
+     * Validates and translates the values returned by the
+     * services.
      *
-     * @param string A format supported by php's date function
-     * @return void
+     * @param array $array
+     * @return array
      */
-    public function setDateFormat($format) { $this->dateFormat = $format; }
+    protected function translate(array $payload = array())
+    {
+        $result = array();
+        $language = $this->loadLanguage();
+        foreach ($payload as $data)
+        {
+            $id = md5($data['service'] . $data['type'] . $data['text'] . date($this->config['merge_strategy'], $data['stamp']));
+            $link = str_replace(array_map(function ($n){
+                return '{' . $n . '}';
+            }, array_keys($data)), array_values($data), $this->config['link_format']);
+
+            $result[$id] = array_merge($data, array(
+                'link' => $link,
+                'date' => date($this->config['date_format'], (int) $data['stamp']),
+                'html' => str_replace('{link}', $link, $language->get($data['type'])),
+            ));
+        }
+
+        return $result;
+    }
 
     /**
-     * When set to true, the library merges consecutive actions that
-     * are equal.
+     * Loads a new Language
      *
-     * @param bool $merge
-     * @return void
+     * @return object
      */
-    public function mergeConsecutive($merge) { $this->mergeConsecutive = (bool) $merge; }
+    protected function loadLanguage()
+    {
+        $languages = array(
+            '\SimpleLifestream\Languages\\' . ucfirst($this->config['language']),
+            $this->config['language'],
+        );
+
+        foreach ($languages as $lang)
+        {
+            if (class_exists($lang))
+                return new $lang();
+        }
+
+        $this->errors[] = 'Could not load the language ' . $this->config['language'];
+        return new \SimpleLifestream\Languages\English();
+    }
+
+    /**
+     * Removes blacklisted actions/services
+     *
+     * @param array $payload
+     * @return array
+     */
+    protected function deleteBlacklisted(array $payload)
+    {
+        $blacklist = array_keys($this->config['blacklist']);
+        return array_filter($payload, function($a) use ($blacklist) {
+            // Check if at least one of the values is blacklisted. When none is found, keep the array
+            return (count(array_intersect($blacklist, array($a['type'], $a['type'] . $a['service']))) === 0);
+        });
+    }
 
     /**
      * Returns true if there were any errors on execution.
@@ -180,82 +212,6 @@ class SimpleLifestream
      * @return string
      */
     public function getLastError() { return end($this->errors); }
-
-    /**
-     * Validates and translates the values returned by the
-     * services.
-     *
-     * @param array $array
-     * @return array
-     */
-    protected function translate(array $payload)
-    {
-        if (empty($payload))
-            return array();
-
-        $defaultValues = array(
-            'stamp' => 0,
-            'type'  => 'unknown',
-            'service' => 'unknown',
-            'url'  => '',
-            'text' => '',
-            'date' => '',
-            'resource' => '',
-        );
-
-        $i = 0;
-        $result = array();
-        foreach ($payload as $v)
-        {
-            $v = array_merge($defaultValues, $v);
-            $v = array(
-                'type'  => lcfirst($v['type']),
-                'stamp' => (int) $v['stamp'],
-                'date'  => date($this->dateFormat, $v['stamp']),
-                'text'  => htmlspecialchars($v['text'], ENT_QUOTES, 'UTF-8', false),
-                'url'   => htmlspecialchars($v['url'], ENT_QUOTES, 'UTF-8', false),
-                'service' => strtolower($v['service']),
-                'resource' => $v['resource'],
-            );
-
-            $link = str_replace(array_map(function ($n){
-                return '{' . $n . '}';
-            }, array_keys($v)), array_values($v), $this->linkTemplate);
-
-            if ($this->mergeConsecutive)
-                $id = md5($v['service'] . $v['type'] . $v['text'] . date('Ymd', $v['stamp']));
-            else
-                $id = $i;
-
-            $result[$id] = array_merge($v, array(
-                    'link' => $link,
-                    'html' =>  str_replace('{link}', $link, $this->config['lang']->get($v['type']))
-                )
-            );
-
-            $i++;
-        }
-
-        return $this->deleteBlacklisted($result);
-    }
-
-    /**
-     * Removes blacklisted actions/services
-     *
-     * @param array $payload
-     * @return array
-     *
-     */
-    protected function deleteBlacklisted(array $payload)
-    {
-        $blacklist = $this->blacklist;
-        return array_filter($payload, function($a) use ($blacklist) {
-            if (isset($blacklist[$a['type']]))
-                return (!empty($blacklist[$a['type']]) && $blacklist[$a['type']] != $a['service']);
-
-            return true;
-        });
-    }
 }
 
 ?>

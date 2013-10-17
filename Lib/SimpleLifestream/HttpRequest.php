@@ -13,121 +13,147 @@
 namespace SimpleLifestream;
 
 /**
- * Class in charge of making http requests
+ * This class is in charge of doing http requests. Its a very minimal
+ * wrapper for curl or file_get_contents
  */
-class HttpRequest Implements \SimpleLifestream\Interfaces\IHttp
+class HttpRequest
 {
-    /** @var array Configuration array */
-    protected $config;
+    /** @var array Array with custom curl/fopen options */
+    protected $config = array();
 
-    /** @var object Instance of \SimpleLifestream\Interfaces\ICache */
-    protected $cache;
+    /** @var string User Agent String */
+    protected $userAgent = 'Mozilla/5.0 PHP/SimpleLifestream';
 
     /**
      * Constructor
      *
      * @param array $config
-     * @param object $cache Instance of SimpleLifestream\Interfaces\ICache
      * @return void
      */
-    public function __construct(array $config = array(), \SimpleLifestream\Interfaces\ICache $cache)
+    public function __construct(array $config = array())
     {
-        $config = array_intersect_key($config, array_flip(array('user_agent', 'timeout')));
         $this->config = array_merge(array(
-            'user_agent' => 'PHP/SimpleLifestream',
-            'timeout' => 0
+            'curl' => array(),
+            'fopen' => array(),
+            'force_redirects' => false,
+            'prefer_curl' => true,
         ), $config);
-
-        $this->cache = $cache;
-    }
-
-    /**
-     * Checks if the response from a url was already cached.
-     * If that is not the case, it makes the request, stores the response
-     * and returns the value.
-     *
-     * @param string $url
-     * @param array $options
-     * @param bool $uncompress
-     * @return string
-     */
-    public function get($url, array $options = array(), $uncompress = false)
-    {
-        $url = trim($url);
-        $id = 'http_' . md5($url);
-
-        $return = $this->cache->read($id);
-        if (empty($return))
-        {
-            $return = $this->makeGetRequest($url, $options, $uncompress);
-            $this->cache->store($id, $return);
-        }
-
-        return $return;
-    }
-
-    /**
-     * Sends an Oauth request
-     *
-     * @param string $string
-     * @return void
-     */
-    public function oauth1Request($url, array $OauthData = array())
-    {
-        if (!class_exists('\Guzzle\Http\Client'))
-            throw new \RuntimeException('You need to install Guzzle');
-
-        $id = 'http_oauth_' . md5($url . $OauthData['user']);
-        $return = $this->cache->read($id);
-
-        if (empty($return))
-        {
-            unset($OauthData['user']);
-
-            $client = new \Guzzle\Http\Client($url);
-            $oauth = new \Guzzle\Plugin\Oauth\OauthPlugin($OauthData);
-            $client->addSubscriber($oauth);
-
-            $response = $client->get()->send();
-            $return = $response->getBody();
-
-            $this->cache->store($id, (string) $return);
-        }
-
-        return (string) $return;
     }
 
     /**
      * Executes http requests
      *
      * @param string $url
-     * @param array $options
-     * @param bool $uncompress
+     * @param array $params Additional parameters for the respective part
      * @return string
      *
-     * @throws RuntimeException when Guzzle is not installed
+     * @throws Exception when an error ocurred or if no way to do a request exists
      */
-    protected function makeGetRequest($url, array $options = array(), $uncompress = false)
+    public function fetch($url, array $params = array())
     {
-        if (class_exists('\Guzzle\Http\Client'))
+        $params = array_merge(array(
+            'curl' => array(),
+            'fopen' => array(),
+        ), $params);
+
+        if (function_exists('curl_init') && $this->config['prefer_curl'])
+            return $this->curl($url, $params['curl']);
+
+        return $this->fileGetContents($url, $params['fopen']);
+    }
+
+    /**
+     * Uses Curl to fetch data from an url
+     *
+     * @param string $url
+     * @param bool $forceRedirect
+     * @param array $params Additional Parameters
+     * @return string
+     *
+     * @throws Exception when the returned status code is not 200 or no data was found
+     */
+    protected function curl($url, array $params = array())
+    {
+        // Not using array_merge here because that function reindexes numeric keys
+        $options = $this->config['curl'] + array(
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_USERAGENT => $this->userAgent,
+            CURLOPT_ENCODING => '',
+        ) + $params;
+
+        $options[CURLOPT_URL] = $url;
+        $options[CURLOPT_HEADER] = true;
+        $options[CURLOPT_RETURNTRANSFER] = 1;
+
+        // CURLOPT_FOLLOWLOCATION doesnt play well with open_basedir/safe_mode
+        if ($options[CURLOPT_FOLLOWLOCATION] && (ini_get('safe_mode') || ini_get('open_basedir')))
         {
-            $defaultOptions = array(
-                CURLOPT_USERAGENT => $this->config['user_agent'],
-                CURLOPT_CONNECTTIMEOUT => $this->config['timeout'],
-                CURLOPT_ENCODING => '',
-            );
-
-            $client = new \Guzzle\Http\Client($url, array_merge($defaultOptions, $options));
-            $response = $client->get()->send();
-            $response = $response->getBody();
-
-            if ($uncompress && is_callable(array($response, 'uncompress')))
-                $response->uncompress();
-
-            return (string) $response;
+            $this->config['curl'][CURLOPT_FOLLOWLOCATION] = false;
+            $this->config['curl'][CURLOPT_TIMEOUT] = 15;
+            $this->config['force_redirects'] = true;
         }
 
-        throw new \RuntimeException('You need to install Guzzle');
+        $handler = curl_init();
+        curl_setopt_array($handler, $options);
+        $response = curl_exec($handler);
+
+        $status = curl_getinfo($handler, CURLINFO_HTTP_CODE);
+        $headerSize = curl_getinfo($handler, CURLINFO_HEADER_SIZE);
+
+        $header = substr($response, 0, $headerSize);
+        $body = substr($response, $headerSize);
+        curl_close($handler);
+
+        if ($this->config['force_redirects'] && in_array($status, array('301', '302')))
+        {
+            if (preg_match('~(?:location|uri): ?([^\n]+)~i', $header, $matches))
+            {
+                $url = trim($matches['1']);
+                if (substr($url, 0, 1) == '/')
+                {
+                    $parsed = parse_url($options[CURLOPT_URL]);
+                    $url = $parsed['scheme'] . '://' . rtrim($parsed['host'], '/') . $url;
+                }
+
+                return $this->curl($url);
+            }
+        }
+
+        if (empty($body) || !in_array($status, array('200')))
+            throw new \Exception($status . ': Invalid response for ' . $url);
+
+        return $body;
+    }
+
+    /**
+     * Uses file_get_contents to fetch data from an url
+     *
+     * @param string $url
+     * @param array $options
+     * @param bool $uncompress
+     * @param array $params Additional Parameters
+     * @return string
+     *
+     * @throws Exception when allow_url_fopen is disabled or when no data was returned
+     */
+    protected function fileGetContents($url, array $params = array())
+    {
+        if (!ini_get('allow_url_fopen'))
+            throw new \Exception('Could not execute lookup, allow_url_fopen is disabled');
+
+        $defaultOptions = array(
+            'method' => 'GET',
+            'user_agent' => $this->userAgent,
+            'follow_location' => 1,
+            'max_redirects' => 20,
+            'timeout' => 40
+        );
+
+        $context = array('http' => array_merge($defaultOptions, $this->config['fopen'], $params));
+        if ($data = file_get_contents($url, false, stream_context_create($context)))
+            return $data;
+
+        throw new \Exception('Invalid Server Response from ' . $url);
     }
 }
 
