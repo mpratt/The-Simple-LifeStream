@@ -37,6 +37,14 @@ class Spanish extends Adapter
         'favorited' => 'agregó {link} a sus favoritos.',
         'bookmarked' => 'guardó {link}.',
         'uploaded-video'  => 'subió el video {link}.',
+        'listened' => 'escuchó a {link}.',
+        'created' => 'creó {link}.',
+        'took-picture' => 'tomó una foto de {link}.',
+        'posted-picture' => 'posteó una foto de {link}.',
+        'loved' => 'se enamoró de {link}.',
+        'ranted' => 'hizo una pataleta {link}.',
+        'liked' => 'le gusta {link}.',
+        'uploaded' => 'subió {link}',
     );
 }
 ?>

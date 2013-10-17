@@ -32,6 +32,11 @@ Supported Sites
 
 For a more detailed information about each provider read the [STREAMS.md](https://github.com/mpratt/The-Simple-LifeStream/blob/master/STREAMS.md) file.
 
+Remember that the Atom/RSS provider can be very useful, giving you the hability to fetch actions from sites that provide RSS/Atom feeds for user actions,
+like for example Vimeo, Flickr, LastFM, Wordpress blogs, Blogger blogs and the list goes on.
+
+So in Theory, there are many more sites that can be used to enhance your lifestream.
+
 Requirements
 ============
 

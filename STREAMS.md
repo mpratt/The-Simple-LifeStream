@@ -51,6 +51,24 @@ Requires: The url to the xml resource
     new \SimpleLifestream\Stream('Feed', 'http://feeds.eltiempo.com/eltiempo/titulares');
 ```
 
+This Stream provider can be very versatile. It can be used to fetch posts from wordpress blogs or posterous, flickr photostreams,
+lastFms loved tracks or recently played ones, saved threads from Reddit, liked or uploaded vimeo videos, and so on.
+
+Basically, if a site has RSS/Atom Feeds available for user actions, you can use this Provider.
+
+This Provider has the option to change its type, so that the string can be translated differently. Its also posible to change the returned service.
+Lets grab recently played songs on a lastFM profile, for example
+
+```php
+    new \SimpleLifestream\Stream('Feed', array(
+        'resource' => 'http://ws.audioscrobbler.com/1.0/user/jhoness_/recenttracks.rss',
+        'type' => 'listened', // Optional - It can be used to change the translation of this action
+        'service' => 'lastfm', // Optional - It can be used to emulate a new provider
+    ));
+```
+
+Translation strings can be found at `SimpleLifestream/Languages/*`
+
 ### Github
 Finds create, push and pull requests events on a repo. Finds starred repos, folled users and issues created.
 Requires: The github username.

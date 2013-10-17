@@ -37,6 +37,14 @@ class English extends Adapter
         'favorited' => 'favorited {link}.',
         'bookmarked' => 'bookmarked {link}.',
         'uploaded-video' => 'uploaded the video {link}.',
+        'listened' => 'listened to {link}.',
+        'created' => 'created {link}.',
+        'took-picture' => 'took picture of {link}.',
+        'posted-picture' => 'posted picture of {link}.',
+        'loved' => 'loved {link}.',
+        'ranted' => 'ranted {link}.',
+        'liked' => 'liked {link}.',
+        'uploaded' => 'uploaded {link}',
     );
 }
 ?>
