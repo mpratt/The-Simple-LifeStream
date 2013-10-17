@@ -21,6 +21,7 @@ Supported Sites
 - DaliyMotion
 - Delicious
 - Deviantart
+- Dribble
 - FacebookPages
 - Atom/RSS Feeds
 - Github

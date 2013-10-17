@@ -31,6 +31,7 @@ class Stream
         'delicious' => '\SimpleLifestream\Providers\Delicious',
         'deviantart' => '\SimpleLifestream\Providers\Deviantart',
         'dailymotion' => '\SimpleLifestream\Providers\DailyMotion',
+        'dribble' => '\SimpleLifestream\Providers\Dribble',
         'stackexchange' => '\SimpleLifestream\Providers\StackExchange',
         'stackoverflow' => '\SimpleLifestream\Providers\StackExchange',
     );
