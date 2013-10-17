@@ -1,6 +1,6 @@
 vendor/*
 Docs/*
 Tests/Coverage
-Tests/TwitterCredentials.php
+Tests/AuthCredentials.php
 composer.lock
 composer.phar

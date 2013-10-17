@@ -2,7 +2,7 @@
 /**
  * PoolInterface.php
  *
- * @package SimpleLifestream
+ * @package Cache
  * @author  Michael Pratt <pratt@hablarmierda.net>
  * @link    http://www.michael-pratt.com/
  *

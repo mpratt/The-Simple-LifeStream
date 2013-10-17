@@ -1,0 +1,5 @@
+{
+	"request": "\/1\/statuses\/user_timeline.json?screen_name=privateProfile",
+	"error": "Not authorized"
+}
+
