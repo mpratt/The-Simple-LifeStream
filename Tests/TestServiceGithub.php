@@ -88,15 +88,5 @@ class TestServiceGithub extends TestService
         $errors = $stream->getErrors();
         $this->assertTrue(!empty($errors));
     }
-
-    public function testServiceInvalidAnswer2()
-    {
-        $invalidResponse = json_encode(array('entries', 'bentries'));
-        $stream = $this->getStream('Github', 'dummyInvalidResourceNotValidJSON', $invalidResponse);
-        $stream->getResponse();
-
-        $errors = $stream->getErrors();
-        $this->assertTrue(!empty($errors));
-    }
 }
 ?>
