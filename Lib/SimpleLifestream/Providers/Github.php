@@ -78,7 +78,7 @@ class Github extends Adapter
             case 'followevent':
 
                 $type = 'followed';
-                $url  = $value['payload']['target']['url'];
+                $url  = $value['payload']['target']['html_url'];
                 $text = $value['payload']['target']['login'];
                 break;
 
@@ -95,7 +95,7 @@ class Github extends Adapter
             case 'issuecommentevent':
 
                 $type = 'repo-issue-' . strtolower($value['payload']['action']);
-                $url  = $value['payload']['issue']['url'];
+                $url  = $value['payload']['issue']['html_url'];
                 $text = $value['payload']['issue']['title'];
                 break;
 
@@ -103,6 +103,12 @@ class Github extends Adapter
                 return array();
         }
 
+        $urlTable = array(
+            '/repos/' => '/',
+            '//api.github.com' => '//github.com'
+        );
+
+        $url = str_replace(array_keys($urlTable), array_values($urlTable), $url);
         return array(
             'service'  => 'github',
             'type'     => strtolower($type),
