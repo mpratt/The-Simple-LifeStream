@@ -19,7 +19,7 @@ namespace SimpleLifestream\Providers;
 class Delicious extends Adapter
 {
     /** inline {@inheritdoc} */
-    protected $url = 'http://feeds.delicious.com/v2/json/%s';
+    protected $url = 'http://feeds.delicious.com/v2/json/%s?count=20';
 
     /** inline {@inheritdoc} */
     public function getApiData()

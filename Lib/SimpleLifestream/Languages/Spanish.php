@@ -32,7 +32,7 @@ class Spanish extends Adapter
         'repo-created' => 'creó el proyecto {link}.',
         'repo-pushed' => 'actualizó el proyecto {link}.',
         'repo-pull-opened' => 'creó un pull request para {link}',
-        'repo-issue-created' => 'escribió un reporte para {link}',
+        'repo-issue-created' => 'participó en el reporte {link}',
         'tweeted' => 'trinó {link}.',
         'favorited' => 'agregó {link} a sus favoritos.',
         'bookmarked' => 'guardó {link}.',
@@ -44,7 +44,7 @@ class Spanish extends Adapter
         'loved' => 'se enamoró de {link}.',
         'ranted' => 'hizo una pataleta {link}.',
         'liked' => 'le gusta {link}.',
-        'uploaded' => 'subió {link}',
+        'uploaded' => 'subió {link}.',
     );
 }
 ?>
