@@ -20,7 +20,7 @@ namespace SimpleLifestream\Providers;
 class Twitter extends Adapter
 {
     /** inline {@inheritdoc} */
-    protected $url = 'http://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=%s&count=%d';
+    protected $url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=%s&count=%d';
 
     /** inline {@inheritdoc} */
     protected $settings = array(

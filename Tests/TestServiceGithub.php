@@ -48,7 +48,7 @@ class TestServiceGithub extends TestService
 
         $this->checkResponseIntegrity('Github', $response);
 
-        $this->assertEquals(19, count($response));
+        $this->assertEquals(22, count($response));
 
         $errors = $stream->getErrors();
         $this->assertTrue(empty($errors));
@@ -61,7 +61,7 @@ class TestServiceGithub extends TestService
 
         $this->checkResponseIntegrity('Github', $response);
 
-        $this->assertEquals(13, count($response));
+        $this->assertEquals(25, count($response));
 
         $errors = $stream->getErrors();
         $this->assertTrue(empty($errors));
@@ -74,7 +74,7 @@ class TestServiceGithub extends TestService
 
         $this->checkResponseIntegrity('Github', $response);
 
-        $this->assertEquals(10, count($response));
+        $this->assertEquals(26, count($response));
 
         $errors = $stream->getErrors();
         $this->assertTrue(empty($errors));

@@ -38,19 +38,12 @@ class Github extends Adapter
         $value['type'] = strtolower($value['type']);
         switch ($value['type'])
         {
+            case 'repo-created':
             case 'createevent':
             case 'pushevent':
 
-                /**
-                 * Github registers CreateEvents twice! The first one is done when you create the repo via webbrowser
-                 * and the second one when you actually do your first push.
-                 * To avoid double-posting we just choose the second one.
-                 */
-                if (empty($value['payload']['ref_type']) || empty($value['payload']['ref']))
-                    return array();
-
                 $text = $value['repo']['name'];
-                if ($value['payload']['ref_type'] == 'tag')
+                if (!empty($value['payload']['ref_type']) && $value['payload']['ref_type'] == 'tag')
                 {
                     $type = 'repo-released';
                     $text = $value['payload']['ref'] . ' (' . basename($value['repo']['name']) . ')';
@@ -58,6 +51,7 @@ class Github extends Adapter
                 else
                 {
                     $actions = array(
+                        'repo-created' => 'repo-created',
                         'create' => 'repo-created',
                         'push' => 'repo-pushed',
                     );
