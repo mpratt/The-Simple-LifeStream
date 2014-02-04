@@ -53,15 +53,7 @@ class Twitter extends Adapter
         $oauth = array_merge($oauth, array('oauth_signature' => $oauthSignature));
         $header = array($this->buildAuthorizationHeader($oauth), 'Expect:');
 
-        // In case curl is not installed
-        if (!defined('CURLOPT_HTTPHEADER'))
-            define('CURLOPT_HTTPHEADER', 'dummy_value');
-
-        $options = array(
-            'curl' => array(CURLOPT_HTTPHEADER => $header),
-            'fopen' => array('header' => $header),
-        );
-
+        $options = $this->createRequestOptions($header);
         $response = $this->http->fetch($url, $options);
         $response = json_decode($response, true);
 
@@ -69,6 +61,53 @@ class Twitter extends Adapter
             return array_map(array($this, 'filterResponse'), $response);
 
         return null;
+    }
+
+    /**
+     * Creates the required parameters for the http wrapper.
+     *
+     * @link http://curl.haxx.se/docs/caextract.html
+     * @link https://dev.twitter.com/docs/security/using-ssl
+     *
+     * @param array $header
+     * @return array
+     *
+     * @throws RuntimeException when no cacert.pem was found
+     */
+    protected function createRequestOptions($header)
+    {
+        if (!file_exists($cert = __DIR__ . '/../Certificates/cacert.pem')) {
+            throw new \RuntimeException(
+                sprintf('The Twitter could not find the certificate in "%s"', $cert)
+            );
+        }
+
+        $curl = $fopen = array();
+        if (function_exists('curl_init')) {
+            $curl = array(
+                CURLOPT_HTTPHEADER => $header,
+                CURLOPT_CAINFO => $cert,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+            );
+        }
+
+        $fopen =  array(
+            'http' => array(
+                'header' => $header
+            ),
+            'ssl' => array(
+                'verify_peer'   => true,
+                'cafile'        => $cert,
+                'verify_depth'  => 9,
+                'CN_match'      => 'api.twitter.com'
+            )
+        );
+
+        return array(
+            'curl' => $curl,
+            'fopen' => $fopen,
+        );
     }
 
     /**

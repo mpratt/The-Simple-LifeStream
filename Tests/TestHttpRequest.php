@@ -101,9 +101,9 @@ class TestHttpRequest extends PHPUnit_Framework_TestCase
 
         $config = array(
             'prefer_curl' => false,
-            'fopen' => array(
+            'fopen' => array('http' => array(
                 'user_agent' => 'PHP/FGC Morcilla'
-            )
+            ))
         );
 
         $http = new \SimpleLifestream\HttpRequest($config);

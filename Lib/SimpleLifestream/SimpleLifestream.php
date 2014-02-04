@@ -43,7 +43,7 @@ class SimpleLifestream
             'date_format' => 'Y-m-d H:i',
             'link_format' => '<a href="{url}">{text}</a>',
             'merge_strategy' => 'Ymd',
-            'language' => 'English',
+            'language' => 'English'
         ), $config);
 
         $this->config['blacklist'] = array_map('strtolower',

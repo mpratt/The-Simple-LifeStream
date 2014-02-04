@@ -142,14 +142,16 @@ class HttpRequest
             throw new \Exception('Could not execute lookup, allow_url_fopen is disabled');
 
         $defaultOptions = array(
-            'method' => 'GET',
-            'user_agent' => $this->userAgent,
-            'follow_location' => 1,
-            'max_redirects' => 20,
-            'timeout' => 40
+            'http' => array(
+                'method' => 'GET',
+                'user_agent' => $this->userAgent,
+                'follow_location' => 1,
+                'max_redirects' => 10,
+                'timeout' => 40
+            )
         );
 
-        $context = array('http' => array_merge($defaultOptions, $this->config['fopen'], $params));
+        $context = array_replace_recursive($defaultOptions, $this->config['fopen'], $params);
         if ($data = file_get_contents($url, false, stream_context_create($context)))
             return $data;
 

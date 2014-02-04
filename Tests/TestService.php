@@ -28,9 +28,10 @@ class TestService extends PHPUnit_Framework_TestCase
      * @param string $provider
      * @param mixed $resource
      * @param string $sampleFile
+     * @param array $config
      * @return object
      */
-    protected function getStream($provider, $resource, $sampleFile = '')
+    protected function getStream($provider, $resource, $sampleFile = '', $config = array())
     {
         $stream = new \SimpleLifestream\Stream($provider, $resource);
         if (!empty($sampleFile))
@@ -42,7 +43,7 @@ class TestService extends PHPUnit_Framework_TestCase
                 $http = new MockHttp($sampleFile);
         }
         else
-            $http = new \SimpleLifestream\HttpRequest();
+            $http = new \SimpleLifestream\HttpRequest($config);
 
         $stream->registerHttpConsumer($http);
         return $stream;
