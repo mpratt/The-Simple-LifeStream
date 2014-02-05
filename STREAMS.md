@@ -170,7 +170,7 @@ and the respective user id.
 
 ### Youtube
 
-- **Important**: Make sure in your favorite feed is publicly available on the settings panel.
+- **Important**: Make sure that your favorite feed is publicly available on the Youtube settings panel.
 - **Requires**: The user name or user id.
 - **Finds**:
     - Videos added to your `Favorites` playlist
@@ -180,6 +180,6 @@ and the respective user id.
 ```
 
 
-- This stream also returns the following keys:
+- **This stream also returns the following keys**:
     - username (The current user name)
     - thumbnail (Thumbnail for the video)
