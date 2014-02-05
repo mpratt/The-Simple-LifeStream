@@ -66,11 +66,11 @@ Download the latest release or clone this repository, place the `Lib/SimpleLifes
 the `Autoload.php` file.
 
 ```php
-    require '/path/to/SimplreLifestream/Autoload.php';
+    require '/path/to/SimpleLifestream/Autoload.php';
     $lifestream = new \SimpleLifestream\SimpleLifestream();
 ```
 
-Or if you already have PSR-0 complaint autoloader, you just need to register the library
+Or if you already have a PSR-0 complaint autoloader, you just need to register the library
 
 ```php
     $loader->registerNamespace('SimpleLifestream', 'path/to/SimpleLifestream');
@@ -95,8 +95,7 @@ Create an array with valid stream providers and pass it to the `SimpleLifestream
     $lifestream->loadStreams($streams);
 
     $data = $lifestream->getLifestream();
-    foreach ($data as $d)
-    {
+    foreach ($data as $d) {
         echo $d['html'];
     }
 ```
@@ -118,14 +117,14 @@ that you can use to modify some parts of the library.
         'date_format' => 'Y-m-d H:i', // Date format returned on by the streams
         'link_format' => '<a href="{url}">{text}</a>', // Link template used by the streams
         'language' => 'English', // The Output language
-        'cache_ttl' => (60*10), // Duration of the cache in seconds
-        'cache_dir' => '/path/bla/bla', // Optional place where the cache is going to be stored
+        'cache_ttl' => (60*10), // Optional: Duration of the cache in seconds
+        'cache_dir' => '/path/bla/bla', // Optional: A place where the cache should be stored
     );
 
     $lifestream = new \SimpleLifestream\SimpleLifestream($config);
 ```
 
-For Example, this library has support for English and Spanish languages. If you want the
+This library has support for English and Spanish languages. If you want the
 output to be in spanish, you just need to write:
 
 ```php
@@ -141,8 +140,9 @@ output to be in spanish, you just need to write:
     $lifestream = new \SimpleLifestream\SimpleLifestream($config);
     $data = $lifestream->loadStreams($streams)->getLifestream();
 
-    foreach ($data as $d)
+    foreach ($data as $d) {
         echo $d['html'];
+    }
 ```
 
 Stream Configuration
@@ -171,10 +171,10 @@ Or use an associative array with the `resource` key:
 ```
 
 The `resource` key is used internally and is interpreted as the relevant username/url/userid needed for
-the current provider.
+the provider.
 
-That being said, some streams require additional information in order to function. For example the `Twitter` provider.
-Remember that you have to  [register an app](http://dev.twitter.com/apps) in order to use it and retrieve your latest tweets:
+That being said, some streams require additional information in order to work, lets take a look to the `Twitter` provider.
+Remember that if you wish to use the Twitter Provider, first you have to  [register an app](http://dev.twitter.com/apps).
 
 ```php
     $streams = array(
@@ -192,8 +192,8 @@ Remember that you have to  [register an app](http://dev.twitter.com/apps) in ord
     print_r($output);
 ```
 
-You can use this technique on a few providers to modify their behaviour in some ways. For example the `StackExchange` Provider
-gives you access to all the sites inside the **StackExchange** web ring, not just stackOverflow. Lets say for example we want
+You can use this technique on a few providers to modify their behaviour in some ways. Another example could be The `StackExchange` Provider.
+The provider gives you access to all the sites inside the **StackExchange** web ring, not just StackOverflow. Let's say for example we want
 to get the data from a user in `http://programmers.stackexchange.com`.
 
 ```php
@@ -220,17 +220,19 @@ There are 3 methods for error checking `bool hasErrors()`, `array getErrors()` a
 
 ```php
     $data = $lifestream->getLifestream();
-    if ($lifestream->hasErrors())
+    if ($lifestream->hasErrors()) {
         echo $lifestream->getLastError();
+    }
 
-    if ($lifestream->hasErrors())
+    if ($lifestream->hasErrors()) {
         var_dump($lifestream->getErrors());
+    }
 ```
 
 ### Ignoring Actions/Types
 
 As you can see, some services detect multiple actions, but in some cases you might not want to have
-all that information. You can ignore it if you want by using the `ignore()` method.
+all that information. You can ignore concrete actions using the `ignore()` method.
 
 ```php
     // Tell the library to Ignore all favorited actions/types
@@ -254,10 +256,10 @@ Lets talk about output formatters. There are 2 formatters (`HtmlList` and `Templ
 display the data in different ways.
 
 In order to use them, you have to apply the decorator pattern. When doing this, the `getLifestream()` method gets
-transformed and instead of returning an array with information, it returns a string with the requested data inside
+transformed and instead of returning an array with information, it returns a **string** with the requested data inside
 a template.
 
-Lets have a look at the `HtmlList` decoration:
+Let's have a look at the `HtmlList` decorator:
 
 ```php
     <?php
@@ -301,15 +303,15 @@ and with the help of some placeholders, you can interpolate the data fetched by 
 ```
 
 If you want to see more examples of how to use this library take a peak inside the `Tests` directory and view the files.
-Otherwise inspect the source code of the library, I would say that it has a "decent" english documentation and it should be easy to follow.
+Otherwise inspect the source code of the library, I would say that it has "decent" english documentation and it should be easy to follow.
 
 License
 =======
 MIT
+
 For the full copyright and license information, please view the LICENSE file.
 
 Author
 =====
 
-Michael Pratt
-[Personal Website](http://www.michael-pratt.com)
+[Michael Pratt](http://www.michael-pratt.com)

@@ -1,58 +1,72 @@
 Supported Sites
 ===============
+
 More detailed information about each stream and instantiation instructions, are found
 on this file.
 
 ### DailyMotion
-Finds uploaded videos.
-Requires: The User name
+
+- **Requires**: The user name.
+- **Finds**:
+    - Uploaded videos
 
 ```php
     new \SimpleLifestream\Stream('DailyMotion', 'Movieline');
 ```
 
 ### Delicious
-Finds bookmarked urls
-Requires: The User name
+
+- **Requires**: The user name.
+- **Finds**:
+    - Bookmarked URLs
 
 ```php
     new \SimpleLifestream\Stream('Delicious', 'andrei.z');
 ```
 
 ### Deviantart
-Finds posted content
-Requires: The User name
+
+- **Requires**: The user name.
+- **Finds**:
+    - Posted Content
 
 ```php
     new \SimpleLifestream\Stream('Deviantart', 'jon-lock');
 ```
 
 ### Dribble
-Finds posted content
-Requires: The User name
+
+- **Requires**: The user name.
+- **Finds**:
+    - Posted Content
 
 ```php
     new \SimpleLifestream\Stream('Dribble', 'focuslab');
 ```
 
 ### FacebookPages
-Remember that a Facebook Page is different from a profile Page.
-The page id is required, if you dont know how to find it, look at [this stackoverflow question](http://stackoverflow.com/questions/3130433/get-facebook-fan-page-id).
+
+**Remember:** A Facebook Page is different from a profile Page.
+- **Requires**: The page id. If you dont know how to find it, look at [this stackoverflow question](http://stackoverflow.com/questions/3130433/get-facebook-fan-page-id)
+- **Finds**:
+    - Posted Content
 
 ```php
     new \SimpleLifestream\Stream('FacebookPages', '140262999339534');
 ```
 
 ### Atom/RSS Feeds
-Finds the latest titles/entries on a RSS/Atom Feed.
-Requires: The url to the xml resource
+
+- **Requires**: The URL to the XML resource
+- **Finds**:
+    - Latest titles/entries on a RSS/Atom Feed.
 
 ```php
     new \SimpleLifestream\Stream('Feed', 'http://feeds.eltiempo.com/eltiempo/titulares');
 ```
 
-This Stream provider can be very versatile. It can be used to fetch posts from wordpress blogs or posterous, flickr photostreams,
-lastFms loved tracks or recently played ones, saved threads from Reddit, liked or uploaded vimeo videos, and so on.
+This Stream provider can be very versatile. It can be used to fetch posts from Wordpress blogs or Posterous, Flickr photostreams,
+LastFm loved tracks or recently played, saved threads from Reddit, liked or uploaded Vimeo videos, and so on.
 
 Basically, if a site has RSS/Atom Feeds available for user actions, you can use this Provider.
 
@@ -70,24 +84,36 @@ Lets grab recently played songs on a lastFM profile, for example
 Translation strings can be found at `SimpleLifestream/Languages/*`
 
 ### Github
-Finds create, push and pull requests events on a repo. Finds starred repos, folled users and issues created.
-Requires: The github username.
+
+- **Requires**: The Github user name
+- **Finds**:
+    - Create events (on repositories)
+    - Push events (on repositories)
+    - Pull requests (on repositories)
+    - Issue interactions
+    - Starred Repos
+    - Followed Users
 
 ```php
     new \SimpleLifestream\Stream('Github', 'mpratt');
 ```
 
 ### GimmeBar
-Finds Bookmarked content
-Requires: The Gimmebar username.
+
+- **Requires**: The user name.
+- **Finds**:
+    - Bookmarked content
 
 ```php
     new \SimpleLifestream\Stream('GimmeBar', 'funkatron');
 ```
 
 ### Reddit
-Finds links submitted and comments on threads.
-Requires: The Reddit username.
+
+- **Requires**: The user name.
+- **Finds**:
+    - Links/Threads submitted
+    - Comments
 
 ```php
     new \SimpleLifestream\Stream('Reddit', 'mpratt');
@@ -96,12 +122,19 @@ This stream also returns this key:
     - subreddit (name of the subreddit where the acion happened)
 
 ### StackExchange/StackOverflow
-Finds the recent comments on questions, answers and questions you have written, Reports questions that you have marked as answered.
-and finds awarded badges.
-Requires: The User Id. If you dont know how to find it, read [this stackexchange thread](http://meta.stackoverflow.com/questions/98771/what-is-my-user-id).
+
+- **Requires**: The user id.  If you dont know how to find it, read [this stackexchange thread](http://meta.stackoverflow.com/questions/98771/what-is-my-user-id).
+- **Finds**:
+    - Questions
+    - Answers (and questions marked as answered)
+    - Recent comments
+    - Comments
+    - Awarded Badges
 
 ```php
+    // For StackOverflow use
     new \SimpleLifestream\Stream('StackExchange', '430087');
+
     // OR
     new \SimpleLifestream\Stream('StackOverflow', '430087');
 ```
@@ -117,9 +150,13 @@ and the respective user id.
 ```
 
 ### Twitter
-Important! You have to [register an app](http://dev.twitter.com/apps) first.
-Finds The latests Tweets.
-Requires: The username and oauth tokens/data from the created app.
+
+- **Important**: You _must_ [register an app](http://dev.twitter.com/apps) first.
+- **Requires**:
+    - The Twitter user name
+    - Oauth tokens/data from the created APP
+- **Finds**:
+    - Latests Tweets
 
 ```php
     new \SimpleLifestream\Stream('twitter', array(
@@ -132,13 +169,17 @@ Requires: The username and oauth tokens/data from the created app.
 ```
 
 ### Youtube
-Finds all the videos added to the favorite playlist.
-Requires: The Youtube Username or user Id.
+
+- **Important**: Make sure in your favorite feed is publicly available on the settings panel.
+- **Requires**: The user name or user id.
+- **Finds**:
+    - Videos added to your `Favorites` playlist
 
 ```php
     new \SimpleLifestream\Stream('Youtube', 'mtppratt');
 ```
 
-This stream also returns this keys:
+
+- This stream also returns the following keys:
     - username (The current user name)
     - thumbnail (Thumbnail for the video)
