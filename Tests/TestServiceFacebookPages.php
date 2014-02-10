@@ -46,6 +46,24 @@ class TestServiceFacebookPages extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    public function testTruncate()
+    {
+        $data = array(
+            'resource' => 'Twinkies',
+            'content_length' => 1,
+            'content_delimiter' => '-',
+        );
+
+        $stream = $this->getStream('FacebookPages', $data, 'Twinkies-2013-10-15.json');
+        $response = $stream->getResponse();
+
+        foreach ($response as $r) {
+            $this->assertTrue(isset($r['text']));
+            $this->assertTrue(strlen($r['text']) === 2); // length + delimiter
+            $this->assertTrue((bool) preg_match('~-$~', $r['text']));
+        }
+    }
+
     public function testSample2()
     {
         $stream = $this->getStream('FacebookPages', 'CocaCola', 'CocaCola-2013-01-24.json');

@@ -55,6 +55,16 @@ on this file.
     new \SimpleLifestream\Stream('FacebookPages', '140262999339534');
 ```
 
+When the text content is longer than 80 chars, the FacebookPages provider, truncates the result. You can change the behaviour quite easily
+
+```php
+    new \SimpleLifestream\Stream('FacebookPages', array(
+       'resource' => '140262999339534',
+       'content_length' => 200, // The width of the desired trim
+       'content_delimiter' => '...' // String that should be added at the end of the string
+    ));
+```
+
 ### Atom/RSS Feeds
 
 - **Requires**: The URL to the XML resource
