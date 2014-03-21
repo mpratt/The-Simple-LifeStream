@@ -102,7 +102,7 @@ class SimpleLifestream
                 $this->errors = array_merge($this->errors, (array) $errors);
             }
 
-            $output = array_merge($output, $response);
+            $output = array_merge($output, (array) $response);
         }
 
         $output = $this->translate(array_filter($output));
@@ -145,14 +145,52 @@ class SimpleLifestream
                 return '{' . $n . '}';
             }, array_keys($data)), array_values($data), $this->config['link_format']);
 
+            $rel = $this->getRelativeInterval($data['stamp']);
             $result[$id] = array_merge($data, array(
                 'link' => $link,
                 'date' => date($this->config['date_format'], (int) $data['stamp']),
+                'date_relative' => $language->getRelativeTranslation(key($rel), (int) current($rel)),
                 'html' => str_replace('{link}', $link, $language->get($data['type'])),
             ));
         }
 
         return $result;
+    }
+
+    /**
+     * Calculates the interval between the dates and returns
+     * an array with the valid time.
+     *
+     * @param string $from
+     * @param string $to When null is given, uses the current date.
+     * @return array
+     */
+    protected function getRelativeInterval($from, $to = null)
+    {
+        $fromTime = new \DateTime();
+        $fromTime->setTimestamp($from);
+
+        if (!$to) {
+            $to = time();
+        }
+
+        $toTime = new \DateTime();
+        $toTime->setTimestamp($to);
+
+        $interval = $fromTime->diff($toTime);
+        $units = array_filter(array(
+            'years'   => (int) $interval->y,
+            'months'  => (int) $interval->m,
+            'days'    => (int) $interval->d,
+            'hours'   => (int) $interval->h,
+            'minutes' => (int) $interval->i,
+        ));
+
+        if (empty($units)) {
+            return array('just_now' => 0);
+        }
+
+        return array_slice($units, 0, 1);
     }
 
     /**

@@ -199,9 +199,12 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
                 $this->assertArrayHasKey('date', $v);
                 $this->assertArrayHasKey('link', $v);
                 $this->assertArrayHasKey('html', $v);
+                $this->assertArrayHasKey('date_relative', $v);
+                $this->assertTrue((bool) preg_match('~(ago|hace|just|ahora)~i', $v['date_relative']), 'Invalid date_relative string: ' . $v['date_relative']);
 
-                if (!empty($htmlContains))
+                if (!empty($htmlContains)) {
                     $this->assertContains($htmlContains, $v['html']);
+                }
             }
         }
         else

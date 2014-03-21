@@ -45,6 +45,19 @@ class Spanish extends Adapter
         'ranted' => 'hizo una pataleta {link}.',
         'liked' => 'le gusta {link}.',
         'uploaded' => 'subió {link}.',
+        'time_just_now' => 'justo ahora',
+        'time_seconds' => 'hace %d segundos',
+        'time_seconds_singular' => 'hace %d segundo',
+        'time_minutes' => 'hace %d minutos',
+        'time_minutes_singular' => 'hace %d minuto',
+        'time_hours' => 'hace %d horas',
+        'time_hours_singular' => 'hace %d hora',
+        'time_days' => 'hace %d dias',
+        'time_days_singular' => 'hace %d dia',
+        'time_months' => 'hace %d meses',
+        'time_months_singular' => 'hace %d mes',
+        'time_years' => 'hace %d años',
+        'time_years_singular' => 'hace %d año',
     );
 }
 ?>

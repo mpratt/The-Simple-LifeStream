@@ -45,6 +45,19 @@ class English extends Adapter
         'ranted' => 'ranted {link}.',
         'liked' => 'liked {link}.',
         'uploaded' => 'uploaded {link}',
+        'time_just_now' => 'just now',
+        'time_seconds' => '%d seconds ago',
+        'time_seconds_singular' => '%d second ago',
+        'time_minutes' => '%d minutes ago',
+        'time_minutes_singular' => '%d minute ago',
+        'time_hours' => '%d hours ago',
+        'time_hours_singular' => '%d hour ago',
+        'time_days' => '%d days ago',
+        'time_days_singular' => '%d day ago',
+        'time_months' => '%d months ago',
+        'time_months_singular' => '%d month ago',
+        'time_years' => '%d years ago',
+        'time_years_singular' => '%d year ago',
     );
 }
 ?>

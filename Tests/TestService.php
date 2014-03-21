@@ -75,6 +75,7 @@ class TestService extends PHPUnit_Framework_TestCase
             $this->assertTrue((is_numeric($r['stamp']) && strlen($r['stamp']) >= 10), 'The stamp seems to be invalid ' . $r['stamp']);
             $this->assertTrue(!empty($r['text']), 'The Text key shouldnt be empty on type ' . $r['type']);
 
+
             $url = parse_url($r['url']);
             $this->assertTrue(!empty($url['host']), 'The Url seems to be invalid ' . $r['url']);
 
