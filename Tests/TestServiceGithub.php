@@ -14,16 +14,23 @@ class TestServiceGithub extends TestService
     protected $validTypes = array(
         'repo-released',
         'repo-created',
+        'repo-created-branch',
         'repo-pushed',
         'repo-pull-opened',
-        'repo-issue-created',
+        'repo-pull-closed',
+        'repo-pull-reopened',
+        'repo-issue-created', // deprecated
+        'repo-issue-opened',
+        'repo-issue-closed',
+        'repo-issue-commented',
+        'repo-fork-created',
         'starred',
         'followed',
     );
 
     public function testRealRequest()
     {
-        $stream = $this->getStream('Github', 'mpratt');
+        $stream = $this->getStream('Github', 'tarruda');
         $response = $stream->getResponse();
 
         $this->checkResponseIntegrity('Github', $response);
@@ -48,7 +55,7 @@ class TestServiceGithub extends TestService
 
         $this->checkResponseIntegrity('Github', $response);
 
-        $this->assertEquals(22, count($response));
+        $this->assertEquals(29, count($response));
 
         $errors = $stream->getErrors();
         $this->assertTrue(empty($errors));
@@ -61,11 +68,12 @@ class TestServiceGithub extends TestService
 
         $this->checkResponseIntegrity('Github', $response);
 
-        $this->assertEquals(25, count($response));
+        $this->assertEquals(27, count($response));
 
         $errors = $stream->getErrors();
         $this->assertTrue(empty($errors));
     }
+
 
     public function testService3()
     {
@@ -74,7 +82,33 @@ class TestServiceGithub extends TestService
 
         $this->checkResponseIntegrity('Github', $response);
 
-        $this->assertEquals(26, count($response));
+        $this->assertEquals(27, count($response));
+
+        $errors = $stream->getErrors();
+        $this->assertTrue(empty($errors));
+    }
+
+    public function testService4()
+    {
+        $stream = $this->getStream('Github', 'dummySample4', 'robbytaylor-2014-03-21.json');
+        $response = $stream->getResponse();
+
+        $this->checkResponseIntegrity('Github', $response);
+
+        $this->assertEquals(28, count($response));
+
+        $errors = $stream->getErrors();
+        $this->assertTrue(empty($errors));
+    }
+
+    public function testService5()
+    {
+        $stream = $this->getStream('Github', 'dummySample5', 'mpratt-2014-03-21.json');
+        $response = $stream->getResponse();
+
+        $this->checkResponseIntegrity('Github', $response);
+
+        $this->assertEquals(28, count($response));
 
         $errors = $stream->getErrors();
         $this->assertTrue(empty($errors));

@@ -100,6 +100,7 @@ Translation strings can be found at `SimpleLifestream/Languages/*`
     - Create events (on repositories)
     - Push events (on repositories)
     - Pull requests (on repositories)
+    - Forked events (On repositories)
     - Issue interactions
     - Starred Repos
     - Followed Users
