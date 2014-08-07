@@ -19,6 +19,10 @@ class TestServiceFeed extends TestService
             $this->markTestSkipped('SimpleXml Is needed for the Feed Provider');
     }
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRealRequestRSS()
     {
         $stream = $this->getStream('Feed', 'http://smodcast.com/feed/');
@@ -30,6 +34,10 @@ class TestServiceFeed extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRealRequestAtom()
     {
         $stream = $this->getStream('Feed', 'http://feeds.feedburner.com/GDBcode');
@@ -41,6 +49,10 @@ class TestServiceFeed extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testFeedRequestFail()
     {
         $stream = $this->getStream('Feed', 'http://httpbin.org/user-agent');

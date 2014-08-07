@@ -11,6 +11,10 @@
 
 class TestSimpleLifestream extends PHPUnit_Framework_TestCase
 {
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testIgnoreTypes()
     {
         if (!is_file(__DIR__ . '/AuthCredentials.php'))
@@ -65,6 +69,10 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
         $this->validateOutput($output, 'tweeted');
     }
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testCustomDateFormatting()
     {
         $streams = array(
@@ -89,6 +97,10 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testLanguages()
     {
         $streams = array(
@@ -125,6 +137,10 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
         $this->validateOutput($output, 'favorited');
     }
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testLinkTemplate()
     {
         $streams = array(
@@ -142,6 +158,10 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
         $this->validateOutput($output, 'hello friends');
     }
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testLimit()
     {
         $streams = array(

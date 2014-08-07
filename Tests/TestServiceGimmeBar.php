@@ -15,6 +15,10 @@ class GimmeBar extends TestService
         'bookmarked',
     );
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRealRequest()
     {
         $stream = $this->getStream('GimmeBar', 'funkatron');
@@ -26,6 +30,10 @@ class GimmeBar extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testFeedRequestFail()
     {
         $stream = $this->getStream('GimmeBar', 'unknown-or-invalid-gimmebar-user---');

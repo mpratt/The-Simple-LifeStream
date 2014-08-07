@@ -14,6 +14,10 @@ class TestServiceFacebookPages extends TestService
     /** inline {@inheritdoc} */
     protected $validTypes = array('link');
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testFacebookPagesRequest()
     {
         $stream = $this->getStream('FacebookPages', '27469195051');

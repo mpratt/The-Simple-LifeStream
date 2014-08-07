@@ -13,6 +13,10 @@ class TestServiceDailyMotion extends TestService
 {
     protected $validTypes = array('uploaded-video');
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRealRequest()
     {
         $stream = $this->getStream('DailyMotion', 'Movieline');

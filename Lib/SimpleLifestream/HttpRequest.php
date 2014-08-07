@@ -56,8 +56,9 @@ class HttpRequest
             'fopen' => array(),
         ), $params);
 
-        if (function_exists('curl_init') && $this->config['prefer_curl'])
+        if (function_exists('curl_init') && $this->config['prefer_curl']) {
             return $this->curl($url, $params['curl']);
+        }
 
         return $this->fileGetContents($url, $params['fopen']);
     }
@@ -66,8 +67,7 @@ class HttpRequest
      * Uses Curl to fetch data from an url
      *
      * @param string $url
-     * @param bool $forceRedirect
-     * @param array $params Additional Parameters
+     * @param array $params Additional parameters for the respective part
      * @return string
      *
      * @throws Exception when the returned status code is not 200 or no data was found
@@ -75,21 +75,20 @@ class HttpRequest
     protected function curl($url, array $params = array())
     {
         // Not using array_merge here because that function reindexes numeric keys
-        $options = $this->config['curl'] + array(
-            CURLOPT_FOLLOWLOCATION => true,
+        $options = $params + $this->config['curl'] + array(
             CURLOPT_USERAGENT => $this->userAgent,
             CURLOPT_ENCODING => '',
-        ) + $params;
+            CURLOPT_FOLLOWLOCATION => true,
+        );
 
         $options[CURLOPT_URL] = $url;
         $options[CURLOPT_HEADER] = true;
         $options[CURLOPT_RETURNTRANSFER] = 1;
 
-        // CURLOPT_FOLLOWLOCATION doesnt play well with open_basedir/safe_mode
-        if ($options[CURLOPT_FOLLOWLOCATION] && (ini_get('safe_mode') || ini_get('open_basedir')))
-        {
-            $this->config['curl'][CURLOPT_FOLLOWLOCATION] = false;
-            $this->config['curl'][CURLOPT_TIMEOUT] = 15;
+         // CURLOPT_FOLLOWLOCATION doesnt play well with open_basedir/safe_mode
+        if (ini_get('safe_mode') || ini_get('open_basedir')) {
+            $options[CURLOPT_FOLLOWLOCATION] = false;
+            $options[CURLOPT_TIMEOUT] = 15;
             $this->config['force_redirects'] = true;
         }
 
@@ -104,23 +103,25 @@ class HttpRequest
         $body = substr($response, $headerSize);
         curl_close($handler);
 
-        if ($this->config['force_redirects'] && in_array($status, array('301', '302')))
-        {
-            if (preg_match('~(?:location|uri): ?([^\n]+)~i', $header, $matches))
-            {
+        if ($this->config['force_redirects'] && in_array($status, array('301', '302'))) {
+
+            if (preg_match('~(?:location|uri): ?([^\n]+)~i', $header, $matches)) {
+
                 $url = trim($matches['1']);
-                if (substr($url, 0, 1) == '/')
-                {
+
+                // Relative redirections
+                if (substr($url, 0, 1) == '/') {
                     $parsed = parse_url($options[CURLOPT_URL]);
                     $url = $parsed['scheme'] . '://' . rtrim($parsed['host'], '/') . $url;
                 }
 
-                return $this->curl($url);
+                return $this->curl($url, $options);
             }
         }
 
-        if (empty($body) || !in_array($status, array('200')))
+        if (empty($body) || !in_array($status, array('200'))) {
             throw new \Exception($status . ': Invalid response for ' . $url);
+        }
 
         return $body;
     }
@@ -129,17 +130,16 @@ class HttpRequest
      * Uses file_get_contents to fetch data from an url
      *
      * @param string $url
-     * @param array $options
-     * @param bool $uncompress
-     * @param array $params Additional Parameters
+     * @param array $params Additional parameters for the respective part
      * @return string
      *
      * @throws Exception when allow_url_fopen is disabled or when no data was returned
      */
     protected function fileGetContents($url, array $params = array())
     {
-        if (!ini_get('allow_url_fopen'))
+        if (!ini_get('allow_url_fopen')) {
             throw new \Exception('Could not execute lookup, allow_url_fopen is disabled');
+        }
 
         $defaultOptions = array(
             'http' => array(
@@ -152,8 +152,9 @@ class HttpRequest
         );
 
         $context = array_replace_recursive($defaultOptions, $this->config['fopen'], $params);
-        if ($data = file_get_contents($url, false, stream_context_create($context)))
+        if ($data = file_get_contents($url, false, stream_context_create($context))) {
             return $data;
+        }
 
         throw new \Exception('Invalid Server Response from ' . $url);
     }

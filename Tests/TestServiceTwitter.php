@@ -23,7 +23,10 @@ class TestServiceTwitter extends TestService
         'resource' => 'mockuser',
     );
 
-    // Test with fopen
+    /**
+     * This needs more execution time (test with fopen)
+     * @large
+     */
     public function testRealRequest()
     {
         if (!is_file(__DIR__ . '/AuthCredentials.php'))
@@ -51,7 +54,10 @@ class TestServiceTwitter extends TestService
     }
 
 
-    // test with curl
+    /**
+     * This needs more execution time .. (Test with curl)
+     * @large
+     */
     public function testRealRequest1()
     {
         if (!is_file(__DIR__ . '/AuthCredentials.php'))
@@ -107,9 +113,9 @@ class TestServiceTwitter extends TestService
 
     public function testService3()
     {
-        if (version_compare(PHP_VERSION, '5.4.0', '<'))
+        if (version_compare(PHP_VERSION, '5.4.0', '<') || defined('HHVM_VERSION'))
         {
-            $this->markTestSkipped('Weird Bug on travis version 5.3, probably a json_decode bug');
+            $this->markTestSkipped('Weird Bug on travis version 5.3 and hhvm');
             return ;
         }
 

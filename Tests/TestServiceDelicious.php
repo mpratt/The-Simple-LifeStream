@@ -15,6 +15,10 @@ class TestServiceDelicious extends TestService
         'bookmarked',
     );
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRealRequest()
     {
         $stream = $this->getStream('Delicious', 'rkmurali');

@@ -19,6 +19,10 @@ class TestServiceStackExchange extends TestService
         'asked',
     );
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRealRequest()
     {
         $stream = $this->getStream('StackOverflow', '430087');

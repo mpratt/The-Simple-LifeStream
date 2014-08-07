@@ -28,6 +28,10 @@ class TestServiceGithub extends TestService
         'followed',
     );
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRealRequest()
     {
         $stream = $this->getStream('Github', 'tarruda');
@@ -39,6 +43,10 @@ class TestServiceGithub extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testFeedRequestFail()
     {
         $stream = $this->getStream('Github', 'unknown-or-invalid-github-user---');

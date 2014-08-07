@@ -16,6 +16,10 @@ class TestServiceReddit extends TestService
         'posted'
     );
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRealRequest()
     {
         $stream = $this->getStream('Reddit', 'mpratt');

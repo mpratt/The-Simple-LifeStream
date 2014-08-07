@@ -13,6 +13,10 @@ class TestServiceDeviantart extends TestService
 {
     protected $validTypes = array('posted');
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRealRequest()
     {
         $stream = $this->getStream('Deviantart', 'yuumei');

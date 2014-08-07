@@ -15,6 +15,10 @@ class TestServiceYoutube extends TestService
         'favorited'
     );
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRealRequest()
     {
         $stream = $this->getStream('Youtube', 'mtppratt');
