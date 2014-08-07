@@ -82,7 +82,7 @@ class Twitter extends Adapter
             );
         }
 
-        $curl = $fopen = array();
+        $curl = array();
         if (function_exists('curl_init')) {
             $curl = array(
                 CURLOPT_HTTPHEADER => $header,
