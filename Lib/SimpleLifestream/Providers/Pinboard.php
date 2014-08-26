@@ -19,7 +19,7 @@ namespace SimpleLifestream\Providers;
 class Pinboard extends Adapter
 {
     /** inline {@inheritdoc} */
-    protected $url = '';
+    protected $url = 'https://api.pinboard.in/v1/posts/recent?auth_token=%s';
 
     /** inline {@inheritdoc} */
     public function getApiData()
@@ -27,28 +27,23 @@ class Pinboard extends Adapter
         $response = $this->http->fetch($this->getApiUrl());
         $xml = simplexml_load_string($response);
 
-        if (!empty($response))
-            return array_map(array($this, 'filterResponse'), $response);
-
         if (!$xml)
             throw new \Exception('Invalid xml format on ' . $this->getApiUrl());
-
-        return array();
+        else
+            return array_map(array($this, 'filterResponse'), $xml->post);
     }
 
     /** inline {@inheritdoc} */
     protected function filterResponse(array $value = array())
     {
-        /*
         return array(
             'service'  => 'pinboard',
             'type'     => 'bookmarked',
-            'resource' => $value['a'],
-            'stamp'    => strtotime($value['dt']),
-            'url'      => $value['u'],
+            'resource' => $value['hash'],
+            'stamp'    => strtotime($value['time']),
+            'url'      => $value['href'],
             'text'     => $value['d'],
         );
-        */
     }
 
 }
