@@ -30,20 +30,30 @@ class Pinboard extends Adapter
         if (!$xml)
             throw new \Exception('Invalid xml format on ' . $this->getApiUrl());
         else
-            return array_map(array($this, 'filterResponse'), $xml->post);
+            return $this->filterXMLArray($xml);
     }
 
-    /** inline {@inheritdoc} */
-    protected function filterResponse(array $value = array())
+    /**
+     * Coverts XML output from Pinboard API into return array
+     *
+     * @return array
+     */
+    protected function filterXMLArray($xml)
     {
-        return array(
-            'service'  => 'pinboard',
-            'type'     => 'bookmarked',
-            'resource' => $value['hash'],
-            'stamp'    => strtotime($value['time']),
-            'url'      => $value['href'],
-            'text'     => $value['d'],
-        );
+        $return = array();
+        foreach ($xml as $post)
+        {
+            $return[] = array(
+                'service'  => 'pinboard',
+                'type'     => 'bookmarked',
+                'resource' => $post['hash'],
+                'stamp'    => strtotime($post['time']),
+                'url'      => $post['href'],
+                'text'     => $post['d'],
+            );
+        }
+
+        return $return;
     }
 
 }
