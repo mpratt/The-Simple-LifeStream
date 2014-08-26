@@ -46,10 +46,10 @@ class Pinboard extends Adapter
             $return[] = array(
                 'service'  => 'pinboard',
                 'type'     => 'bookmarked',
-                'resource' => $post['hash'],
+                'resource' => (string) $post['hash'],
                 'stamp'    => strtotime($post['time']),
-                'url'      => $post['href'],
-                'text'     => $post['d'],
+                'url'      => (string) $post['href'],
+                'text'     => (string) $post['d'],
             );
         }
 
