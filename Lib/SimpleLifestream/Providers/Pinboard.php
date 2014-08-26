@@ -49,7 +49,7 @@ class Pinboard extends Adapter
                 'resource' => (string) $post['hash'],
                 'stamp'    => strtotime($post['time']),
                 'url'      => (string) $post['href'],
-                'text'     => (string) $post['d'],
+                'text'     => (string) $post['description'],
             );
         }
 
