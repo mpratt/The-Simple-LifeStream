@@ -92,6 +92,9 @@ class TestFormatters extends TestService
         $formatter->UnknownMethod();
     }
 
+    /**
+     * @large
+     */
     public function testFormatterReal()
     {
         $streams = array(new \SimpleLifestream\Stream('Reddit', 'mpratt'));
