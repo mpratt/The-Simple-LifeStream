@@ -29,20 +29,23 @@ class TestServiceTwitter extends TestService
      */
     public function testRealRequest()
     {
-        if (!is_file(__DIR__ . '/AuthCredentials.php'))
-        {
+        if (!is_file(__DIR__ . '/AuthCredentials.php')) {
             $this->markTestSkipped('No twitter Credentials Found');
             return ;
         }
 
-        if (!ini_get('allow_url_fopen'))
-        {
+        $auth = require __DIR__ . '/AuthCredentials.php';
+        if (!isset($auth['twitter'])) {
+            $this->markTestSkipped('No twitter Credentials Found');
+            return ;
+        }
+
+        if (!ini_get('allow_url_fopen')) {
             $this->markTestIncomplete('Could not test twitter with file_get_contents, allow_url_fopen is closed');
             return ;
         }
 
-        require __DIR__ . '/AuthCredentials.php';
-        $data = array_merge(array('resource' => 'HablarMierda'), $twitterOauth);
+        $data = array_merge(array('resource' => 'HablarMierda'), $auth['twitter']);
 
         $stream = $this->getStream('Twitter', $data, null, array('prefer_curl' => false));
         $response = $stream->getResponse();
@@ -60,15 +63,18 @@ class TestServiceTwitter extends TestService
      */
     public function testRealRequest1()
     {
-        if (!is_file(__DIR__ . '/AuthCredentials.php'))
-        {
+        if (!is_file(__DIR__ . '/AuthCredentials.php')) {
             $this->markTestSkipped('No twitter Credentials Found');
             return ;
         }
 
-        require __DIR__ . '/AuthCredentials.php';
-        $data = array_merge(array('resource' => 'HablarMierda'), $twitterOauth);
+        $auth = require __DIR__ . '/AuthCredentials.php';
+        if (!isset($auth['twitter'])) {
+            $this->markTestSkipped('No twitter Credentials Found');
+            return ;
+        }
 
+        $data = array_merge(array('resource' => 'HablarMierda'), $auth['twitter']);
         $stream = $this->getStream('Twitter', $data);
         $response = $stream->getResponse();
 
