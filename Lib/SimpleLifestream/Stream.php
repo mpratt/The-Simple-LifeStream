@@ -35,6 +35,7 @@ class Stream
         'stackexchange' => '\SimpleLifestream\Providers\StackExchange',
         'stackoverflow' => '\SimpleLifestream\Providers\StackExchange',
         'gimmebar' => '\SimpleLifestream\Providers\GimmeBar',
+        'instagram' => '\SimpleLifestream\Providers\Instagram',
     );
 
     /** @var object Instance of the current provider */
