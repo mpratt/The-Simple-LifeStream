@@ -12,8 +12,8 @@
 class TestServiceInstagram extends TestService
 {
     protected $validTypes = array(
-        'video',
-        'image'
+        'took-picture',
+        'uploaded-video'
     );
 
     protected $mockData = array(
@@ -28,14 +28,18 @@ class TestServiceInstagram extends TestService
      */
     public function testRealRequest()
     {
-        if (!is_file(__DIR__ . '/AuthCredentials.php'))
-        {
+        if (!is_file(__DIR__ . '/AuthCredentials.php')) {
             $this->markTestSkipped('No instagram Credentials Found');
             return ;
         }
-        require __DIR__ . '/AuthCredentials.php';
 
-        $stream = $this->getStream('Instagram', ['resource'=>'41864127','client_id'=>$instagramClientId]);
+        $auth = require __DIR__ . '/AuthCredentials.php';
+        if (!isset($auth['instagram'])) {
+            $this->markTestSkipped('No instagram Credentials Found');
+            return ;
+        }
+
+        $stream = $this->getStream('Instagram', array('resource'=>'41864127','client_id'=> $auth['instagram']));
         $response = $stream->getResponse();
 
         $this->checkResponseIntegrity('Instagram', $response, array('username', 'thumbnail'));

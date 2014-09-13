@@ -6,8 +6,8 @@
  * @author  QWp6t <hi@qwp6t.me>
  * @link    http://qwp6t.me/
  *
- * MIT License
- *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace SimpleLifestream\Providers;
@@ -18,7 +18,6 @@ namespace SimpleLifestream\Providers;
  */
 class Instagram extends Adapter
 {
-    /** inline {@inheritdoc} */
     /** inline {@inheritdoc} */
     protected $url = 'https://api.instagram.com/v1/users/%s/media/recent?client_id=%s&count=%d';
 
@@ -37,7 +36,7 @@ class Instagram extends Adapter
         $response = $this->http->fetch($url, $options);
         $response = json_decode($response, true);
 
-        return ($response['meta']['code'] === 200) ? array_map(array($this, 'filterResponse'), $response['data']) : null;
+        return (isset($response['meta']['code']) && $response['meta']['code'] === 200) ? array_map(array($this, 'filterResponse'), $response['data']) : null;
     }
 
     /**
@@ -84,7 +83,10 @@ class Instagram extends Adapter
     }
 
     /** inline {@inheritdoc} */
-    public function getApiUrl() { return sprintf($this->url, $this->settings['resource'], $this->settings['client_id'], $this->settings['count']); }
+    public function getApiUrl()
+    {
+        return sprintf($this->url, $this->settings['resource'], $this->settings['client_id'], $this->settings['count']);
+    }
 
     /** inline {@inheritdoc} */
     protected function filterResponse($value)
@@ -92,7 +94,7 @@ class Instagram extends Adapter
         $resource = $value[$value['type'] . 's']['standard_resolution']['url'];
         return array(
             'service'  => 'instagram',
-            'type'     => $value['type'],
+            'type'     => (strtolower($value['type']) == 'video' ? 'uploaded-video' : 'took-picture'),
             'resource' => $resource,
             'username' => $value['user']['username'],
             'stamp'    => (int) $value['created_time'],
