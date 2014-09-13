@@ -57,8 +57,9 @@ class Twitter extends Adapter
         $response = $this->http->fetch($url, $options);
         $response = json_decode($response, true);
 
-        if (!empty($response))
+        if (!empty($response)) {
             return array_map(array($this, 'filterResponse'), $response);
+        }
 
         return null;
     }
@@ -125,8 +126,9 @@ class Twitter extends Adapter
 
         $r = array();
         ksort($params);
-        foreach($params as $key => $value)
+        foreach($params as $key => $value) {
             $r[] = $key . '=' . rawurlencode($value);
+        }
 
         return $method . '&' . rawurlencode($baseURI). '&' . rawurlencode(implode('&', $r));
     }
@@ -140,14 +142,18 @@ class Twitter extends Adapter
     protected function buildAuthorizationHeader(array $oauth = array())
     {
         $values = array();
-        foreach($oauth as $key => $value)
+        foreach($oauth as $key => $value) {
             $values[] = $key . '="' . rawurlencode($value) . '"';
+        }
 
         return 'Authorization: OAuth ' . implode(', ', $values);
     }
 
     /** inline {@inheritdoc} */
-    public function getApiUrl() { return sprintf($this->url, $this->settings['resource'], $this->settings['count']); }
+    public function getApiUrl()
+    {
+        return sprintf($this->url, $this->settings['resource'], $this->settings['count']);
+    }
 
     /** inline {@inheritdoc} */
     protected function filterResponse($value)
