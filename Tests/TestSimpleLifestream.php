@@ -23,8 +23,13 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
             return ;
         }
 
-        require __DIR__ . '/AuthCredentials.php';
-        $twitterData = array_merge(array('resource' => 'HablarMierda'), $twitterOauth);
+        $auth = require __DIR__ . '/AuthCredentials.php';
+        if (!isset($auth['twitter'])) {
+            $this->markTestSkipped('No Twitter Credentials Found');
+            return ;
+        }
+
+        $twitterData = array_merge(array('resource' => 'HablarMierda'), $auth['twitter']);
 
         $streams = array(
             new \SimpleLifestream\Stream('Twitter', $twitterData),

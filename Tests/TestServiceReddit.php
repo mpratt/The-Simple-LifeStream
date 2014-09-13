@@ -31,6 +31,10 @@ class TestServiceReddit extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRequestFail()
     {
         $stream = $this->getStream('Reddit', 'unknown-reddit-user-that-doesnt-exists-as-of-now');

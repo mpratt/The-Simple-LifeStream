@@ -109,6 +109,26 @@ Translation strings can be found at `SimpleLifestream/Languages/*`
     new \SimpleLifestream\Stream('Github', 'mpratt');
 ```
 
+### Instagram
+
+- **Important**: You _must_ [register an app](http://instagram.com/developer/) first.
+- **Requires**: The [user id](http://stackoverflow.com/questions/11796349/instagram-how-to-get-my-user-id-from-username) and the client_id
+- **Finds**:
+    - Uploaded Images
+    - Uploaded Videos
+
+```php
+    new \SimpleLifestream\Stream('Instagram', array(
+        'resource' => '12312',
+        'client_id' => 'abcdef123456789',
+        'count' => 20
+    ));
+```
+This stream also returns the following keys:
+
+    - username (The current username)
+    - thumbnail (Thumbnail for the resource)
+
 ### GimmeBar
 
 - **Requires**: The user name.
