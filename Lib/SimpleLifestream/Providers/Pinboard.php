@@ -3,8 +3,8 @@
  * Pinboard.php
  *
  * @package Providers
- * @author  Michael Pratt <pratt@hablarmierda.net>
- * @link    http://www.michael-pratt.com/
+ * @author  Vic Garcia <vic.garcia@outlook.com>
+ * @link    http://vicg4rcia.com/
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
