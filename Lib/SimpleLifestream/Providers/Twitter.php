@@ -158,13 +158,17 @@ class Twitter extends Adapter
     /** inline {@inheritdoc} */
     protected function filterResponse($value)
     {
+        $tweet = $value['text'];
+        if (isset($value['retweeted_status'])) {
+            $tweet = 'RT @' . $value['retweeted_status']['user']['screen_name'] . ': ' . $value['retweeted_status']['text'];
+        }
         return array(
             'service'  => 'twitter',
             'type'     => 'tweeted',
             'resource' => $this->settings['resource'],
             'stamp'    => (int) strtotime($value['created_at']),
             'url'      => 'http://twitter.com/#!/' . $this->settings['resource'] . '/status/' . $value['id_str'],
-            'text'     => $value['text']
+            'text'     => $tweet
         );
     }
 }
