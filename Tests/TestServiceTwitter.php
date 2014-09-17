@@ -42,6 +42,15 @@ class TestServiceTwitter extends TestService
         }
 
         require __DIR__ . '/AuthCredentials.php';
+
+        if (empty($twitterOauth))
+        {
+            $this->markTestSkipped(
+                'Twitter credentials are not provided in AuthCredentials.php'
+            );
+            return ;
+        }
+
         $data = array_merge(array('resource' => 'HablarMierda'), $twitterOauth);
 
         $stream = $this->getStream('Twitter', $data, null, array('prefer_curl' => false));
@@ -67,6 +76,15 @@ class TestServiceTwitter extends TestService
         }
 
         require __DIR__ . '/AuthCredentials.php';
+
+        if (empty($twitterOauth))
+        {
+            $this->markTestSkipped(
+                'Twitter credentials are not provided in AuthCredentials.php'
+            );
+            return ;
+        }
+
         $data = array_merge(array('resource' => 'HablarMierda'), $twitterOauth);
 
         $stream = $this->getStream('Twitter', $data);

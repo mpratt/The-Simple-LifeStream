@@ -22,8 +22,15 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('No twitter Credentials Found');
             return ;
         }
-
         require __DIR__ . '/AuthCredentials.php';
+
+        if (empty($twitterOauth))
+        {
+            $this->markTestSkipped(
+                'Twitter credentials are not provided in AuthCredentials.php'
+            );
+            return ;
+        }
         $twitterData = array_merge(array('resource' => 'HablarMierda'), $twitterOauth);
 
         $streams = array(
