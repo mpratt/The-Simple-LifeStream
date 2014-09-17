@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<posts user="vicg4rcia" dt="2014-09-16T05:48:01Z">
+    <post href="http://crohr.me/journal/2014/postgres-rails-the-chosen-lc-ctype-setting-requires-encoding-latin1.html" time="2014-09-16T05:48:01Z" description="Fixing postgres UTF-8 encoding error when creating new databases" extended=" $ sudo locale-gen en_US.UTF-8
+Update the /etc/default/locale file with the corresponding variables (or use update-locale LANG=xx LC_CTYPE=xx ...):
+
+ $ sudo cat - &gt; /etc/default/locale &lt;&lt;EOF
+ LANG=en_US.UTF-8
+ LANGUAGE=
+ LC_CTYPE=&quot;en_US.UTF-8&quot;
+ LC_NUMERIC=&quot;en_US.UTF-8&quot;
+ L" tag="postgres ubuntu" hash="8fb4838481d196dc2552f403699bc812"    />
+    <post href="http://serverfault.com/questions/407317/passing-default-answers-to-apt-get-package-install-questions" time="2014-09-16T05:09:06Z" description="configuration - Passing default answers to apt-get package install questions? - Server Fault" extended="debconf-get-selections
+
+how to check the env/config settings of an apt-get install to determine values to set to script the process and sidestep the config prompts" tag="ubuntu linux sysadmin" hash="6f6c57b5699fe3304576e8f0b4b416f6"    />
+    <post href="http://switch2osm.org/serving-tiles/building-a-tile-server-from-packages/" time="2014-09-16T03:04:53Z" description="Building a tile server from packages | switch2osm" extended="sudo apt-get install libapache2-mod-tile" tag="" hash="e738bc77ced30fef977f65903ff9b181"    />
+    <post href="https://www.mapbox.com/tilemill/docs/guides/osm-bright-ubuntu-quickstart/" time="2014-09-15T20:58:46Z" description="OSM Bright Ubuntu Quickstart" extended="" tag="geolocation openstreetmap cartography" hash="c3c09222afda75cdc0036f2e90776957"    />
+    <post href="http://seshagiriprabhu.wordpress.com/2013/07/21/building-an-openstreetmap-tile-server-on-ubuntu-12-04-lts/" time="2014-09-15T20:51:55Z" description="Building an OSM Tile Server on Ubuntu 12.04" extended="" tag="cartography openstreetmap geolocation" hash="3b4c439007a624be50b6899a5ab2ce83"    />
+    <post href="http://www.sitepoint.com/logging-with-psr-3-to-improve-reusability/" time="2014-09-15T19:58:53Z" description="Logging in PHP with PSR3" extended="" tag="php logging psr3" hash="22f31560368a7b67028ffdec8d9ced03"    />
+    <post href="http://download.bbbike.org/osm/bbbike/Chicago/" time="2014-09-13T06:37:55Z" description="OSM extracts for Chicago in OSM, PBF, Garmin cycle map, Osmand, mapsforge, Navit and Esri shapefile format" extended="Chicago.osm.pbf" tag="openstreetmap" hash="4f8d2a0a29af7664b3ac13d44b383130"    />
+    <post href="http://wiki.openstreetmap.org/wiki/Osm2pgsql" time="2014-09-13T06:37:39Z" description="Osm2pgsql - OpenStreetMap Wiki" extended="osm2pgsql is a command-line based program that converts OpenStreetMap data to postGIS-enabled PostgreSQL databases.
+Such databases are often used to render OSM data visually using Mapnik, as PostgreSQL is one of the most efficient and flexible formats Mapnik can use for querying large amounts of data. For more information on using osm2pgsql to render OpenStreetMap data with Mapnik, see the Mapnik page." tag="mapnik openstreetmap" hash="8aaa337a82447e9f5ea81613f31394b5"    />
+    <post href="http://switch2osm.org/serving-tiles/manually-building-a-tile-server-12-04/" time="2014-09-12T19:07:49Z" description="Manually building a tile server (12 04) | switch2osm" extended="This page describes how to install, setup and configure all the necessary software to operate your own tile server. The step-by-step instructions are written for Ubuntu Linux 12.04 LTS (Precise Pangolin), however they should transfer fairly straightforwardly to other versions of Ubuntu or Linux distributions.
+" tag="map geo" hash="b55926ddf74243ac8c7245a29d2cc82c"    />
+    <post href="http://www.reserveamerica.com/camping/adeline-jay-geokaris-illinois-beach-state-park/r/campgroundDetails.do?contractCode=IL&amp;parkId=453023" time="2014-09-03T03:30:14Z" description="Adeline Jay Geo-Karis Illinois Beach State Park, IL - Campground &amp; Camping Details - ReserveAmerica - [IL]" extended="" tag="" hash="f588ca43e9e46065133157264ae1f24f"    />
+    <post href="http://postgis.refractions.net/documentation/manual-1.3/ch04.html" time="2014-08-31T22:13:34Z" description="Chapter 4. Using PostGIS" extended="" tag="postgres postgis geodata" hash="c7bd77f39a6f9eae5cacb434ed5b0ff8"    />
+    <post href="http://support.sprint.com/support/tutorial/Perform_a_hardware_factory_reset_Samsung_Galaxy_Tabreg_3/49933-396" time="2014-08-31T22:13:14Z" description="Perform a hardware factory reset - Samsung Galaxy Tab 3" extended="Perform a hardware factory reset
+A master reset will result in the loss of all data stored on the device including 3rd party applications.
+
+This type of reset should only be used as a last resort after all other troubleshooting steps have been exhausted. It is highly recommended that you complete a backup of the device information before proceeding with the steps in this tutorial." tag="" hash="ea29255ee74d2ef1492bda0cc9fbc2ea"    />
+    <post href="http://gis.stackexchange.com/questions/60928/how-to-insert-a-geojson-polygon-into-a-postgis-table" time="2014-08-31T19:04:03Z" description="How to insert a GeoJSON polygon into a PostGIS table? - Geographic Information Systems Stack Exchange" extended="" tag="postgis postgresql postgres geodata gis geojson" hash="0c1ddae8bfb201521dde02ead3d22165"    />
+    <post href="http://stackoverflow.com/questions/9995140/get-the-srid-of-a-geometry-field" time="2014-08-31T18:49:34Z" description="postgis - Get the SRID of a geometry field - Stack Overflow" extended="I have a table with some geometry types in and need to be able to return the SRID of a given field. How can I do this. I have had a search but all I can find is the function to alter a SRID. In Oracle I am doing this:
+
+A.CLUSTER_EXTENT.SDO_SRID 
+Is there an equivalent function in PostGIS?" tag="postgis geodata" hash="d630f336cd584d48262de28ccae95608"    />
+    <post href="http://codemagician.wordpress.com/2009/09/12/point-in-polygon-in-postgis/" time="2014-08-31T18:48:29Z" description="Point-In-Polygon in PostGIS | Frustrating Problems - Presto Solutions!" extended="I was trying to get a PiP (point-in-polygon) done with all the GIS data that I had all of which was either Polygon or Multipolygon format.
+I stored counties boundaries (Current County and Equivalent layer) I got from the Census Bureau in tables by state (for the sake of better organization). The data is in Geographic NAD 1983 (basically unprojected data)." tag="postgis geodata" hash="98306bb0f5bc42c3db0cadf0c80dadc0"    />
+</posts>
+	
