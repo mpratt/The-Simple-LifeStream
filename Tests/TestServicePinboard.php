@@ -15,14 +15,12 @@ class TestServicePinboard extends TestService
         'bookmarked',
     );
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRealRequest()
     {
-        if (!is_file(__DIR__ . '/AuthCredentials.php'))
-        {
-            $this->markTestSkipped('No Pinboard Credentials Found');
-            return ;
-        }
-
         if (!ini_get('allow_url_fopen'))
         {
             $this->markTestIncomplete(
@@ -31,17 +29,19 @@ class TestServicePinboard extends TestService
             return ;
         }
 
-        require __DIR__ . '/AuthCredentials.php';
-
-        if (empty($pinboardToken))
+        if (!is_file(__DIR__ . '/AuthCredentials.php'))
         {
-            $this->markTestIncomplete(
-                'Pinboard credentials are not provided in AuthCredentials.php'
-            );
+            $this->markTestSkipped('No Pinboard Credentials Found');
             return ;
         }
 
-        $stream = $this->getStream('Pinboard', $pinboardToken);
+        $auth = require __DIR__ . '/AuthCredentials.php';
+        if (!isset($auth['pinboard_token'])) {
+            $this->markTestSkipped('No Pinboard Credentials Found');
+            return ;
+        }
+
+        $stream = $this->getStream('Pinboard', $auth['pinboard_token']);
         $response = $stream->getResponse();
 
         $this->checkResponseIntegrity('Pinboard', $response);
@@ -50,6 +50,10 @@ class TestServicePinboard extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testRequestFail()
     {
         $stream = $this->getStream('Pinboard', 'invalid-pinboard-token');
