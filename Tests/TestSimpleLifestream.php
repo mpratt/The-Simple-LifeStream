@@ -28,7 +28,6 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('No Twitter Credentials Found');
             return ;
         }
-
         $twitterData = array_merge(array('resource' => 'HablarMierda'), $auth['twitter']);
 
         $streams = array(
