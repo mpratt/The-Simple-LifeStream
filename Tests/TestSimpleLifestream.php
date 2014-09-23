@@ -202,6 +202,49 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * This test ensures that the merging of duplicate texts is working
+     * @large
+     */
+    public function testMergedResponses()
+    {
+        $modifiedTitle = function ($v) {
+            return array('modified_title' => str_replace(' ', '', $v['data']['title']));
+        };
+
+        $modifiedTitle2 = function ($v) {
+            return array('modified_title_2' => str_replace('-', '', $v['data']['title']));
+        };
+
+        $streams = array(
+            new \SimpleLifestream\Stream('Reddit', array(
+                'resource' => '_vargas_',
+                'callback' => $modifiedTitle
+            )),
+            new \SimpleLifestream\Stream('Reddit', array(
+                'resource' => '_vargas_',
+                'callback' => $modifiedTitle2
+            )),
+        );
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream();
+        $output = $lifestream->loadStreams($streams)->getLifestream();
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output);
+
+        /**
+         * What Im doing here is testing that the key always has a modified_title_2 key.
+         *
+         * Why? The TEXT response from both streams is EQUAL, but due to the way
+         * the library merges repeated text, the only one that should be available
+         * comes from the second stream (which uses the callback $modifiedTitle2)..
+         */
+        foreach ($output as $o) {
+            $this->assertArrayHasKey('modified_title_2', $o);
+            $this->assertTrue(empty($o['modified_title']));
+        }
+    }
+
     public function testCallbackException()
     {
         $this->setExpectedException('Exception');
