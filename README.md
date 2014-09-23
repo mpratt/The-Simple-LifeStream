@@ -30,6 +30,7 @@ Supported Sites
 - StackExchange/StackOverflow
 - Twitter (Important! You have to [register an app](http://dev.twitter.com/apps) first)
 - Instagram (Important! You must [register an app](http://instagram.com/developer/) first.)
+- Pinboard (Important! You need to have an API Token. You can find yours on the [settings page](https://pinboard.in/settings/password))
 - Youtube
 
 For a more detailed information about each provider read the [STREAMS.md](https://github.com/mpratt/The-Simple-LifeStream/blob/master/STREAMS.md) file.

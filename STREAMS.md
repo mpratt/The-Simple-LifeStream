@@ -210,7 +210,17 @@ and the respective user id.
     new \SimpleLifestream\Stream('Youtube', 'mtppratt');
 ```
 
-
 - **This stream also returns the following keys**:
     - username (The current user name)
     - thumbnail (Thumbnail for the video)
+
+### Pinboard
+
+- **Important**: You need to have an API Token. You can find yours on the [settings page](https://pinboard.in/settings/password)
+- **Requires**: The api-token of the user.
+- **Finds**:
+    - Bookmarked list of the users most recent posts.
+
+```php
+    new \SimpleLifestream\Stream('Pinboard', 'your-api-token');
+```
