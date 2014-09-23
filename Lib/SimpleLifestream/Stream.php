@@ -57,22 +57,23 @@ class Stream
     public function __construct($providerName, $providerConfig)
     {
         $providerName = strtolower($providerName);
-        if (!isset($this->providers[$providerName]))
-        {
+        if (!isset($this->providers[$providerName])) {
             throw new \InvalidArgumentException(
                 sprintf('%s is not a valid provider. Allowed Providers are: %s',
                     $providerName, implode(', ', array_keys($this->providers)))
             );
         }
 
-        if (!is_array($providerConfig))
-        {
+        if (!is_array($providerConfig)) {
             $providerConfig = array(
                 'resource' => $providerConfig,
             );
         }
 
-        $this->provider = new $this->providers[$providerName]($providerConfig);
+        $this->provider = new $this->providers[$providerName](array_merge(array(
+            'resource' => null,
+            'callback' => null,
+        ), $providerConfig));
     }
 
     /**
@@ -80,7 +81,20 @@ class Stream
      *
      * @return void
      */
-    public function registerHttpConsumer(\SimpleLifestream\HttpRequest $http) { $this->provider->registerHttpConsumer($http); }
+    public function registerHttpConsumer(\SimpleLifestream\HttpRequest $http)
+    {
+        $this->provider->registerHttpConsumer($http);
+    }
+
+    /**
+     * Adds a new callback to the stream provider
+     *
+     * @return void
+     */
+    public function addCallback($callback)
+    {
+        $this->provider->addCallback($callback);
+    }
 
     /**
      * Gets the actual response from the provider and
@@ -93,8 +107,9 @@ class Stream
     {
         try {
             $response = $this->provider->getApiData();
-            if (!is_array($response))
+            if (!is_array($response)) {
                 throw new \Exception(sprintf('Invalid/Empty answer from the url: %s', $this->provider->getApiUrl()));
+            }
 
             return $this->normalizeResponse(array_filter($response));
         } catch (\Exception $e) {
@@ -130,14 +145,19 @@ class Stream
      *
      * @return array
      */
-    public function getErrors() { return $this->errors; }
+    public function getErrors()
+    {
+        return $this->errors;
+    }
 
     /**
      * Returns a unique identifier for the current provider
      *
      * @return string
      */
-    public function getId() { return md5($this->provider->getApiUrl()); }
+    public function getId()
+    {
+        return md5($this->provider->getApiUrl());
+    }
 }
-
 ?>

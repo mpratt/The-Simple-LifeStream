@@ -230,6 +230,51 @@ There are 3 methods for error checking `bool hasErrors()`, `array getErrors()` a
     }
 ```
 
+### Accessing the Raw Response (Adding your own keys)
+
+As of version 4.7.0, you can access the raw response from a provider and return custom keys for your own usage.
+You can modify the response on a provider basis.
+
+```php
+    $streams = array(
+        new \SimpleLifestream\Stream('Reddit', array(
+            'resource' => 'mpratt',
+            'callback' => function ($value) {
+                return array(
+                    'modified_title' => str_replace(' ', '-', $value['data']['title'])
+                );
+            },
+        )),
+        new \SimpleLifestream\Stream('Github', 'mpratt'),
+        new \SimpleLifestream\Stream('Youtube', 'ERB'),
+    );
+
+    $lifestream = new \SimpleLifestream\SimpleLifestream();
+    $output = $lifestream->loadStreams($streams)->getLifestream();
+    print_r($output);
+```
+
+Or you can register the callback by using the `addCallback()` method of each stream.
+
+```php
+    $reddit = new \SimpleLifestream\Stream('Reddit', 'mpratt');
+    $reddit->addCallback(function ($v) {
+        return array(
+            'modified_title' => str_replace(' ', '', $v['data']['title'])
+        );
+    });
+
+    $streams = array(
+        $reddit,
+        new \SimpleLifestream\Stream('Github', 'mpratt'),
+        new \SimpleLifestream\Stream('Youtube', 'ERB'),
+    );
+
+    $lifestream = new \SimpleLifestream\SimpleLifestream();
+    $output = $lifestream->loadStreams($streams)->getLifestream();
+    print_r($output);
+```
+
 ### Ignoring Actions/Types
 
 As you can see, some services detect multiple actions, but in some cases you might not want to have

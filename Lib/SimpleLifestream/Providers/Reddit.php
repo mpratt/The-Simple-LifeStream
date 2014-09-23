@@ -27,17 +27,24 @@ class Reddit extends Adapter
         $response = $this->http->fetch($this->getApiUrl());
         $response = json_decode($response, true);
 
-        if (!empty($response['data']['children']))
+        if (!empty($response['data']['children'])) {
             return array_map(array($this, 'filterResponse'), $response['data']['children']);
+        }
 
         return null;
     }
 
-    /** inline {@inheritdoc} */
+    /**
+     * Filters and formats the response
+     *
+     * @param array $value
+     * @return array
+     */
     protected function filterResponse(array $value = array())
     {
-        if (empty($value['kind']) || !in_array($value['kind'], array('t1', 't3')))
+        if (empty($value['kind']) || !in_array($value['kind'], array('t1', 't3'))) {
             return array();
+        }
 
         // Populate this keys just in case
         $value['data'] = array_merge(array(
@@ -48,10 +55,9 @@ class Reddit extends Adapter
         ), $value['data']);
 
         $url = 'http://www.reddit.com';
-        if (!empty($value['data']['permalink']))
+        if (!empty($value['data']['permalink'])) {
             $url .= $value['data']['permalink'];
-        else
-        {
+        } else {
             $value['data']['link_id'] = $this->stripRedditIds($value['data']['link_id']);
             $value['data']['name'] = $this->stripRedditIds($value['data']['name']);
             $url .= '/r/' . $value['data']['subreddit'] . '/comments/' . $value['data']['link_id'] . '/#' . $value['data']['name'];
@@ -69,9 +75,9 @@ class Reddit extends Adapter
         );
 
         $text = $modes[$value['kind']]['title'];
-        if (!empty($text))
-        {
-            return array(
+        if (!empty($text)) {
+            $callbackReturn = $this->applyCallbacks($value);
+            return array_merge($callbackReturn, array(
                 'service'  => 'reddit',
                 'type'     => $modes[$value['kind']]['type'],
                 'resource' => $value['data']['author'],
@@ -79,7 +85,7 @@ class Reddit extends Adapter
                 'url'      => $url,
                 'text'     => $text,
                 'subreddit' => $value['data']['subreddit'],
-            );
+            ));
         }
 
         return array();
@@ -91,6 +97,9 @@ class Reddit extends Adapter
      * @param string $id
      * @return string
      */
-    protected function stripRedditIds($id) { return preg_replace('~^(t1|t3)_~', '', $id); }
+    protected function stripRedditIds($id)
+    {
+        return preg_replace('~^(t1|t3)_~', '', $id);
+    }
 }
 ?>

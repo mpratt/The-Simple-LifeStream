@@ -86,6 +86,24 @@ class TestServiceFeed extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    public function testCallback()
+    {
+        $stream = $this->getStream('Feed', 'dummyAtomResource', 'Atom.xml');
+        $stream->addCallback(function ($v) {
+            return array(
+                'modified_title' => str_replace(' ', '', $v->title)
+            );
+        });
+
+        $response = $stream->getResponse();
+        $this->assertEquals(50, count($response));
+        $this->checkResponseIntegrity('Feed', $response, array('modified_title'));
+        $this->assertTrue((strpos($response['0']['modified_title'], ' ') === false));
+
+        $errors = $stream->getErrors();
+        $this->assertTrue(empty($errors));
+    }
+
     public function testServiceInvalidAnswer()
     {
         $stream = $this->getStream('Feed', 'dummyInvalidResourceNotXML', 'not a xml string');

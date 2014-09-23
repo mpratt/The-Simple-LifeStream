@@ -27,23 +27,30 @@ class Delicious extends Adapter
         $response = $this->http->fetch($this->getApiUrl());
         $response = json_decode($response, true);
 
-        if (!empty($response))
+        if (!empty($response)) {
             return array_map(array($this, 'filterResponse'), $response);
+        }
 
         return null;
     }
 
-    /** inline {@inheritdoc} */
+    /**
+     * Filters and formats the response
+     *
+     * @param array $value
+     * @return array
+     */
     protected function filterResponse(array $value = array())
     {
-        return array(
+        $callbackReturn = $this->applyCallbacks($value);
+        return array_merge($callbackReturn, array(
             'service'  => 'delicious',
             'type'     => 'bookmarked',
             'resource' => $value['a'],
             'stamp'    => strtotime($value['dt']),
             'url'      => $value['u'],
             'text'     => $value['d'],
-        );
+        ));
     }
 }
 ?>

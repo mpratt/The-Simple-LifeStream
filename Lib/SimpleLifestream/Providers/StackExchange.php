@@ -41,29 +41,40 @@ class StackExchange extends Adapter
         $response = $this->http->fetch($this->getApiUrl());
         $response = json_decode($response, true);
 
-        if (!empty($response['items']))
+        if (!empty($response['items'])) {
             return array_filter(array_map(array($this, 'filterResponse'), $response['items']));
+        }
 
         return null;
     }
 
-    /** inline {@inheritdoc} */
-    protected function filterResponse($value)
+    /**
+     * Filters and formats the response
+     *
+     * @param array $value
+     * @return array
+     */
+    protected function filterResponse(array $value = array())
     {
-        if (!in_array($value['timeline_type'], $this->allowedTypes))
+        if (!in_array($value['timeline_type'], $this->allowedTypes)) {
             return array();
+        }
 
-        return array(
+        $callbackReturn = $this->applyCallbacks($value);
+        return array_merge($callbackReturn, array(
             'service'  => strtolower($this->settings['site']),
             'type'     => strtolower($value['timeline_type']),
             'resource' => $this->settings['resource'],
             'stamp'    => (int) $value['creation_date'],
             'url'      => $value['link'],
             'text'     => ($value['timeline_type'] == 'badge' ? $value['detail'] : $value['title']),
-        );
+        ));
     }
 
     /** inline {@inheritdoc} */
-    public function getApiUrl() { return sprintf($this->url, $this->settings['resource'], $this->settings['site']); }
+    public function getApiUrl()
+    {
+        return sprintf($this->url, $this->settings['resource'], $this->settings['site']);
+    }
 }
 ?>

@@ -27,10 +27,11 @@ class Pinboard extends Adapter
         $response = $this->http->fetch($this->getApiUrl());
         $xml = simplexml_load_string($response);
 
-        if (!$xml)
+        if (!$xml) {
             throw new \Exception('Invalid xml format on ' . $this->getApiUrl());
-        else
+        } else {
             return $this->filterXMLArray($xml);
+        }
     }
 
     /**
@@ -41,16 +42,16 @@ class Pinboard extends Adapter
     protected function filterXMLArray($xml)
     {
         $return = array();
-        foreach ($xml as $post)
-        {
-            $return[] = array(
+        foreach ($xml as $post) {
+            $callbackReturn = $this->applyCallbacks($post);
+            $return[] = array_merge($callbackReturn, array(
                 'service'  => 'pinboard',
                 'type'     => 'bookmarked',
                 'resource' => (string) $post['hash'],
                 'stamp'    => strtotime($post['time']),
                 'url'      => (string) $post['href'],
                 'text'     => (string) $post['description'],
-            );
+            ));
         }
 
         return $return;

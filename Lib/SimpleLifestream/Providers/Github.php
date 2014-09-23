@@ -96,8 +96,13 @@ class Github extends Adapter
         );
     }
 
-    /** inline {@inheritdoc} */
-    protected function filterResponse($value)
+    /**
+     * Filters and formats the response
+     *
+     * @param array $value
+     * @return array
+     */
+    protected function filterResponse(array $value = array())
     {
         $value['type'] = strtolower($value['type']);
         $actions = array(
@@ -162,14 +167,15 @@ class Github extends Adapter
                 return array();
             }
 
-            return array(
+            $callbackReturn = $this->applyCallbacks($value);
+            return array_merge($callbackReturn, array(
                 'service'  => 'github',
                 'type'     => strtolower($data['type']),
                 'resource' => $value['actor']['login'],
                 'stamp'    => (int) strtotime($value['created_at']),
                 'url'      => str_replace(array_keys($urlTable), array_values($urlTable), $data['url']),
                 'text'     => $data['text'],
-            );
+            ));
         }
 
         return array();

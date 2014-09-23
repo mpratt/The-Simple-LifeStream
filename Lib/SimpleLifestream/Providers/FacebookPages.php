@@ -33,31 +33,40 @@ class FacebookPages extends Adapter
         $response = $this->http->fetch($this->getApiUrl());
         $response = json_decode($response, true);
 
-        if (!empty($response['entries']))
+        if (!empty($response['entries'])) {
             return array_map(array($this, 'filterResponse'), $response['entries']);
+        }
 
         return null;
     }
 
-    /** inline {@inheritdoc} */
+    /**
+     * Filters and formats the response
+     *
+     * @param array $value
+     * @return array
+     */
     protected function filterResponse(array $value = array())
     {
-        if (trim($value['title']) !== '')
+        $callbackReturn = $this->applyCallbacks($value);
+
+        if (trim($value['title']) !== '') {
             $text = $value['title'];
-        else if (trim(strip_tags($value['content'])) !== '')
+        } else if (trim(strip_tags($value['content'])) !== '') {
             $text = strip_tags($value['content']);
-        else
+        } else {
             $text = $value['alternate'];
+        }
 
         $text = $this->truncate(trim($text));
-        return array(
+        return array_merge($callbackReturn, array(
             'service'  => 'facebookpages',
             'type'     => 'link',
             'resource' => $value['author']['name'],
             'stamp'    => (int) strtotime($value['published']),
             'url'      => $value['alternate'],
             'text'     => $text
-        );
+        ));
     }
 
     /**

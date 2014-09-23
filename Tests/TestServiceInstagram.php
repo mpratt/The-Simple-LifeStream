@@ -62,6 +62,24 @@ class TestServiceInstagram extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    public function testCallback()
+    {
+        $stream = $this->getStream('Instagram', $this->mockData, 'AnnaFaithXoXo-2014-09-10.json');
+        $stream->addCallback(function ($v) {
+            return array(
+                'modified_title' => str_replace('_', '', $v['id'])
+            );
+        });
+
+        $response = $stream->getResponse();
+        $this->assertEquals(20, count($response));
+        $this->checkResponseIntegrity('Instagram', $response, array('modified_title'));
+        $this->assertTrue((strpos($response['0']['modified_title'], '_') === false));
+
+        $errors = $stream->getErrors();
+        $this->assertTrue(empty($errors));
+    }
+
     public function testServiceInvalidUser()
     {
         $stream = $this->getStream('Instagram', $this->mockData, 'InvalidUser-2014-09-10.json');

@@ -76,6 +76,24 @@ class TestServicePinboard extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    public function testCallback()
+    {
+        $stream = $this->getStream('Pinboard', 'dummySample', 'vicg4rcia-2014-09-17');
+        $stream->addCallback(function ($v) {
+            return array(
+                'modified_title' => str_replace(' ', '', $v['description'])
+            );
+        });
+
+        $response = $stream->getResponse();
+        $this->assertEquals(15, count($response));
+        $this->checkResponseIntegrity('Pinboard', $response, array('modified_title'));
+        $this->assertTrue((strpos($response['0']['modified_title'], ' ') === false));
+
+        $errors = $stream->getErrors();
+        $this->assertTrue(empty($errors));
+    }
+
     public function testServiceInvalidAnswer()
     {
         $stream = $this->getStream('Pinboard', 'dummyInvalidResponse', 'an invalid response');
