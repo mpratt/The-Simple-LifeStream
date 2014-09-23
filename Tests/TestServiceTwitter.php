@@ -117,6 +117,24 @@ class TestServiceTwitter extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    public function testCallback()
+    {
+        $stream = $this->getStream('Twitter', $this->mockData, 'ParisHilton-2013-01-25.json');
+        $stream->addCallback(function ($v) {
+            return array(
+                'modified_title' => str_replace(' ', '', $v['text'])
+            );
+        });
+
+        $response = $stream->getResponse();
+        $this->assertEquals(20, count($response));
+        $this->checkResponseIntegrity('Twitter', $response, array('modified_title'));
+        $this->assertTrue((strpos($response['0']['modified_title'], ' ') === false));
+
+        $errors = $stream->getErrors();
+        $this->assertTrue(empty($errors));
+    }
+
     public function testService3()
     {
         if (version_compare(PHP_VERSION, '5.4.0', '<') || defined('HHVM_VERSION'))

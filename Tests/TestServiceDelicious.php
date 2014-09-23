@@ -73,5 +73,23 @@ class TestServiceDelicious extends TestService
         $errors = $stream->getErrors();
         $this->assertTrue(!empty($errors));
     }
+
+    public function testCallback()
+    {
+        $stream = $this->getStream('Delicious', 'dummySample1', 'andrei-2013-10-17.json');
+        $stream->addCallback(function ($v) {
+            return array(
+                'modified_title' => str_replace(' ', '', $v['d'])
+            );
+        });
+
+        $response = $stream->getResponse();
+        $this->checkResponseIntegrity('Delicious', $response, array('modified_title'));
+        $this->assertTrue((strpos($response['0']['modified_title'], ' ') === false));
+        $this->assertEquals(10, count($response));
+
+        $errors = $stream->getErrors();
+        $this->assertTrue(empty($errors));
+    }
 }
 ?>

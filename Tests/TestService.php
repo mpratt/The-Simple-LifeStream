@@ -62,13 +62,14 @@ class TestService extends PHPUnit_Framework_TestCase
      */
     protected function checkResponseIntegrity($provider, array $result, array $additional = array())
     {
-        if (!is_array($result))
+        if (!is_array($result)) {
             throw new \Exception('Test - ' . $provider . ': has an invalid response (not an array)');
-        else if (empty($result))
+        } else if (empty($result)) {
             throw new \Exception('Test - ' . $provider . ': has an empty response!');
+        }
 
-        foreach ($result as $r)
-        {
+        foreach ($result as $r) {
+
             $this->assertEquals($r['service'], strtolower($provider), 'The service key must be ' . strtolower($provider));
             $this->assertTrue(in_array($r['type'], $this->validTypes), 'Unknown Type ' . $r['type']);
             $this->assertTrue(!empty($r['resource']), 'The Resource Key shouldnt be empty');
@@ -79,10 +80,8 @@ class TestService extends PHPUnit_Framework_TestCase
             $url = parse_url($r['url']);
             $this->assertTrue(!empty($url['host']), 'The Url seems to be invalid ' . $r['url']);
 
-            if (!empty($additional))
-            {
-                foreach ($additional as $a)
-                    $this->assertTrue(!empty($r[$a]), 'The response should have a key named ' . $a . ' - - ' . print_r($r, true));
+            foreach ($additional as $a) {
+                $this->assertTrue(!empty($r[$a]), 'The response should have a key named ' . $a . ' - - ' . print_r($r, true));
             }
         }
     }

@@ -60,5 +60,23 @@ class TestDribble extends TestService
         $errors = $stream->getErrors();
         $this->assertTrue(empty($errors));
     }
+
+    public function testCallback()
+    {
+        $stream = $this->getStream('Dribble', 'dummySample1', 'tron-2013-10-17.json');
+        $stream->addCallback(function ($v) {
+            return array(
+                'modified_title' => str_replace(' ', '', $v['title'])
+            );
+        });
+
+        $response = $stream->getResponse();
+        $this->assertEquals(15, count($response));
+        $this->checkResponseIntegrity('Dribble', $response, array('modified_title'));
+        $this->assertTrue((strpos($response['0']['modified_title'], ' ') === false));
+
+        $errors = $stream->getErrors();
+        $this->assertTrue(empty($errors));
+    }
 }
 ?>

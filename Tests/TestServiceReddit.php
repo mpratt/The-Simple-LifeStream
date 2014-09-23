@@ -82,6 +82,24 @@ class TestServiceReddit extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    public function testCallback()
+    {
+        $stream = $this->getStream('Reddit', 'dummySample3', 'lepotaters-2013-10-15.json');
+        $stream->addCallback(function ($v) {
+            return array(
+                'modified_title' => str_replace(' ', '', $v['data']['title'])
+            );
+        });
+
+        $response = $stream->getResponse();
+        $this->assertEquals(80, count($response));
+        $this->checkResponseIntegrity('Reddit', $response, array('modified_title'));
+        $this->assertTrue((strpos($response['0']['modified_title'], ' ') === false));
+
+        $errors = $stream->getErrors();
+        $this->assertTrue(empty($errors));
+    }
+
     public function testServiceInvalidAnswer()
     {
         $stream = $this->getStream('Reddit', 'dummyInvalidResourceNotJson', 'this is not a json response');

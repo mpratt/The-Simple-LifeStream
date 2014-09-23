@@ -67,6 +67,24 @@ class TestServiceStackExchange extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    public function testCallback()
+    {
+        $stream = $this->getStream('StackOverflow', 'dummySample2', 'VonC-2013-10-16.json');
+        $stream->addCallback(function ($v) {
+            return array(
+                'modified_title' => str_replace(' ', '', $v['title'])
+            );
+        });
+
+        $response = $stream->getResponse();
+        $this->assertEquals(27, count($response));
+        $this->checkResponseIntegrity('StackOverflow', $response, array('modified_title'));
+        $this->assertTrue((strpos($response['0']['modified_title'], ' ') === false));
+
+        $errors = $stream->getErrors();
+        $this->assertTrue(empty($errors));
+    }
+
     public function testServiceInvalidAnswer()
     {
         $stream = $this->getStream('StackOverflow', 'dummyInvalidResourceNotJson', 'this is not a json response');

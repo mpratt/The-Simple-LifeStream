@@ -64,6 +64,24 @@ class TestServiceYoutube extends TestService
         $this->assertTrue(empty($errors));
     }
 
+    public function testCallback()
+    {
+        $stream = $this->getStream('Youtube', 'dummySample2', 'imthatcoolguy-2013-01-24.json');
+        $stream->addCallback(function ($v) {
+            return array(
+                'modified_title' => str_replace(' ', '', $v['video']['title'])
+            );
+        });
+
+        $response = $stream->getResponse();
+        $this->assertEquals(25, count($response));
+        $this->checkResponseIntegrity('Youtube', $response, array('modified_title', 'username', 'thumbnail'));
+        $this->assertTrue((strpos($response['0']['modified_title'], ' ') === false));
+
+        $errors = $stream->getErrors();
+        $this->assertTrue(empty($errors));
+    }
+
     public function testServiceInvalidAnswer()
     {
         $stream = $this->getStream('Youtube', 'dummyInvalidResourceNotJson', 'this is not a json response');

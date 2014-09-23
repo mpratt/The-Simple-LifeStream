@@ -27,23 +27,30 @@ class GimmeBar extends Adapter
         $response = $this->http->fetch($this->getApiUrl());
         $response = json_decode($response, true);
 
-        if (!empty($response['records']))
+        if (!empty($response['records'])) {
             return array_map(array($this, 'filterResponse'), $response['records']);
+        }
 
         return null;
     }
 
-    /** inline {@inheritdoc} */
+    /**
+     * Filters and formats the response
+     *
+     * @param array $value
+     * @return array
+     */
     protected function filterResponse(array $value = array())
     {
-        return array(
+        $callbackReturn = $this->applyCallbacks($value);
+        return array_merge($callbackReturn, array(
             'service'  => 'gimmebar',
             'type'     => 'bookmarked',
             'resource' => $this->settings['resource'],
             'stamp'    => $value['date'],
             'url'      => 'http://gim.ie/' . $value['short_url_token'],
             'text'     => $value['title'],
-        );
+        ));
     }
 }
 ?>

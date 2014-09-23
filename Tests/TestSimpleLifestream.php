@@ -166,6 +166,55 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
      * This needs more execution time ..
      * @large
      */
+    public function testCallbacks()
+    {
+        $streams = array(
+            new \SimpleLifestream\Stream('Reddit', array(
+                'resource' => '_vargas_',
+                'callback' => array(
+                    function ($v) {
+                        return array(
+                            'modified_title' => str_replace(' ', '', $v['data']['title'])
+                        );
+                    },
+                    function ($v) {
+                        return array_merge($v, array(
+                            'modified_title_2' => base64_encode($v['modified_title']),
+                            'other_stuff' => null,
+                        ));
+                    }
+                )
+            )),
+        );
+
+        $lifestream = new \SimpleLifestream\SimpleLifestream(array(
+            'cache_ttl' => 1,
+        ));
+
+        $output = $lifestream->loadStreams($streams)->getLifestream();
+        $this->assertFalse($lifestream->hasErrors());
+        $this->validateOutput($output);
+
+
+        foreach ($output as $o) {
+            $this->assertEquals($o['modified_title_2'], base64_encode($o['modified_title']));
+            $this->assertArrayHasKey('other_stuff', $o);
+        }
+    }
+
+    public function testCallbackException()
+    {
+        $this->setExpectedException('Exception');
+        new \SimpleLifestream\Stream('Reddit', array(
+            'resource' => 'mpratt',
+            'callback' => 'notCallableFunction',
+        ));
+    }
+
+    /**
+     * This needs more execution time ..
+     * @large
+     */
     public function testLimit()
     {
         $streams = array(

@@ -58,7 +58,7 @@ class Instagram extends Adapter
             );
         }
 
-        $curl = $fopen = array();
+        $curl = array();
         if (function_exists('curl_init')) {
             $curl = array(
                 CURLOPT_CAINFO => $cert,
@@ -67,7 +67,7 @@ class Instagram extends Adapter
             );
         }
 
-        $fopen =  array(
+        $fopen = array(
             'ssl' => array(
                 'verify_peer'   => true,
                 'cafile'        => $cert,
@@ -88,11 +88,17 @@ class Instagram extends Adapter
         return sprintf($this->url, $this->settings['resource'], $this->settings['client_id'], $this->settings['count']);
     }
 
-    /** inline {@inheritdoc} */
-    protected function filterResponse($value)
+    /**
+     * Filters and formats the response
+     *
+     * @param array $value
+     * @return array
+     */
+    protected function filterResponse(array $value = array())
     {
+        $callbackReturn = $this->applyCallbacks($value);
         $resource = $value[$value['type'] . 's']['standard_resolution']['url'];
-        return array(
+        return array_merge($callbackReturn, array(
             'service'  => 'instagram',
             'type'     => (strtolower($value['type']) == 'video' ? 'uploaded-video' : 'took-picture'),
             'resource' => $resource,
@@ -101,7 +107,7 @@ class Instagram extends Adapter
             'url'      => stripslashes($value['link']),
             'text'     => $value['caption']['text'],
             'thumbnail' => stripslashes($value['images']['thumbnail']['url'])
-        );
+        ));
     }
 }
 ?>

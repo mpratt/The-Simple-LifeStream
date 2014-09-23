@@ -27,16 +27,23 @@ class Dribble extends Adapter
         $response = $this->http->fetch($this->getApiUrl());
         $response = json_decode($response, true);
 
-        if (!empty($response['shots']))
+        if (!empty($response['shots'])) {
             return array_map(array($this, 'filterResponse'), $response['shots']);
+        }
 
         return null;
     }
 
-    /** inline {@inheritdoc} */
+    /**
+     * Filters and formats the response
+     *
+     * @param array $value
+     * @return array
+     */
     protected function filterResponse(array $value = array())
     {
-        return array(
+        $callbackReturn = $this->applyCallbacks($value);
+        return array_merge($callbackReturn, array(
             'service'  => 'dribble',
             'type'     => 'posted',
             'resource' => $value['player']['name'],
@@ -45,7 +52,7 @@ class Dribble extends Adapter
             'text'     => $value['title'],
             'avatar'   => $value['player']['avatar_url'],
             'thumbnail' => $value['image_teaser_url'],
-        );
+        ));
     }
 }
 ?>

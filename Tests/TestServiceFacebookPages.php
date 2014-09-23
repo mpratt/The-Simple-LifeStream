@@ -98,5 +98,23 @@ class TestServiceFacebookPages extends TestService
         $errors = $stream->getErrors();
         $this->assertTrue(!empty($errors));
     }
+
+    public function testCallback()
+    {
+        $stream = $this->getStream('FacebookPages', 'CocaCola', 'CocaCola-2013-01-24.json');
+        $stream->addCallback(function ($v) {
+            return array(
+                'modified_title' => 'custom-title-' . str_replace(' ', '', $v['title'])
+            );
+        });
+
+        $response = $stream->getResponse();
+        $this->checkResponseIntegrity('FacebookPages', $response, array('modified_title'));
+        $this->assertTrue((strpos($response['0']['modified_title'], ' ') === false));
+        $this->assertEquals(26, count($response));
+
+        $errors = $stream->getErrors();
+        $this->assertTrue(empty($errors));
+    }
 }
 ?>
