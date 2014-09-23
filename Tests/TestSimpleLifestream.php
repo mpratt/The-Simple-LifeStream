@@ -202,6 +202,16 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testCallbackException()
+    {
+        $this->setExpectedException('Exception');
+        new \SimpleLifestream\Stream('Reddit', array(
+            'resource' => 'mpratt',
+            'callback' => 'notCallableFunction',
+        ));
+    }
+
+
     /**
      * This test ensures that the merging of duplicate texts is working
      * @large
@@ -209,20 +219,20 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
     public function testMergedResponses()
     {
         $modifiedTitle = function ($v) {
-            return array('modified_title' => str_replace(' ', '', $v['data']['title']));
+            return array('modified_title' => str_replace(' ', '', $v['title']));
         };
 
         $modifiedTitle2 = function ($v) {
-            return array('modified_title_2' => str_replace('-', '', $v['data']['title']));
+            return array('modified_title_2' => str_replace('-', '', $v['title']));
         };
 
         $streams = array(
-            new \SimpleLifestream\Stream('Reddit', array(
-                'resource' => '_vargas_',
+            new \SimpleLifestream\Stream('GimmeBar', array(
+                'resource' => 'funkatron',
                 'callback' => $modifiedTitle
             )),
-            new \SimpleLifestream\Stream('Reddit', array(
-                'resource' => '_vargas_',
+            new \SimpleLifestream\Stream('GimmeBar', array(
+                'resource' => 'funkatron',
                 'callback' => $modifiedTitle2
             )),
         );
@@ -245,14 +255,6 @@ class TestSimpleLifestream extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testCallbackException()
-    {
-        $this->setExpectedException('Exception');
-        new \SimpleLifestream\Stream('Reddit', array(
-            'resource' => 'mpratt',
-            'callback' => 'notCallableFunction',
-        ));
-    }
 
     /**
      * This needs more execution time ..
