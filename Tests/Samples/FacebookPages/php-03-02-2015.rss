@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+      xmlns:media="http://search.yahoo.com/mrss/"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+    >
+  <channel>
+    <title>PHP&apos;s Facebook Wall</title>
+    <link>https://www.facebook.com/</link>
+    <description>PHP&apos;s Facebook Wall</description>
+    <language>en-us</language>
+    <category domain="Facebook">PageSyndicationFeed</category>
+    <generator>Facebook Syndication</generator><docs>http://www.rssboard.org/rss-specification</docs>
+    <lastBuildDate>Thu, 14 Aug 2014 15:11:43 +0000</lastBuildDate>
+    <webMaster>webmaster@facebook.com</webMaster>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/719a3c65d903d7e4abb6667512d5ebb0</guid>
+      <title><![CDATA[ The final 5.3 release: 
+PHP 5.3.29 was released today, and it is the final 5.3 r...]]></title>
+      <link>http://www.facebook.com/PHP/posts/10152312085432479</link>
+      <description><![CDATA[The final 5.3 release: <br /> PHP 5.3.29 was released today, and it is the final 5.3 release. The 5.4 and 5.5 branches remain active, and 5.6 is on its way.<br/><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fphp.net%2Farchive%2F2014.php%23id2014-08-14-1&amp;h=aAQEitRhc&amp;s=1" id="" title="" target="" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/php.net\/archive\/2014.php#id2014-08-14-1&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fphp.net\u00252Farchive\u00252F2014.php\u002523id2014-08-14-1&amp;h=aAQEitRhc&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/php.net\/archive\/2014.php#id2014-08-14-1&quot;);"><img class="img" src="https://fbexternal-a.akamaihd.net/safe_image.php?d=AQDiYmHoeSwvzAWu&amp;w=158&amp;h=158&amp;url=http%3A%2F%2Fphp.net%2Fimages%2Fnews%2FZendCon2014.png" alt="" /></a><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fphp.net%2Farchive%2F2014.php%23id2014-08-14-1&amp;h=TAQGB3SuK&amp;s=1" id="" target="_blank" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/php.net\/archive\/2014.php#id2014-08-14-1&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fphp.net\u00252Farchive\u00252F2014.php\u002523id2014-08-14-1&amp;h=TAQGB3SuK&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/php.net\/archive\/2014.php#id2014-08-14-1&quot;);">PHP: News Archive - 2014</a><br/>php.net<br/>PHP 5.3.29 is available, PHP 5.3 reaching end of life14 Aug 2014The PHP development team announces the immediate availability of PHP 5.3.29. This release marks the end of life of the PHP 5.3 series. Future releases of this series are not planned. All PHP 5.3 users are encouraged to upgrade to the cu…]]></description>
+      <pubDate>Thu, 14 Aug 2014 15:11:43 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/e4dd435df51a9da72e53e14c48e8254b</guid>
+      <title><![CDATA[ PHP 5.5.0 was released today! Read the changelog for additional details. Also, n...]]></title>
+      <link>http://www.facebook.com/PHP/posts/10151471926302479</link>
+      <description><![CDATA[PHP 5.5.0 was released today! Read the changelog for additional details. Also, note that 5.3.x will only receive security fixes after 5.3.27 is released, whereas the 5.4.x branch remains active.<br/><br/><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2FChangeLog-5.php%235.5.0&amp;h=NAQGDPq6P&amp;s=1" id="" target="_blank" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/ChangeLog-5.php#5.5.0&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252FChangeLog-5.php\u0025235.5.0&amp;h=NAQGDPq6P&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/ChangeLog-5.php#5.5.0&quot;);">PHP 5.5.0 released</a><br/>php.net]]></description>
+      <pubDate>Thu, 20 Jun 2013 18:52:53 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/a6187711cb16e33ee689d8ab06836387</guid>
+      <title><![CDATA[ Enjoy!]]></title>
+      <link>http://www.facebook.com/PHP/posts/503084089738719</link>
+      <description><![CDATA[Enjoy!<br/><br/><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fphp.net%2F&amp;h=lAQGbbgw3&amp;s=1" id="" target="_blank" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/php.net\/&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fphp.net\u00252F&amp;h=lAQGbbgw3&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/php.net\/&quot;);">The PHP 5.5.0 Beta 1 has been released</a><br/>www.php.net<br/>The 5.5 branch of PHP released its first beta. The 5.3 and 5.4 branches remain active and available. Do not use a beta product in production, that is, unless you are awesome^H^H^H^H^H^H^Hcrazy.]]></description>
+      <pubDate>Fri, 22 Mar 2013 00:11:48 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/1af4dc6d2fcd5e40c3f89d0c8326f7fd</guid>
+      <title><![CDATA[ Now that you&#039;ve been drinking more water, and are spending more time being activ...]]></title>
+      <link>http://www.facebook.com/PHP/posts/10151090573342479</link>
+      <description><![CDATA[Now that you&#039;ve been drinking more water, and are spending more time being active outside, it&#039;s time to update your PHP. PHP 5.3.18 and PHP 5.4.8 were both released today.<br /> <a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2FChangeLog-5.php&amp;h=cAQHDla02&amp;s=1" rel="nofollow nofollow" target="_blank" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/ChangeLog-5.php&quot;);" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/ChangeLog-5.php&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252FChangeLog-5.php&amp;h=cAQHDla02&amp;render_verification=0&amp;enc&amp;d&quot;);">http://www.php.net/ChangeLog-5.php</a>]]></description>
+      <pubDate>Thu, 18 Oct 2012 19:11:07 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/b6cd6bd8423a6b1e2bd896920af65bb3</guid>
+      <title><![CDATA[ PHP 5.3.15 and PHP 5.4.5 were both released today. You should download and insta...]]></title>
+      <link>http://www.facebook.com/PHP/posts/238632722924181</link>
+      <description><![CDATA[PHP 5.3.15 and PHP 5.4.5 were both released today. You should download and install PHP because it&#039;s great. Then write cool web applications and sites. And other stuff. Also, drink more water.<br/><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2FChangeLog-5.php&amp;h=tAQE8nKnA&amp;s=1" id="" title="" target="" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/ChangeLog-5.php&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252FChangeLog-5.php&amp;h=tAQE8nKnA&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/ChangeLog-5.php&quot;);"><img class="img" src="https://fbexternal-a.akamaihd.net/safe_image.php?d=AQANbYDjoFF7jW9F&amp;w=158&amp;h=158&amp;url=http%3A%2F%2Fstatic.php.net%2Fwww.php.net%2Fimages%2Fphp.gif" alt="" /></a><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2FChangeLog-5.php&amp;h=PAQENLESS&amp;s=1" id="" target="_blank" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/ChangeLog-5.php&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252FChangeLog-5.php&amp;h=PAQENLESS&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/ChangeLog-5.php&quot;);">PHP 5 ChangeLog</a><br/>php.net]]></description>
+      <pubDate>Fri, 20 Jul 2012 05:32:09 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/fcdaf3f881a42898b03df3df8dcd2b8f</guid>
+      <title><![CDATA[ PHP 5.3.14 and PHP 5.4.4 were released today.
+
+http://www.php.net/archive/2012.p...]]></title>
+      <link>http://www.facebook.com/PHP/posts/282017791895757</link>
+      <description><![CDATA[PHP 5.3.14 and PHP 5.4.4 were released today.<br /> <br /> <a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2Farchive%2F2012.php%23id2012-06-14-1&amp;h=iAQGJe4rU&amp;s=1" rel="nofollow nofollow" target="_blank" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/archive\/2012.php#id2012-06-14-1&quot;);" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/archive\/2012.php#id2012-06-14-1&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252Farchive\u00252F2012.php\u002523id2012-06-14-1&amp;h=iAQGJe4rU&amp;render_verification=0&amp;enc&amp;d&quot;);">http://www.php.net/archive/2012.php#id2012-06-14-1</a><br/><br/><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2Farchive%2F2012.php%23id2012-06-14-1&amp;h=fAQFH6mty&amp;s=1" id="" target="_blank" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/archive\/2012.php#id2012-06-14-1&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252Farchive\u00252F2012.php\u002523id2012-06-14-1&amp;h=fAQFH6mty&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/archive\/2012.php#id2012-06-14-1&quot;);">PHP: News Archive - 2012</a><br/>php.net<br/>The PHP development team would like to announce the immediate       availability of PHP 5.4.4 and PHP 5.3.14. All users of PHP are       encouraged to upgrade to PHP 5.4.4 or PHP 5.3.14.]]></description>
+      <pubDate>Thu, 14 Jun 2012 14:25:12 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/cbfa4b750221595fc1e6db738a303ffe</guid>
+      <title><![CDATA[ http://php.net/releases/5_4_0.php]]></title>
+      <link>http://www.facebook.com/PHP/posts/140702489385802</link>
+      <description><![CDATA[<a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fphp.net%2Freleases%2F5_4_0.php&amp;h=tAQE8nKnA&amp;s=1" rel="nofollow nofollow" target="_blank" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/php.net\/releases\/5_4_0.php&quot;);" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/php.net\/releases\/5_4_0.php&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fphp.net\u00252Freleases\u00252F5_4_0.php&amp;h=tAQE8nKnA&amp;render_verification=0&amp;enc&amp;d&quot;);">http://php.net/releases/5_4_0.php</a><br/><br/><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fphp.net%2Freleases%2F5_4_0.php&amp;h=DAQFkQL6U&amp;s=1" id="" target="_blank" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/php.net\/releases\/5_4_0.php&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fphp.net\u00252Freleases\u00252F5_4_0.php&amp;h=DAQFkQL6U&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/php.net\/releases\/5_4_0.php&quot;);">PHP 5.4.0 Released!</a><br/>php.net<br/>PHP 5.4.0 was released today. See the announcement and changelog for a list of changes/features. And, have fun :)]]></description>
+      <pubDate>Thu, 01 Mar 2012 21:44:51 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/e6372f6f1ce527b7cc9c0b3ca3f109ad</guid>
+      <title><![CDATA[ http://www.php.net/archive/2012.php#id2012-01-10-1]]></title>
+      <link>http://www.facebook.com/PHP/posts/338835702812938</link>
+      <description><![CDATA[<a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2Farchive%2F2012.php%23id2012-01-10-1&amp;h=xAQHn6uEH&amp;s=1" rel="nofollow nofollow" target="_blank" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/archive\/2012.php#id2012-01-10-1&quot;);" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/archive\/2012.php#id2012-01-10-1&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252Farchive\u00252F2012.php\u002523id2012-01-10-1&amp;h=xAQHn6uEH&amp;render_verification=0&amp;enc&amp;d&quot;);">http://www.php.net/archive/2012.php#id2012-01-10-1</a><br/><br/><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2Farchive%2F2012.php%23id2012-01-10-1&amp;h=rAQG33LJu&amp;s=1" id="" target="_blank" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/archive\/2012.php#id2012-01-10-1&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252Farchive\u00252F2012.php\u002523id2012-01-10-1&amp;h=rAQG33LJu&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/archive\/2012.php#id2012-01-10-1&quot;);">PHP 5.3.9 Released!</a><br/>php.net<br/>PHP 5.3.9 was released today. All users are strongly encouraged to upgrade to PHP 5.3.9. Please read the changelog for details.]]></description>
+      <pubDate>Wed, 11 Jan 2012 01:56:03 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/7ced25187c77ab9f573d6ee2fc517afe</guid>
+      <title><![CDATA[ ]]></title>
+      <link>http://www.facebook.com/PHP/posts/230574653654731</link>
+      <description><![CDATA[<a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2Farchive%2F2011.php%23id2011-08-23-1&amp;h=LAQFpOnan&amp;s=1" id="" title="" target="" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/archive\/2011.php#id2011-08-23-1&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252Farchive\u00252F2011.php\u002523id2011-08-23-1&amp;h=LAQFpOnan&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/archive\/2011.php#id2011-08-23-1&quot;);"><img class="img" src="https://fbexternal-a.akamaihd.net/safe_image.php?d=AQANbYDjoFF7jW9F&amp;w=158&amp;h=158&amp;url=http%3A%2F%2Fstatic.php.net%2Fwww.php.net%2Fimages%2Fphp.gif" alt="" /></a><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2Farchive%2F2011.php%23id2011-08-23-1&amp;h=HAQHRrJ63&amp;s=1" id="" target="_blank" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/archive\/2011.php#id2011-08-23-1&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252Farchive\u00252F2011.php\u002523id2011-08-23-1&amp;h=HAQHRrJ63&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/archive\/2011.php#id2011-08-23-1&quot;);">PHP 5.3.8 Released!</a><br/>www.php.net<br/>The PHP development team would like to announce the immediate      availability of PHP 5.3.8. This release fixes two issues introduced in      the PHP 5.3.7 release:]]></description>
+      <pubDate>Tue, 23 Aug 2011 17:14:09 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/29e7b6eb75309ad9a8940684373c1152</guid>
+      <title><![CDATA[ http://www.php.net/archive/2011.php#id2011-08-18-1]]></title>
+      <link>http://www.facebook.com/PHP/posts/152865038128980</link>
+      <description><![CDATA[<a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2Farchive%2F2011.php%23id2011-08-18-1&amp;h=vAQEtKVJV&amp;s=1" rel="nofollow nofollow" target="_blank" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/archive\/2011.php#id2011-08-18-1&quot;);" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/archive\/2011.php#id2011-08-18-1&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252Farchive\u00252F2011.php\u002523id2011-08-18-1&amp;h=vAQEtKVJV&amp;render_verification=0&amp;enc&amp;d&quot;);">http://www.php.net/archive/2011.php#id2011-08-18-1</a><br/><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2Farchive%2F2011.php%23id2011-08-18-1&amp;h=uAQGvfBnq&amp;s=1" id="" title="" target="" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/archive\/2011.php#id2011-08-18-1&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252Farchive\u00252F2011.php\u002523id2011-08-18-1&amp;h=uAQGvfBnq&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/archive\/2011.php#id2011-08-18-1&quot;);"><img class="img" src="https://fbexternal-a.akamaihd.net/safe_image.php?d=AQANbYDjoFF7jW9F&amp;w=158&amp;h=158&amp;url=http%3A%2F%2Fstatic.php.net%2Fwww.php.net%2Fimages%2Fphp.gif" alt="" /></a><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2Farchive%2F2011.php%23id2011-08-18-1&amp;h=pAQGT8xUQ&amp;s=1" id="" target="_blank" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/archive\/2011.php#id2011-08-18-1&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252Farchive\u00252F2011.php\u002523id2011-08-18-1&amp;h=pAQGT8xUQ&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/archive\/2011.php#id2011-08-18-1&quot;);">PHP 5.3.7 Released!</a><br/>www.php.net<br/>The PHP development team would like to announce the immediate      availability of PHP 5.3.7. This release focuses on improving the      stability of the PHP 5.3.x branch with over 90 bug fixes, some of which      are security related.]]></description>
+      <pubDate>Thu, 18 Aug 2011 16:53:07 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/88fea7f8b06aff8e1d606f80b723ea8b</guid>
+      <title><![CDATA[ PHP 5.4 alpha1 was released today. Test and have fun.]]></title>
+      <link>http://www.facebook.com/PHP/posts/125562824194670</link>
+      <description><![CDATA[PHP 5.4 alpha1 was released today. Test and have fun.<br/><br/><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2Farchive%2F2011.php%23id2011-06-28-1&amp;h=OAQHOPe0R&amp;s=1" id="" target="_blank" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/archive\/2011.php#id2011-06-28-1&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252Farchive\u00252F2011.php\u002523id2011-06-28-1&amp;h=OAQHOPe0R&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/archive\/2011.php#id2011-06-28-1&quot;);">PHP 5.4 alpha1 released - PHP News - 2011</a><br/>www.php.net<br/>The PHP development team is proud to announce the first PHP 5.4 alpha release.       PHP 5.4 includes new language features and removes several legacy (deprecated) behaviors.       Read the NEWS       file for a complete list of changes.]]></description>
+      <pubDate>Wed, 29 Jun 2011 02:51:52 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/b086a89167aa62c8b4741cffc698b39f</guid>
+      <title><![CDATA[ PHP 5.3.3 is out - http://www.php.net/downloads.php]]></title>
+      <link>http://www.facebook.com/PHP/posts/134285009940164</link>
+      <description><![CDATA[PHP 5.3.3 is out - <a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.php.net%2Fdownloads.php&amp;h=_AQEr7T0O&amp;s=1" rel="nofollow nofollow" target="_blank" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.php.net\/downloads.php&quot;);" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.php.net\/downloads.php&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.php.net\u00252Fdownloads.php&amp;h=_AQEr7T0O&amp;render_verification=0&amp;enc&amp;d&quot;);">http://www.php.net/downloads.php</a>]]></description>
+      <pubDate>Fri, 23 Jul 2010 07:30:08 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+    <item>
+      <guid isPermaLink="false">www.facebook.com/notification/62bf528ba9c4b5f10990ccf851198159</guid>
+      <title><![CDATA[ is now 15 years old, thank you Rasmus Lerdorf]]></title>
+      <link>http://www.facebook.com/PHP/posts/110644942314673</link>
+      <description><![CDATA[is now 15 years old, thank you <a href="/profile.php?id=500058753" title="To tag someone, type &#064; and then the friend&#039;s name">Rasmus Lerdorf</a><br/><br/><br/><a href="http://l.facebook.com/l.php?u=http%3A%2F%2Fwww.sitepoint.com%2Fblogs%2F2010%2F06%2F09%2Fphp-15-birthday%2F&amp;h=7AQGrh3jL&amp;s=1" id="" target="_blank" onclick="LinkshimAsyncLink.referrer_log(this, &quot;http:\/\/www.sitepoint.com\/blogs\/2010\/06\/09\/php-15-birthday\/&quot;, &quot;\/si\/ajax\/l\/render_linkshim_log\/?u=http\u00253A\u00252F\u00252Fwww.sitepoint.com\u00252Fblogs\u00252F2010\u00252F06\u00252F09\u00252Fphp-15-birthday\u00252F&amp;h=7AQGrh3jL&amp;render_verification=0&amp;enc&amp;d&quot;);" style="" rel="nofollow" onmouseover="LinkshimAsyncLink.swap(this, &quot;http:\/\/www.sitepoint.com\/blogs\/2010\/06\/09\/php-15-birthday\/&quot;);">PHP is Fifteen Today!</a><br/>www.sitepoint.com<br/>PHP was released by Rasmus Lerdorf on June 8, 1995. His original usenet post is still available online if you]]></description>
+      <pubDate>Wed, 09 Jun 2010 08:38:22 +0000</pubDate>
+      <author>PHP</author>
+      <dc:creator>PHP</dc:creator>
+    </item>
+  </channel>
+  <access:restriction relationship="deny" xmlns:access="http://www.bloglines.com/about/specs/fac-1.0" />
+</rss>

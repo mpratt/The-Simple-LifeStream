@@ -16,11 +16,8 @@ namespace SimpleLifestream\Providers;
 /**
  * A provider for Facebook Pages
  */
-class FacebookPages extends Adapter
+class FacebookPages extends Feed
 {
-    /** inline {@inheritdoc} */
-    protected $url = 'http://www.facebook.com/feeds/page.php?id=%s&format=json';
-
     /** inline {@inheritdoc} */
     protected $settings = array(
         'content_length' => '80',
@@ -28,45 +25,52 @@ class FacebookPages extends Adapter
     );
 
     /** inline {@inheritdoc} */
-    public function getApiData()
+    public function __construct(array $settings)
     {
-        $response = $this->http->fetch($this->getApiUrl());
-        $response = json_decode($response, true);
+        $settings = array_merge($settings, array(
+            'type' => 'link',
+            'service' => 'facebookpages',
+            'resource' => 'http://www.facebook.com/feeds/page.php?format=rss20&id=' . $settings['resource'],
+            'resource_name' => $settings['resource']
+        ));
 
-        if (!empty($response['entries'])) {
-            return array_map(array($this, 'filterResponse'), $response['entries']);
+        parent::__construct($settings);
+    }
+
+    /** inline {@inheritdoc} */
+    protected function rss()
+    {
+        $return = array();
+        foreach ($this->xml->channel->item as $item) {
+            $callbackReturn = $this->applyCallbacks($item);
+            $return[] = array_merge($callbackReturn, array(
+                'service'  => $this->settings['service'],
+                'type'     => $this->settings['type'],
+                'stamp'    => (int) strtotime($item->pubDate),
+                'text'     => (string) $this->getStatusText($item),
+                'url'      => (string) $item->link,
+                'resource' => (string) $item->author,
+            ));
         }
 
-        return null;
+        return $return;
     }
 
     /**
-     * Filters and formats the response
+     * Retrieves text from either item title or content
      *
-     * @param array $value
-     * @return array
+     * @param SimpleXMLElement $item
+     * @return string
      */
-    protected function filterResponse(array $value = array())
+    protected function getStatusText(\SimpleXMLElement $item)
     {
-        $callbackReturn = $this->applyCallbacks($value);
+        $text = $item->link;
+        if (trim($item->title) !== '')
+            $text = $item->title;
+        else if (trim(strip_tags($item->description)) !== '')
+            $text = strip_tags($item->description);
 
-        if (trim($value['title']) !== '') {
-            $text = $value['title'];
-        } else if (trim(strip_tags($value['content'])) !== '') {
-            $text = strip_tags($value['content']);
-        } else {
-            $text = $value['alternate'];
-        }
-
-        $text = $this->truncate(trim($text));
-        return array_merge($callbackReturn, array(
-            'service'  => 'facebookpages',
-            'type'     => 'link',
-            'resource' => $value['author']['name'],
-            'stamp'    => (int) strtotime($value['published']),
-            'url'      => $value['alternate'],
-            'text'     => $text
-        ));
+        return $this->truncate(trim($text));
     }
 
     /**
@@ -84,5 +88,4 @@ class FacebookPages extends Adapter
         return $text;
     }
 }
-
 ?>

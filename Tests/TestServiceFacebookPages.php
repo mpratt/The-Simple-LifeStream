@@ -40,10 +40,10 @@ class TestServiceFacebookPages extends TestService
 
     public function testSample1()
     {
-        $stream = $this->getStream('FacebookPages', 'Twinkies', 'Twinkies-2013-10-15.json');
+        $stream = $this->getStream('FacebookPages', 'PHP', 'php-03-02-2015.rss');
         $response = $stream->getResponse();
 
-        $this->assertEquals(5, count($response));
+        $this->assertEquals(13, count($response));
         $this->checkResponseIntegrity('FacebookPages', $response);
 
         $errors = $stream->getErrors();
@@ -53,12 +53,12 @@ class TestServiceFacebookPages extends TestService
     public function testTruncate()
     {
         $data = array(
-            'resource' => 'Twinkies',
+            'resource' => 'PHP',
             'content_length' => 1,
             'content_delimiter' => '-',
         );
 
-        $stream = $this->getStream('FacebookPages', $data, 'Twinkies-2013-10-15.json');
+        $stream = $this->getStream('FacebookPages', $data, 'php-03-02-2015.rss');
         $response = $stream->getResponse();
 
         foreach ($response as $r) {
@@ -70,10 +70,10 @@ class TestServiceFacebookPages extends TestService
 
     public function testSample2()
     {
-        $stream = $this->getStream('FacebookPages', 'CocaCola', 'CocaCola-2013-01-24.json');
+        $stream = $this->getStream('FacebookPages', 'Facebook', 'facebook-03-02-2015.rss');
         $response = $stream->getResponse();
 
-        $this->assertEquals(26, count($response));
+        $this->assertEquals(6, count($response));
         $this->checkResponseIntegrity('FacebookPages', $response);
 
         $errors = $stream->getErrors();
@@ -82,7 +82,7 @@ class TestServiceFacebookPages extends TestService
 
     public function testServiceInvalidAnswer()
     {
-        $stream = $this->getStream('FacebookPages', 'dummyInvalidResourceNotJson', 'not a json response');
+        $stream = $this->getStream('FacebookPages', 'dummyInvalidResourceNotXML', 'not a xml response');
         $stream->getResponse();
 
         $errors = $stream->getErrors();
@@ -91,8 +91,25 @@ class TestServiceFacebookPages extends TestService
 
     public function testServiceInvalidAnswer2()
     {
-        $invalidResponse = json_encode(array('hello' => 'test', 'world' => array('universe', 'answer')));
-        $stream = $this->getStream('FacebookPages', 'dummyInvalidResourceNotValidJSON', $invalidResponse);
+        $invalidResponse = '
+                <?xml version="1.0" encoding="utf-8"?>
+                <rss version="2.0"
+                      xmlns:media="http://search.yahoo.com/mrss/"
+                      xmlns:dc="http://purl.org/dc/elements/1.1/"
+                    >
+                  <channel>
+                    <title>Coca-Cola&apos;s Facebook Wall</title>
+                    <link>https://www.facebook.com/</link>
+                    <description>Coca-Cola&apos;s Facebook Wall</description>
+                    <language>en-us</language>
+                    <category domain="Facebook">PageSyndicationFeed</category>
+                    <generator>Facebook Syndication</generator><docs>http://www.rssboard.org/rss-specification</docs>
+                    <webMaster>webmaster@facebook.com</webMaster>
+                  </channel>
+                  <access:restriction relationship="deny" xmlns:access="http://www.bloglines.com/about/specs/fac-1.0" />
+              </rss>';
+
+        $stream = $this->getStream('FacebookPages', 'dummyInvalidResourceNotValidRSS', $invalidResponse);
         $stream->getResponse();
 
         $errors = $stream->getErrors();
@@ -101,7 +118,7 @@ class TestServiceFacebookPages extends TestService
 
     public function testCallback()
     {
-        $stream = $this->getStream('FacebookPages', 'CocaCola', 'CocaCola-2013-01-24.json');
+        $stream = $this->getStream('FacebookPages', 'Facebook', 'facebook-03-02-2015.rss');
         $stream->addCallback(function ($v) {
             return array(
                 'modified_title' => 'custom-title-' . str_replace(' ', '', $v['title'])
@@ -111,7 +128,7 @@ class TestServiceFacebookPages extends TestService
         $response = $stream->getResponse();
         $this->checkResponseIntegrity('FacebookPages', $response, array('modified_title'));
         $this->assertTrue((strpos($response['0']['modified_title'], ' ') === false));
-        $this->assertEquals(26, count($response));
+        $this->assertEquals(6, count($response));
 
         $errors = $stream->getErrors();
         $this->assertTrue(empty($errors));
