@@ -24,7 +24,7 @@ class File extends Handler implements ItemInterface
     public function __construct(array $config = array())
     {
         parent::__construct(array_merge(array(
-            'cache_dir' => sys_get_temp_dir(),
+            'cache_dir' => ini_get('upload_tmp_dir') ? ini_get('upload_tmp_dir') : sys_get_temp_dir(),
             'cache_prefix' => 'SimpleLifestreamFileCache',
             'cache_suffix' => 'cache',
         ), $config));
