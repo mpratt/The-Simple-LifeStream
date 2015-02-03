@@ -21,12 +21,12 @@ class DailyMotion extends Feed
     /** inline {@inheritdoc} */
     public function __construct(array $settings)
     {
-        $settings = array(
+        $settings = array_merge($settings, array(
             'type' => 'uploaded-video',
             'service' => 'dailymotion',
             'resource' => 'http://www.dailymotion.com/rss/user/' . $settings['resource'],
             'resource_name' => $settings['resource']
-        );
+        ));
 
         parent::__construct($settings);
     }

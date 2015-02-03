@@ -21,11 +21,11 @@ class Deviantart extends Feed
     /** inline {@inheritdoc} */
     public function __construct(array $settings)
     {
-        $settings = array(
+        $settings = array_merge($settings, array(
             'service' => 'deviantart',
             'resource' => 'http://backend.deviantart.com/rss.xml?q=gallery%3A' . urlencode($settings['resource']) . '&type=deviation',
             'resource_name' => $settings['resource']
-        );
+        ));
 
         parent::__construct($settings);
     }
