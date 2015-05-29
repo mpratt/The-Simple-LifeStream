@@ -163,10 +163,22 @@ class Twitter extends Adapter
      */
     protected function filterResponse(array $value = array())
     {
-        $tweet = $value['text'];
+        $tweet = $tweetRaw = $value['text'];
         if (isset($value['retweeted_status'])) {
-            $tweet = 'RT @' . $value['retweeted_status']['user']['screen_name'] . ': ' . $value['retweeted_status']['text'];
+            $tweet = $tweetRaw = 'RT @' . $value['retweeted_status']['user']['screen_name'] . ': ' . $value['retweeted_status']['text'];
         }
+
+        $tweet = preg_replace_callback('~\bhttp(s)?://([\w#$%&\~/=?@\/\.])+\b/?~i', function ($matches) {
+            $url = $matches[0];
+            if (!filter_var($url, FILTER_VALIDATE_URL)) {
+                return $url;
+            }
+
+            return sprintf('<a href="%s" rel="nofollow" target="_blank">%s</a>', $url, $url);
+        }, $tweet);
+
+        $tweet = preg_replace('~#([\pL-_+]+)~ui', ' <a href="https://twitter.com/hashtag/$1?src=hash" target="_blank" rel="nofollow">#$1</a>', $tweet);
+        $tweet = preg_replace('~@([\pL-_+]+)~ui', ' <a href="https://twitter.com/$1" target="_blank" rel="nofollow">@$1</a>', $tweet);
 
         $callbackReturn = $this->applyCallbacks($value);
         return array_merge($callbackReturn, array(
@@ -175,7 +187,8 @@ class Twitter extends Adapter
             'resource' => $this->settings['resource'],
             'stamp'    => (int) strtotime($value['created_at']),
             'url'      => 'http://twitter.com/#!/' . $this->settings['resource'] . '/status/' . $value['id_str'],
-            'text'     => $tweet
+            'text' => $tweetRaw,
+            'tweet_html' => $tweet,
         ));
     }
 }
