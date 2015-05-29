@@ -19,7 +19,7 @@ namespace SimpleLifestream;
 class SimpleLifestream
 {
     /** @var int The version of this library */
-    const VERSION = '4.7.2';
+    const VERSION = '4.7.3';
 
     /** @var array Array with the loaded providers. */
     protected $providers = array();
