@@ -45,7 +45,7 @@ class TestServiceTwitter extends TestService
             return ;
         }
 
-        $data = array_merge(array('resource' => 'HablarMierda'), $auth['twitter']);
+        $data = array_merge(array('resource' => 'guiacereza'), $auth['twitter']);
 
         $stream = $this->getStream('Twitter', $data, null, array('prefer_curl' => false));
         $response = $stream->getResponse();
@@ -74,7 +74,7 @@ class TestServiceTwitter extends TestService
             return ;
         }
 
-        $data = array_merge(array('resource' => 'HablarMierda'), $auth['twitter']);
+        $data = array_merge(array('resource' => 'guiacereza'), $auth['twitter']);
         $stream = $this->getStream('Twitter', $data);
         $response = $stream->getResponse();
 

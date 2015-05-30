@@ -156,6 +156,32 @@ class Twitter extends Adapter
     }
 
     /**
+     * Extracts media entities from a tweet response
+     *
+     * @param array $value
+     * @return array
+     */
+    protected function getMedia(array $value)
+    {
+        $return = array();
+        if (!isset($value['entities']) || !isset($value['entities']['media'])) {
+            return $return;
+        }
+
+        foreach ((array) $value['entities']['media'] as $media) {
+            $url = (isset($media['media_url_https']) ? $media['media_url_https'] : $media['media_url']);
+            $extension = strtolower(pathinfo(parse_url($url, PHP_URL_PATH),PATHINFO_EXTENSION));
+            if (in_array($extension, array('jpg', 'jpeg', 'png', 'gif'))) {
+                $return[] = sprintf('<a href="%s" rel="external nofollow" data-media="%s"><img class="sl-tw-img-twitter-img" src="%s" alt="" title=""></a>', $url, $url, $url);
+            } else {
+                $return[] = sprintf('<a href="%s" rel="external nofollow" data-media="%s">%s</a>', $url, $url, $media['display_url']);
+            }
+        }
+
+        return $return;
+    }
+
+    /**
      * Filters and formats the response
      *
      * @param array $value
@@ -187,9 +213,11 @@ class Twitter extends Adapter
             'resource' => $this->settings['resource'],
             'stamp'    => (int) strtotime($value['created_at']),
             'url'      => 'http://twitter.com/#!/' . $this->settings['resource'] . '/status/' . $value['id_str'],
-            'text' => $tweetRaw,
+            'text'     => $tweetRaw,
             'tweet_html' => $tweet,
+            'tweet_media' => $this->getMedia($value),
         ));
     }
+
 }
 ?>
