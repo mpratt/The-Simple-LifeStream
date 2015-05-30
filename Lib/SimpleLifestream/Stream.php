@@ -157,7 +157,7 @@ class Stream
      */
     public function getId()
     {
-        return md5(spl_object_hash($this->provider));
+        return md5($this->provider->getApiUrl());
     }
 }
 ?>
